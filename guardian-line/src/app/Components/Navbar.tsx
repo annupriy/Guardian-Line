@@ -5,7 +5,13 @@ import Sidebar from "./Sidebar";
 const Navbar = () => {
   return (
     <>
-      <div className="navbar bg-base-100 w-4/5 flex-end justify-between items-center h-24">
+      <div className="navbar bg-fuchsia-100 w-full flex-end justify-between items-center h-[20%] top-0 right-0">
+          <img
+            src={"./Guardian Line-logos_transparent.png"}
+            alt=""
+            width={170}
+            height={170}
+          />
         <div className="flex-1 flex justify-center">
           <a
             href="/"

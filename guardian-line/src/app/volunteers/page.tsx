@@ -1,7 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactElement, ReactNode } from "react";
+import Layout from "../Components/layout";
+import { NextPage } from "next";
 
-const GeolocationButton: React.FC = () => {
+type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+const GeolocationButton: NextPageWithLayout = (props:any) => {
   const [location, setLocation] = useState<GeolocationCoordinates | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [address, setAddress] = useState<string | null>(null);
@@ -52,7 +58,7 @@ const GeolocationButton: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div className="">
       <button onClick={handleGetLocation}>
         {error ? "Geolocation Error" : "Get Location"}
       </button>
@@ -64,12 +70,14 @@ const GeolocationButton: React.FC = () => {
         </div>
       )}
 
-      <button onClick={handleGetAddress}>
-        Get Address
-      </button>
+      <button onClick={handleGetAddress}>Get Address</button>
       {address && <p>Address: {address}</p>}
     </div>
   );
+};
+
+GeolocationButton.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default GeolocationButton;

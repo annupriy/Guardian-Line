@@ -1,12 +1,17 @@
-import React from 'react'
+import React from "react";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
-const layout = () => {
+export default function Layout({ children }: any) {
   return (
-    <div>
-      
-    </div>
-  )
+    <>
+      <div className="">
+        hiii
+        <Sidebar />
+      </div>
+      <div className="h-screen w-5/6 flex-col pr-10 flex">
+        <Navbar />
+      </div>
+    </>
+  );
 }
-
-
-export default layout

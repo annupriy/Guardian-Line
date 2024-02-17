@@ -18,14 +18,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex-end">
-        <div className="flex flex-1">
-        <Sidebar />
-          <div className="h-dvh min-h-[1em] w-px self-stretch bg-gradient-to-tr from-transparent via-neutral-500 to-transparent opacity-20 dark:opacity-100"></div>
+        <div className="h-screen flex-col">
           <Navbar />
+          <div className="flex h-[80%]">
+            <div className="w-1/6" style={{ borderRight: "1px solid gray" }}>
+              <Sidebar />
+            </div>
+            <div className="w-5/6">
+              <div>{children}</div>
+            </div>
+          </div>
         </div>
-        </div>
-        {children}
       </body>
     </html>
   );
