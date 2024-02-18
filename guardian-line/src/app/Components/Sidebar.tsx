@@ -9,7 +9,7 @@ const Sidebar = () => {
         <Link href="/volunteers" className="text-lg">Reported Crimes</Link>
         </li>
         <li className="focus:outline-none focus:ring text-cyan-800">
-        <Link href="/components/volunteers" className="text-lg">Volunteers page</Link>
+        <Link href="/volunteers" className="text-lg">Volunteers page</Link>
         </li>
         <li className="focus:outline-none focus:ring text-cyan-800">
         <Link href="/volunteers" className="text-lg">About Us</Link>
