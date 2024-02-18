@@ -20,12 +20,12 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="h-screen flex-col">
           <Navbar />
-          <div className="flex h-[80%]">
-            <div className="w-1/6" style={{ borderRight: "1px solid gray" }}>
+          <div className="flex h-[85%]">
+            <div className="w-1/6 h-full" style={{ borderRight: "1px solid gray" }}>
               <Sidebar />
             </div>
-            <div className="w-5/6">
-              <div>{children}</div>
+            <div className="w-5/6 h-full">
+              {children}
             </div>
           </div>
         </div>

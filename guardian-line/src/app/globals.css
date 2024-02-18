@@ -15,13 +15,43 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
-
+/* 
 body {
-  /* background-color: rgba(236, 247, 252, 1) */
-}
+  /* background-color: rgba(236, 247, 252, 1)} */ 
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
+
+/* Home.module.css */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animatedText {
+  animation: fadeInUp 1s ease-out; /* Apply fadeInUp animation */
+}
+
+@keyframes borderTransition {
+  0% {
+    border: 2px solid red;
+  }
+  50% {
+    border: 2px solid purple;
+  }
+  100% {
+    border: 2px solid blue;
+  }
+}
+
+
