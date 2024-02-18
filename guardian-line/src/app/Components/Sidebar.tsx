@@ -4,7 +4,7 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <>
-      <ul className="menu menu-md h-full mx-2 flex-nowrap justify-evenly">
+      <ul className="menu menu-md h-full mx-2 flex-nowrap justify-evenly bg-white">
         <li className="pt-2 focus:outline-none focus:ring text-cyan-800">
         <Link href="/volunteers" className="text-lg">Reported Crimes</Link>
         </li>

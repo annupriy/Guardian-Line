@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 const Navbar = () => {
   return (
     <>
-      <div className="navbar bg-fuchsia-100 w-full flex-end justify-between items-center h-[15%] top-0 right-0 border-b-2 border-slate-300">
+      <div className="navbar bg-cyan-600 w-full flex-end justify-between items-center h-[15%] top-0 right-0 border-b-2 border-slate-300">
           <img
             src={"./Guardian Line-logos_transparent.png"}
             alt=""
@@ -15,7 +15,7 @@ const Navbar = () => {
         <div className="flex-1 flex justify-center">
           <a
             href="/"
-            className="text-cyan-900 font-bold text-3xl mx-4 hover:cursor-pointer focus:drop-shadow-sm"
+            className="text-slate-50 font-bold text-3xl mx-4 hover:cursor-pointer focus:drop-shadow-sm"
           >
             Guardian Line
           </a>
