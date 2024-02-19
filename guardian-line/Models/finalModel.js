@@ -1,7 +1,7 @@
 // NOT FRAUD = Add(Reputation points)
 // FRAUD = Add(Reputation points)
 
-// if NOT FRAUD > FRAUD okay
+// if NOT FRAUD > FRAUD it's okay
 // else AI MODEL Result if attachment provided
 
 let numVolunteerSaysFraud;

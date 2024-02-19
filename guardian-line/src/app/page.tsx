@@ -22,7 +22,7 @@ export default function Home() {
     setPlayerStarted(true);
   }, 2000);
   return (
-    <main className="h-full w-full flex justify-center bg-gradient-to-b from-red-50 to-blue-50">
+    <main className="h-full w-full flex justify-center bg-neutral-100	">
       <div className="text-center mt-16 w-full">
         <div className="animatedText text-3xl font-semibold mb-4 text-gray-800 inline-flex">
           <TypeAnimation
