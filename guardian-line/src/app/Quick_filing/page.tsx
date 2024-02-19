@@ -66,7 +66,7 @@ const Page = () => {
         };    
 
     return (
-        <div>
+        <div className='p-6'>
             <form action="" className='shadow-lg border rounded-md border-gray-700 bg-white mx-auto w-2/3'>
                 {/* <div className='w-full p-4 m-0 mx-auto border-gray-700'></div> */}
                 <div className=' bg-white mt-2 p-4'>

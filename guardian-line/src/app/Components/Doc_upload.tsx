@@ -70,15 +70,10 @@ const Doc_upload = () => {
                 <div>
                     <div className="text-black flex">
                     <p
-                      className="font-mono font-light text-sm  mt-6"
-                      style={{ fontFamily: "" }}>
+                      className="text-sm  mt-6 ml-1">
                       {("Additional Documents")}
                     </p>
-                    <p
-                      className="  text-sm font-mono text-black opacity-50 ml-3 mt-7"
-                      style={{ fontFamily: "" }}>
-                      {("Maximum file size 5 MB")}
-                    </p>
+ 
                   </div>
                   <div className="">
                     <div className="flex w-full">
@@ -151,7 +146,7 @@ const Doc_upload = () => {
                             <div
                               className="relative ml-4 flex cursor-pointer items-center px-2   text-base font-medium text-black"
                               onClick={() => toggleDropdownMore(index)}
-                              style={{ fontFamily: "__POPPINS_C17214" }}>
+                              style={{ fontFamily: "" }}>
                               <img src="/more.svg" className="inline" alt="" />
                               {dropdownIndex === index && (
                                 <div className="absolute left-0 top-[2.7rem] w-36 overflow-hidden rounded-[10px] border border-neutral-900 bg-white shadow-lg">

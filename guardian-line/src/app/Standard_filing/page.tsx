@@ -66,8 +66,8 @@ const Page = () => {
         };    
 
     return (
-        <div className='p-6'>
-            <form action="" className='shadow-lg border rounded-md border-gray-700 bg-white mx-auto w-2/3'>
+        <div className='p-6 relative z-10'>
+            <form action="" className='shadow-xl border rounded-md border-gray-700 bg-white mx-auto w-2/3 relative z-20'>
                 {/* <div className='w-full p-4 m-0 mx-auto border-gray-700'></div> */}
                 <div className=' bg-white mt-2 p-4'>
                 <div className='text-md flex mb-3'><span className="text-red-500 pr-2 text-lg">*</span><span>Required Fields</span></div>                    
@@ -78,40 +78,40 @@ const Page = () => {
                             <p className='text-xl font-medium'> INCIDENT DESCRIPTION</p>
                             <hr className=' border border-gray-500' />
                             <div className='mt-6 grid grid-cols'>
-                                <div className='flex'><p className='mr-2 font-normal text-sm font-mono'>Type of Incident</p><span className='text-red-500 text-lg '>*</span></div>
+                                <div className='flex'><p className='mr-2 font-normal text-sm '>Type of Incident</p><span className='text-red-500 text-lg '>*</span></div>
                                 <select className="select border-black mt-0">
                                     <option disabled selected>Accidents</option>
                                     <option>Harassment</option>
                                     <option>Mob Lynching & Crowd Fights</option>
                                     <option>Others</option>
                                 </select>
-                                <div className='flex'><p className='mt-3 mr-2 font-normal text-sm font-mono' >Description of the Incident</p><span className='text-red-500 text-lg mt-3'>*</span></div>
+                                <div className='flex'><p className='mt-3 mr-2 font-normal text-sm ' >Description of the Incident</p><span className='text-red-500 text-lg mt-3'>*</span></div>
                                 <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea>
 
                                 
-                                <div className='flex mt-6 font-light font-mono text-sm'><p className='mr-2'>Does the Incident Live or Not ?</p><span className='text-red-500 text-lg'>*</span></div>
-                                <div role="tablist" className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-4">
-                                <input type="radio" name="my_tabs_1" role="tab" className="tab font-light font-mono text-sm" aria-label="LIVE" onClick={() => toggle2(3)} checked={toggleState2 === 3 && toggleState === 1} />
+                                <div className='flex mt-6   text-sm'><p className='mr-2'>Does the Incident Live or Not ?</p><span className='text-red-500 text-lg'>*</span></div>
+                                <div role="tablist" className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-2">
+                                <input type="radio" name="my_tabs_1" role="tab" className="tab font-light  text-sm" aria-label="LIVE" onClick={() => toggle2(3)} checked={toggleState2 === 3 && toggleState === 1} />
                                         <div role="tabpanel" className="tab-content p-2"> 
                                         <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
                                                     <div>
-                                                        <label className="font-light font-mono text-sm mt-2" style={{ fontFamily: "" }}>
+                                                        <label className="font-light  text-sm mt-2" style={{ fontFamily: "" }}>
                                                             {("Location of Incident")}
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="w-full font-light font-mono text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                                                            className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                                                             placeholder=""
                                                             style={{ fontFamily: "" }}
                                                         />
                                                     </div>  
                                                 </div>
                                         </div>
-                                        <input type="radio" name="my_tabs_1" role="tab" className="tab text-sm font-mono font-light" aria-label="NOT LIVE" onClick={() => toggle2(4)} checked={toggleState2 === 4 && toggleState === 1} />
-                                            <div role="tabpanel" className="tab-content p-2 text-sm font-mono font-light mt-2">
+                                        <input type="radio" name="my_tabs_1" role="tab" className="tab text-sm  font-light" aria-label="NOT LIVE" onClick={() => toggle2(4)} checked={toggleState2 === 4 && toggleState === 1} />
+                                            <div role="tabpanel" className="tab-content p-2 text-sm  font-light mt-2">
                                             <div className="grid grid-rows-2 items-center gap-8  md:grid-cols-2 md:grid-rows-none">
                                                             <div>
-                                                                <label className="font-light font-mono text-sm" style={{ fontFamily: "" }}>
+                                                                <label className="font-light  text-sm" style={{ fontFamily: "" }}>
                                                                 {("Date of Incident")}
                                                                 </label>
                                                         <div className="relative text-gray-400 focus-within:text-gray-600">
@@ -125,7 +125,7 @@ const Page = () => {
                                                         </div>
 
                                                         <div>
-                                                            <label className="font-light font-mono text-sm mt-2" style={{ fontFamily: "" }}>
+                                                            <label className="font-light  text-sm mt-2" style={{ fontFamily: "" }}>
                                                             {("Time of Incident")}
                                                             </label>
                                                         <div className="relative text-gray-400 focus-within:text-gray-600">
@@ -140,7 +140,7 @@ const Page = () => {
                                                     </div>
                                                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
                                                         <div>
-                                                            <label className="font-light font-mono text-sm mt-2" style={{ fontFamily: "" }}>
+                                                            <label className="font-light  text-sm mt-2" style={{ fontFamily: "" }}>
                                                                 {("Location of Incident")}
                                                             </label>
                                                             <input
@@ -152,7 +152,7 @@ const Page = () => {
                                                         </div> 
 
                                                     <div>
-                                                    <label className="font-mono font-light text-sm" style={{ fontFamily: "" }}>
+                                                    <label className=" font-light text-sm" style={{ fontFamily: "" }}>
                                                         {("city")}
                                                     </label>
                                                     <input
@@ -166,7 +166,7 @@ const Page = () => {
 
                                                 <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
                                                 <div>
-                                                <label className="font-mono font-light text-sm" style={{ fontFamily: "" }}>
+                                                <label className=" font-light text-sm" style={{ fontFamily: "" }}>
                                                     {("State")}
                                                 </label>
                                                 <select
@@ -212,7 +212,7 @@ const Page = () => {
                                                         </select>
                                                 </div>
                                                 <div>
-                                                    <label className="text-sm font-mono font-light" style={{ fontFamily: "" }}>
+                                                    <label className="text-sm  font-light" style={{ fontFamily: "" }}>
                                                         {("pincode")}
                                                     </label>
                                                     <input
@@ -232,7 +232,7 @@ const Page = () => {
                                 <div className='flex flex-col'>
                             <p className='text-xl mt-6 font-medium'> PERSONAL INFORMATION</p>
                             <hr className='border border-gray-500'/>
-                            <p className='mt-3 text-sm italic font-mono'>Tell us about your appearance to Identify you correctly</p>
+                            <p className='mt-3 text-sm italic '>Tell us about your appearance to Identify you correctly</p>
                             <textarea className="textarea textarea-bordered border-black" placeholder=""></textarea>
                         </div>
                             </div>
@@ -242,39 +242,39 @@ const Page = () => {
                         <p className='text-xl font-medium'> INCIDENT DESCRIPTION</p>
                             <hr className='border border-gray-500' />
                             <div className='mt-6 grid grid-cols'>
-                                <div className='flex'><p className='mr-2 font-normal text-sm font-mono'>Type of Incident</p><span className='text-red-500 text-lg '>*</span></div>
+                                <div className='flex'><p className='mr-2 font-normal text-sm '>Type of Incident</p><span className='text-red-500 text-lg '>*</span></div>
                                 <select className="select border-black mt-0">
                                     <option disabled selected>Accidents</option>
                                     <option>Harassment</option>
                                     <option>Mob Lynching & Crowd Fights</option>
                                     <option>Others</option>
                                 </select>
-                                <div className='flex'><p className='mt-3 mr-2 font-normal text-sm font-mono' >Description of the Incident</p><span className='text-red-500 text-lg mt-3'>*</span></div>
+                                <div className='flex'><p className='mt-3 mr-2 font-normal text-sm ' >Description of the Incident</p><span className='text-red-500 text-lg mt-3'>*</span></div>
                                 <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea>
 
-                                <div className='flex mt-6 font-light font-mono text-sm'><p className='mr-2'>Does the Incident Live or Not ?</p><span className='text-red-500 text-lg'>*</span></div>
+                                <div className='flex mt-6 font-light  text-sm'><p className='mr-2'>Does the Incident Live or Not ?</p><span className='text-red-500 text-lg'>*</span></div>
                                 <div role="tablist" className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-4">
-                                <input type="radio" name="my_tabs_1" role="tab" className="tab font-light font-mono text-sm" aria-label="LIVE" onClick={() => toggle2(3)} checked={toggleState2 === 3 && toggleState === 2} />
+                                <input type="radio" name="my_tabs_1" role="tab" className="tab font-light  text-sm" aria-label="LIVE" onClick={() => toggle2(3)} checked={toggleState2 === 3 && toggleState === 2} />
                                         <div role="tabpanel" className="tab-content p-2"> 
                                         <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
                                                     <div>
-                                                        <label className="font-light font-mono text-sm mt-2" style={{ fontFamily: "" }}>
+                                                        <label className="font-light  text-sm mt-2" style={{ fontFamily: "" }}>
                                                             {("Location of Incident")}
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="w-full font-light font-mono text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                                                            className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                                                             placeholder=""
                                                             style={{ fontFamily: "" }}
                                                         />
                                                     </div>  
                                                 </div>
                                         </div>
-                                        <input type="radio" name="my_tabs_1" role="tab" className="tab text-sm font-mono font-light" aria-label="NOT LIVE" onClick={() => toggle2(4)} checked={toggleState2 === 4 && toggleState === 2} />
-                                            <div role="tabpanel" className="tab-content p-4 text-sm font-mono font-light mt-2 text-gray-600">
+                                        <input type="radio" name="my_tabs_1" role="tab" className="tab text-sm  font-light" aria-label="NOT LIVE" onClick={() => toggle2(4)} checked={toggleState2 === 4 && toggleState === 2} />
+                                            <div role="tabpanel" className="tab-content p-4 text-sm  font-light mt-2 text-gray-600">
                                             <div className="grid grid-rows-2 items-center gap-8  md:grid-cols-2 md:grid-rows-none">
                                                             <div>
-                                                                <label className="font-light font-mono text-sm" style={{ fontFamily: "" }}>
+                                                                <label className="font-light  text-sm" style={{ fontFamily: "" }}>
                                                                 {("Date of Incident")}
                                                                 </label>
                                                         <div className="relative text-gray-400 focus-within:text-gray-600">
@@ -288,7 +288,7 @@ const Page = () => {
                                                         </div>
 
                                                         <div>
-                                                            <label className="font-light font-mono text-sm mt-2" style={{ fontFamily: "" }}>
+                                                            <label className="font-light  text-sm mt-2" style={{ fontFamily: "" }}>
                                                             {("Time of Incident")}
                                                             </label>
                                                         <div className="relative text-gray-400 focus-within:text-gray-600">
@@ -303,7 +303,7 @@ const Page = () => {
                                                     </div>
                                                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
                                                         <div>
-                                                            <label className="font-light font-mono text-sm mt-2" style={{ fontFamily: "" }}>
+                                                            <label className="font-light  text-sm mt-2" style={{ fontFamily: "" }}>
                                                                 {("Location of Incident")}
                                                             </label>
                                                             <input
@@ -315,7 +315,7 @@ const Page = () => {
                                                         </div> 
 
                                                     <div>
-                                                    <label className="font-mono font-light text-sm" style={{ fontFamily: "" }}>
+                                                    <label className=" font-light text-sm" style={{ fontFamily: "" }}>
                                                         {("city")}
                                                     </label>
                                                     <input
@@ -329,7 +329,7 @@ const Page = () => {
 
                                                 <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
                                                 <div>
-                                                <label className="font-mono font-light text-sm" style={{ fontFamily: "" }}>
+                                                <label className=" font-light text-sm" style={{ fontFamily: "" }}>
                                                     {("State")}
                                                 </label>
                                                 <select
@@ -375,7 +375,7 @@ const Page = () => {
                                                         </select>
                                                 </div>
                                                 <div>
-                                                    <label className="text-sm font-mono font-light" style={{ fontFamily: "" }}>
+                                                    <label className="text-sm  font-light" style={{ fontFamily: "" }}>
                                                         {("pincode")}
                                                     </label>
                                                     <input
@@ -393,9 +393,9 @@ const Page = () => {
                                     </div>
                                 <Doc_upload/>
                                 <div className='flex flex-col'>
-                            <p className='text-xl mt-6 font-medium'> PERSONAL INFORMATION</p>
+                            <div className='flex'><p className='text-xl mt-6 font-medium'> PERSONAL INFORMATION</p><span className='text-red-500'>Optional</span></div>
                             <hr className='border border-gray-500'/>
-                            <p className='mt-3 text-sm italic font-mono'>Tell us about victim's appearance to Identify victim correctly</p>
+                            <p className='mt-3 text-sm italic font-light'>Tell us about victim's appearance to Identify victim correctly</p>
                             <textarea className="textarea textarea-bordered border-black" placeholder=""></textarea>
                         </div>                     
                         </div> 
