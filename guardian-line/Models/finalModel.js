@@ -62,7 +62,7 @@ function getInput() {
     // For example, it could be implemented using prompt in a browser environment
     // or using readline in a Node.js environment
     return new Promise(resolve => {
-        // Implementation depends 
+        // Implementation 
     });
 }
 
