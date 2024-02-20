@@ -6,7 +6,7 @@ const Sidebar = () => {
     <>
       <ul className="menu menu-md h-full mx-2 flex-nowrap justify-evenly bg-stone-400	">
         <li className="pt-2 focus:outline-none focus:ring text-cyan-800">
-        <Link href="/volunteers" className="text-lg text-white">Reported Crimes</Link>
+        <Link href="/reported_crimes" className="text-lg text-white">Reported Crimes</Link>
         </li>
         <li className="focus:outline-none focus:ring text-cyan-800">
         <Link href="/volunteers" className="text-lg text-white">Volunteers page</Link>
