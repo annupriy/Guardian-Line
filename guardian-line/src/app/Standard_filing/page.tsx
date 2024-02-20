@@ -395,7 +395,7 @@ const Page = () => {
                                 <div className='flex flex-col'>
                             <div className='flex'><p className='text-xl mt-6 font-medium'> PERSONAL INFORMATION</p><span className='text-red-500'>Optional</span></div>
                             <hr className='border border-gray-500'/>
-                            <p className='mt-3 text-sm italic font-light'>Tell us about victim's appearance to Identify victim correctly</p>
+                            <p className='mt-3 text-sm italic font-light'>Tell us about victim&apos;s appearance to Identify victim correctly</p>
                             <textarea className="textarea textarea-bordered border-black" placeholder=""></textarea>
                         </div>                     
                         </div> 

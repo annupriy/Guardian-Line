@@ -16,7 +16,7 @@ const page = () => {
           <div className=" ">
             <div className='ml-15 mr-15 mt-6 '>
               <h2 className="text-center  mt-1 text-2xl font-bold">Create your account</h2>
-              <p className='text-center text-sm text-gray-500'>It's quick and easy</p>
+              <p className='text-center text-sm text-gray-500'>It&apos;s quick and easy</p>
             </div>
             <hr className='mt-4 border border-gray-300' />
             <form action="#" className="flex flex-col gap-4 mt-6 items-center justify-center">

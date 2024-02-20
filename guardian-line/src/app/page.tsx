@@ -44,7 +44,7 @@ export default function Home() {
           )}
         </div>
         <p className="animatedText text-lg text-gray-600 mb-4">
-          Please don't indulge in scamming, you will be banned
+          Please don&apos;t indulge in scamming, you will be banned
         </p>
         <hr className="m-auto w-[65%]"/>
         <p className="animatedText text-lg text-gray-600 mt-10 mb-8">
