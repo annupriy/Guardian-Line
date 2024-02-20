@@ -1,4 +1,8 @@
 # Guardian-Line
+Dependecies to install
+- `npm i`
+- `npm i react-tooltip`
+- `npm run dev`
 
 To run the app.py from FindDuplicateVideoModel follow these steps:
 - Install FFmpeg and add it to the path

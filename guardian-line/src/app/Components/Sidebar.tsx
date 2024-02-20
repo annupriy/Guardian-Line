@@ -4,21 +4,21 @@ import Link from "next/link";
 const Sidebar = () => {
   return (
     <>
-      <ul className="menu menu-md h-full mx-2 flex-nowrap justify-evenly  text-black">
-        <li className="pt-2 focus:outline-none  hover:bg-teal-300 rounded-lg ">
-        <Link href="/volunteers" className="text-lg">Reported Crimes</Link>
+      <ul className="menu menu-md h-full mx-2 flex-nowrap justify-evenly bg-stone-400	">
+        <li className="pt-2 focus:outline-none focus:ring text-cyan-800">
+        <Link href="/volunteers" className="text-lg text-white">Reported Crimes</Link>
         </li>
-        <li className="focus:outline-none focus:ring">
-        <Link href="/volunteers" className="text-lg">Volunteers page</Link>
+        <li className="focus:outline-none focus:ring text-cyan-800">
+        <Link href="/volunteers" className="text-lg text-white">Volunteers page</Link>
         </li>
-        <li className="focus:outline-none focus:ring focus:bg-teal-200">
-        <Link href="/volunteers" className="text-lg">About Us</Link>
+        <li className="focus:outline-none focus:ring text-cyan-800">
+        <Link href="/volunteers" className="text-lg text-white">About Us</Link>
         </li>
-        <li className="focus:outline-none focus:ring">
-        <Link href="/volunteers" className="text-lg">User Guide</Link>
+        <li className="focus:outline-none focus:ring text-cyan-800">
+        <Link href="/volunteers" className="text-lg text-white">User Guide</Link>
         </li>
-        <li className="focus:outline-none focus:ring">
-        <Link href="/volunteers" className="text-lg">Contact Us</Link>
+        <li className="focus:outline-none focus:ring text-cyan-800">
+        <Link href="/volunteers" className="text-lg text-white">Contact Us</Link>
         </li>
       </ul>
     </>
