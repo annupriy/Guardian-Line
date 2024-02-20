@@ -14,7 +14,7 @@
 // //           style={{ marginLeft: "4px", marginTop: "-2px" }}
 // //         />
 // //       </div>
-// //       <div className="form-control mt-4 "> div2
+// //       <div className="form-control mt-4 "> div3
 // //         <label className="label cursor-pointer justify-center mr-24">
 // //           <span className="label-text text-xl font-semibold">
 // //             Register yourself as a volunteer
