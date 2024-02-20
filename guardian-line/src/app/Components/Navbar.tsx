@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 const Navbar = () => {
   return (
     <>
+
       <div className="navbar bg-emerald-600 w-full flex-end justify-between items-center h-[15%] top-0 right-0 border-b-2 border-slate-300">
           <img
             src={"./Guardian Line-logos_transparent.png"}
