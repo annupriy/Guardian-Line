@@ -7,7 +7,7 @@
 // //       </div>
 // //       <div className="flex justify-center mr-24">
 // //         <Player
-// //           autoplay
+// //           autoplay b
 // //           loop
 // //           src="./Animation-Volunteer.json"
 // //           className="h-60 w-60"
