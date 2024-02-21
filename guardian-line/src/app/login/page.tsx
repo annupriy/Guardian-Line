@@ -3,6 +3,8 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import logo from "./logo4.jpg";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "react-hot-toast";
 
 type LoginInput = {
   username: string;
@@ -16,10 +18,12 @@ type PageProps = {
 const Page = ({ searchParams }: PageProps) => {
   const [usernameError, setUsernameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [inputs, setInputs] = useState<LoginInput>({
     username: "",
     password: "",
   });
+  const router = useRouter();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -27,24 +31,49 @@ const Page = ({ searchParams }: PageProps) => {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (inputs.password !== "") {
-      await signIn("credentials", {
+    setErrorMessage(null);
+    const res = await toast.promise(
+      signIn("credentials", {
         username: inputs.username,
         password: inputs.password,
         callbackUrl: "/",
-      });
+        redirect: false,
+      }),
+      {
+        loading: "Logging in...",
+        success: "Logged in",
+        error: "Error",
+      },
+      {
+        style: {
+          minWidth: "250px",
+        },
+      }
+    );
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+      setErrorMessage("Error");
+    } else if (!res.error) {
+      router.push("/");
+    } else {
+      toast.dismiss();
+      if (res.status == 401) {
+        toast.error("Invalid username or password");
+        setErrorMessage("Invalid username or password");
+      } else {
+        toast.error("Could not login.");
+        setErrorMessage("Could not login.");
+      }
     }
   };
-  useEffect(() => {
-    getUserName();
-  }, []);
 
-  async function getUserName() {
-    return "annu";
-  }
+  useEffect(() => {
+    setInputs((prevInputs) => ({ ...prevInputs, username: "annu" }));
+  }, []);
 
   return (
     <div className="container md:px-0">
@@ -54,7 +83,7 @@ const Page = ({ searchParams }: PageProps) => {
           alt="logo for it"
           className="w-[30%] h-[60%] relative z-10 left-[3%] ml-10 "
         />
-
+        <Toaster />
         <div className="rounded-lg shadow-xl w-[30%] h-[50%] p-2 relative z-20 top-[15%]">
           <div className=" ">
             <div className="ml-15 mr-15 mt-6">

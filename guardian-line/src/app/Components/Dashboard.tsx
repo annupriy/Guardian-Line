@@ -6,6 +6,7 @@ import { Tooltip } from "react-tooltip";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { TypeAnimation } from "react-type-animation";
 import { User } from "@/types/user";
+import toast, { Toaster } from 'react-hot-toast';
 
 type UserInfoProps = {
   user: User;

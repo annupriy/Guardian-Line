@@ -3,14 +3,20 @@ export const userService = {
 };
 
 function authenticate(username: string, password: string) {
-  if (username !== "admin" || password !== "admin") {
-    return null; //(2)
+  if (!username || !password) {
+    throw new Error("invalid-credentials");
   }
-
+  if (username === "admin" && password !== "admin") {
+    throw new Error("invalid-password");
+  }
+  if (username !== "admin") {
+    throw new Error("invalid-username");
+  }
+  if (username !== "admin" || password !== "admin") {
+    return null;
+  }
   const user = {
-    id: "9001",
-    name: "Web Admin",
-    email: "admin@example.com",
+    username: username,
   };
 
   return user; //(4)
