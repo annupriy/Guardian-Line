@@ -1,8 +1,11 @@
 import React from 'react'
+import UserGuide from './userGuide'
 
 const page = () => {
   return (
-    <div>page</div>
+    <>
+    < UserGuide/ >
+    </>
   )
 }
 
