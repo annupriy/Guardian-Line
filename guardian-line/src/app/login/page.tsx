@@ -1,10 +1,44 @@
-'use client';
-import React, { useEffect } from "react";
+"use client";
+import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import logo from "./logo4.jpg";
+import { signIn } from "next-auth/react";
 
+type LoginInput = {
+  username: string;
+  password: string;
+};
 
-const Page = () => {
+type PageProps = {
+  searchParams: { error?: string };
+};
+
+const Page = ({ searchParams }: PageProps) => {
+  const [usernameError, setUsernameError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [inputs, setInputs] = useState<LoginInput>({
+    username: "",
+    password: "",
+  });
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("hii");
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs((values) => ({ ...values, [name]: value }));
+  };
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    if (inputs.password !== "") {
+      await signIn("credentials", {
+        username: inputs.username,
+        password: inputs.password,
+        callbackUrl: "/",
+      });
+    }
+  };
   useEffect(() => {
     getUserName();
   }, []);
@@ -12,6 +46,7 @@ const Page = () => {
   async function getUserName() {
     return "annu";
   }
+
   return (
     <div className="container md:px-0">
       <section className=" m-5 flex justify-start h-screen">
@@ -27,28 +62,46 @@ const Page = () => {
               <h2 className="text-center  mt-1 text-2xl ">
                 Login to your account
               </h2>
-              {/* <p className='text-center text-sm text-gray-500'>It's quick and easy</p> */}
             </div>
-            {/* <hr className='mt-2 border border-gray-300' /> */}
             <form
-              action="#"
+              onSubmit={handleSubmit}
               className="flex flex-col gap-4 mt-4 items-center justify-center"
             >
               <div className="p-2 flex flex-col gap-3 ">
                 <input
+                  id="username"
+                  name="username"
                   type="text"
                   placeholder="Username"
-                  className="py-2 px-12 border border-gray-400 rounded-lg text-center w-full"
+                  value={inputs.username || ""}
+                  onChange={handleChange}
+                  className={`py-2 px-12 border ${
+                    usernameError ? "border-red-500" : "border-gray-400"
+                  } rounded-lg text-center w-full`}
                 />
                 <input
-                  type="Password"
+                  id="password"
+                  name="password"
+                  type="password"
                   placeholder="Password"
-                  className="py-2 border border-gray-400 rounded-lg text-center w-full"
+                  className={`py-2 border ${
+                    passwordError ? "border-red-500" : "border-gray-400"
+                  } rounded-lg text-center w-full`}
+                  value={inputs.password || ""}
+                  onChange={handleChange}
                 />
               </div>
 
               <div className=" px-4 w-full">
-                <button className="w-full  py-2 rounded-lg text-center text-black  border border-black border-3 text-md hover:bg-teal-300 hover:scale-100 duration-300 font-semibold" onClick={getUserName}>
+                <button
+                  type="submit"
+                  className="w-full  py-2 rounded-lg text-center text-black  border border-black border-3 text-md hover:bg-teal-300 hover:scale-100 duration-300 font-semibold"
+
+                  // onClick={() => {
+                  //   getUserName();
+                  //   matchCredentials();
+                  // }}
+                >
                   Login
                 </button>
               </div>
@@ -63,19 +116,17 @@ const Page = () => {
                   </button>
                 </div>
               </div>
+              {searchParams.error && (
+                <p className="text-red-600 text-center capitalize">
+                  Login failed.
+                </p>
+              )}
             </form>
           </div>
-          {/* <div className='w-1/2 '>
-            <Image src={logo} alt="logo for it" className="md:block hidden h-[120%] w-[120% ]" />
-
-          </div> */}
         </div>
       </section>
     </div>
   );
 };
-// orange: #ff710d
-// kesari #FF7722
-// white #ffffff
-// yellow #ffb800
+
 export default Page;

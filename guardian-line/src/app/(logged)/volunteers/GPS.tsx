@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, ReactElement, ReactNode } from "react";
-import Layout from "../Components/layout";
+import Layout from "../../Components/layout";
 import { NextPage } from "next";
 
 type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
