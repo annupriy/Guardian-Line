@@ -22,7 +22,6 @@ const Page = ({ searchParams }: PageProps) => {
   });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("hii");
     const name = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({ ...values, [name]: value }));
