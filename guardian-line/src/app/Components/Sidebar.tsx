@@ -12,13 +12,13 @@ const Sidebar = () => {
         <Link href="/volunteers" className="text-lg text-white">Volunteers page</Link>
         </li>
         <li className="focus:outline-none focus:ring text-cyan-800">
-        <Link href="/volunteers" className="text-lg text-white">About Us</Link>
+        <Link href="/aboutUs" className="text-lg text-white">About Us</Link>
         </li>
         <li className="focus:outline-none focus:ring text-cyan-800">
-        <Link href="/volunteers" className="text-lg text-white">User Guide</Link>
+        <Link href="/user_guide" className="text-lg text-white">User Guide</Link>
         </li>
         <li className="focus:outline-none focus:ring text-cyan-800">
-        <Link href="/volunteers" className="text-lg text-white">Contact Us</Link>
+        <Link href="/contactUs" className="text-lg text-white">Contact Us</Link>
         </li>
       </ul>
     </>
