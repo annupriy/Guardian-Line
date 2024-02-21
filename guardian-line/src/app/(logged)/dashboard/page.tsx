@@ -4,16 +4,14 @@ import { getServerAuthSession } from "@/server/auth";
 import { User } from "@/types/user";
 import { redirect } from "next/navigation";
 
-type UserInfoProps = {
-  user: User;
-};
-
-const DashboardPage = async ({ user }: UserInfoProps) => {
+const DashboardPage = async () => {
   const authSession = await getServerAuthSession();
   if (!authSession) {
     redirect('/login')
   }
-  return <Dashboard user={authSession.user} />;
+  if(authSession.user){
+    return <Dashboard user={authSession.user} />;
+  }
 };
 
 export default DashboardPage;
