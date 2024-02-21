@@ -1,6 +1,7 @@
 import React from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import Sidebar from "./Sidebar";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
@@ -40,13 +41,12 @@ const Navbar = () => {
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">
+                <Link href="../my_profile" className="justify-between">
+               
                   My Profile
                   {/* <span className="badge">New</span> */}
-                </a>
-              </li>
-              <li>
-                <a>Settings</a>
+                
+                </Link>
               </li>
               <li>
                 <a>Logout</a>
