@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
 
 type LoginInput = {
-  username: string;
+  userName: string;
   password: string;
 };
 
@@ -16,11 +16,11 @@ type PageProps = {
 };
 
 const Page = ({ searchParams }: PageProps) => {
-  const [usernameError, setUsernameError] = useState(false);
+  const [userNameError, setUserNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [inputs, setInputs] = useState<LoginInput>({
-    username: "",
+    userName: "",
     password: "",
   });
   const router = useRouter();
@@ -37,7 +37,7 @@ const Page = ({ searchParams }: PageProps) => {
     setErrorMessage(null);
     const res = await toast.promise(
       signIn("credentials", {
-        username: inputs.username,
+        userName: inputs.userName,
         password: inputs.password,
         callbackUrl: "/",
         redirect: false,
@@ -72,7 +72,7 @@ const Page = ({ searchParams }: PageProps) => {
   };
 
   useEffect(() => {
-    setInputs((prevInputs) => ({ ...prevInputs, username: "annu" }));
+    setInputs((prevInputs) => ({ ...prevInputs, userName: "" }));
   }, []);
 
   return (
@@ -96,15 +96,16 @@ const Page = ({ searchParams }: PageProps) => {
               className="flex flex-col gap-4 mt-4 items-center justify-center"
             >
               <div className="p-2 flex flex-col gap-3 ">
+                <label htmlFor="userName" className="text-md"> </label>
                 <input
-                  id="username"
-                  name="username"
+                  id="userName"
+                  name="userName"
                   type="text"
                   placeholder="Username"
-                  value={inputs.username || ""}
+                  value={inputs.userName || ""}
                   onChange={handleChange}
                   className={`py-2 px-12 border ${
-                    usernameError ? "border-red-500" : "border-gray-400"
+                    userNameError ? "border-red-500" : "border-gray-400"
                   } rounded-lg text-center w-full`}
                 />
                 <input

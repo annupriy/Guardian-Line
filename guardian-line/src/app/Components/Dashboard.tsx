@@ -5,14 +5,18 @@ import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "react-tooltip";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { TypeAnimation } from "react-type-animation";
-import { User } from "@/types/user";
-import toast, { Toaster } from 'react-hot-toast';
 
-type UserInfoProps = {
+type User = {
+  name: string | null;
+  id: string | null;
+};
+
+type UserInfo = {
   user: User;
 };
+
 // Dashboard takes user as props of type username
-const Dashboard: React.FC<UserInfoProps> = ({ user }) => {
+const Dashboard: React.FC<UserInfo> = ({ user }) => {
   const [playerStarted, setPlayerStarted] = useState(false);
   const myElem = useRef<HTMLDivElement>(null);
 
@@ -30,6 +34,9 @@ const Dashboard: React.FC<UserInfoProps> = ({ user }) => {
   return (
     <main className="h-full w-full flex justify-center bg-neutral-100	">
       <div className="text-center mt-16 w-full">
+        <h1 className="animatedText text-4xl font-semibold mb-4 text-gray-800">
+          Welcome {user.name}
+        </h1>
         <div className="animatedText text-3xl font-semibold mb-4 text-gray-800 inline-flex">
           <TypeAnimation
             sequence={["Your identity is safe and anonymous with us", 1000]}

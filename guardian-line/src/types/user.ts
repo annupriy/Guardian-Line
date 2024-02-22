@@ -1,4 +1,5 @@
 export type User = {
-    username?: string | null;
-    password?: string | null;
-  }
+  id?: string | null;
+  userName?: string | null;
+  password?: string | null;
+};

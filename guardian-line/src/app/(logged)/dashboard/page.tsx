@@ -1,7 +1,6 @@
 import React from "react";
 import Dashboard from "@/app/Components/Dashboard";
 import { getServerAuthSession } from "@/server/auth";
-import { User } from "@/types/user";
 import { redirect } from "next/navigation";
 
 const DashboardPage = async () => {
