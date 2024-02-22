@@ -1,11 +1,51 @@
+"use client"
 import React from 'react'
 import Image from 'next/image'
 import logo from './logo4.jpg'
 import arrow from 'arrow-2.svg'
+import { useEffect, useState } from 'react';
+import { createHash } from 'crypto';
+
+
 
 
 
 const page = () => {
+  const [aadharNumber, setAadharNumber] = useState<string>('');
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAadharNumber(event.target.value);
+  };
+
+  const handleTabClick = async () => {
+    const hashedAadharNumber = createHash('sha256').update(aadharNumber).digest('hex');
+
+    try {
+      const response = await fetch('http://localhost:3000/api/addAadhar', {
+        method: 'POST',
+        body: hashedAadharNumber,
+      });
+
+      const data = await response.json();
+      console.log('Hashed Aadhar number stored in IPFS:', data.Hash);
+    } catch (error) {
+      console.error('Error storing hashed Aadhar number in IPFS:', error);
+    }
+  };
+  
+  
+
+  useEffect(() => {
+    // console.log('Aadhar Number:', aadharNumber);
+  }, [aadharNumber]);
+
+
+
+  
+
+
+
+
   return (
     <div className="container md:px-0 bg-white">
 
@@ -23,17 +63,15 @@ const page = () => {
 
               <div className="flex p-2">
                 <div className='relative '>
-                <input type="text" placeholder="Enter Your Aadhar Number" className="bg-white border border-gray-400 py-1 px-12 w-full rounded-lg text-center" />
-                <div className="tooltip flex" data-tip="Click Here for Authentication">
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" className='items-center'>
-                    <g>
-                      <polygon points="11.707 3.293 10.293 4.707 17.586 12 10.293 19.293 11.707 20.707 20.414 12 11.707 3.293" />
-                      <polygon points="5.707 3.293 4.293 4.707 11.586 12 4.293 19.293 5.707 20.707 14.414 12 5.707 3.293" />
-                    </g>
-                  </svg> */}
+                <input type="text" placeholder="Enter Your Aadhar Number" id= "aadhar" 
+                className="bg-white border border-gray-400 py-1 px-12 w-full rounded-lg text-center" 
+                onChange={handleInputChange} 
+                />
+                
+                <div className="tooltip flex" data-tip="Click Here for Authentication"
+                onClick={handleTabClick}>
                   <img src="/arrow2.svg" alt=""  className='w-5 absolute right-2 bottom-2'/>
                   </div>
-                  
                 </div>
               </div>
 
