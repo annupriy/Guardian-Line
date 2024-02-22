@@ -4,7 +4,7 @@ import React from 'react'
 import { NextPageContext } from "next";
 import router, { Router } from "next/router";
 import { ReactElement, useEffect, useRef, useState } from "react";
-import PdfViewer from "../../Components/pdfViewer";
+import PdfViewer from "../../Components/PdfViewer";
 import Doc_upload from '../../Components/Doc_upload';
 
 const Page = () => {
