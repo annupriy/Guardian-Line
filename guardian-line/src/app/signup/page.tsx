@@ -2,15 +2,10 @@
 import React from 'react'
 import Image from 'next/image'
 import logo from './logo4.jpg'
-import arrow from 'arrow-2.svg'
 import { useEffect, useState } from 'react';
 import { createHash } from 'crypto';
 
-
-
-
-
-const page = () => {
+const Page = () => {
   const [aadharNumber, setAadharNumber] = useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,32 +14,21 @@ const page = () => {
 
   const handleTabClick = async () => {
     const hashedAadharNumber = createHash('sha256').update(aadharNumber).digest('hex');
-
-    try {
-      const response = await fetch('http://localhost:3000/api/addAadhar', {
-        method: 'POST',
-        body: hashedAadharNumber,
-      });
-
-      const data = await response.json();
-      console.log('Hashed Aadhar number stored in IPFS:', data.Hash);
-    } catch (error) {
-      console.error('Error storing hashed Aadhar number in IPFS:', error);
-    }
+    console.log(hashedAadharNumber)
+    const response = await fetch('/api/addAadhar', {
+      method: 'POST',
+      body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    // const data= await response.json();
+    // const parsedData = data ? JSON.parse(data) : {};
+    // console.log(data);
   };
-  
-  
-
-  useEffect(() => {
-    // console.log('Aadhar Number:', aadharNumber);
-  }, [aadharNumber]);
 
 
-
-  
-
-
-
+// ipfs://bafyreib4pff766vhpbxbhjbqqnsh5emeznvujayjj4z2iu533cprgbz23m/metadata.json
 
   return (
     <div className="container md:px-0 bg-white">
@@ -56,21 +40,21 @@ const page = () => {
           <div className=" ">
             <div className='ml-15 mr-15 mt-6 '>
               <h2 className="text-center  mt-1 text-2xl font-bold">Create your account</h2>
-              <p className='text-center text-sm text-gray-500'>It's quick and easy</p>
+              <p className='text-center text-sm text-gray-500'>It&apos;s quick and easy</p>
             </div>
             <hr className='mt-4 border border-gray-300' />
             <form action="#" className="flex flex-col gap-4 mt-6 items-center justify-center">
 
               <div className="flex p-2">
                 <div className='relative '>
-                <input type="text" placeholder="Enter Your Aadhar Number" id= "aadhar" 
-                className="bg-white border border-gray-400 py-1 px-12 w-full rounded-lg text-center" 
-                onChange={handleInputChange} 
-                />
-                
-                <div className="tooltip flex" data-tip="Click Here for Authentication"
-                onClick={handleTabClick}>
-                  <img src="/arrow2.svg" alt=""  className='w-5 absolute right-2 bottom-2'/>
+                  <input type="text" placeholder="Enter Your Aadhar Number" id="aadhar"
+                    className="bg-white border border-gray-400 py-1 px-12 w-full rounded-lg text-center"
+                    onChange={handleInputChange}
+                  />
+
+                  <div className="tooltip flex" data-tip="Click Here for Authentication"
+                    onClick={handleTabClick}>
+                    <img src="/arrow2.svg" alt="" className='w-5 absolute right-2 bottom-2' />
                   </div>
                 </div>
               </div>
@@ -86,12 +70,12 @@ const page = () => {
                   Sign Up
                 </button>
               </div>
-              
+
               <div className='px-4 w-full'>
-              <div className="w-full mt-2 text-xs flex justify-between bg-slate-700 p-1 px-4 rounded-lg">
-                <p className=' text-md text-white flex items-center'>Already have an account?</p>
-                <button className=" py-2 w-1/3 bg-white border rounded-xl hover:scale-100 duration-300">Login</button>
-              </div>
+                <div className="w-full mt-2 text-xs flex justify-between bg-slate-700 p-1 px-4 rounded-lg">
+                  <p className=' text-md text-white flex items-center'>Already have an account?</p>
+                  <button className=" py-2 w-1/3 bg-white border rounded-xl hover:scale-100 duration-300">Login</button>
+                </div>
               </div>
 
             </form>
@@ -116,4 +100,4 @@ const page = () => {
 // kesari #FF7722
 // white #ffffff
 // yellow #ffb800
-export default page
+export default Page;

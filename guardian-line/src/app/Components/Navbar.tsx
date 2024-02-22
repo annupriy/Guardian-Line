@@ -1,18 +1,22 @@
+'use client'
 import React from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import Sidebar from "./Sidebar";
+import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const Navbar = () => {
+  const handleLogout = async () => {
+    await signOut();
+  };
   return (
     <>
-
       <div className="navbar bg-emerald-600 w-full flex-end justify-between items-center h-[15%] top-0 right-0 border-b-2 border-slate-300">
-          <img
-            src={"./Guardian Line-logos_transparent.png"}
-            alt=""
-            width={170}
-            height={170}
-          />
+        <img
+          src={"./Guardian Line-logos_transparent.png"}
+          alt=""
+          width={170}
+          height={170}
+        />
         <div className="flex-1 flex justify-center">
           <a
             href="/"
@@ -40,16 +44,13 @@ const Navbar = () => {
               className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">
+                <Link href="../my_profile" className="justify-between">
                   My Profile
                   {/* <span className="badge">New</span> */}
-                </a>
+                </Link>
               </li>
               <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
+                <button onClick={handleLogout}>Logout</button>
               </li>
             </ul>
           </div>
