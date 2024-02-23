@@ -13,42 +13,118 @@ type User = {
 type UserInfo = {
   user: User;
 };
-const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
-  console.log(user);
-  const router = useRouter();
-  const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+// const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
+//   console.log(user);
+//   const router = useRouter();
+//   const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
+//   const [error, setError] = useState<string | null>(null);
 
-  const handleNoClick = () => {
-    console.log("No clicked");
-  };
+//   const handleNoClick = () => {
+//     console.log("No clicked");
+//   };
 
-  const handleYesClick = () => {
-    console.log("Yes clicked");
-    setIsReadyToVolunteer(true);
-    console.log(user);
-    if (user && user.name) {
-      handleGetLocation();
-    }
-  };
-  const handleDeleteLocation = () => {
-    console.log("Delete clicked");
-  };
+//   const handleYesClick = async () => {
+//     console.log("Yes clicked");
+//     setIsReadyToVolunteer(true);
+//     console.log(user);
+//     if (user && user.id) {
+//       try {
+//         const res = await fetch("/api/activeVolunteers", {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({
+//             userId: user.id,
+//           }),
+//         });
+  
+//         if (res.ok) {
+//           console.log("User ID added to active volunteers");
+//         } else {
+//           console.error("Failed to add user ID to active volunteers");
+//         }
+//       } catch (error) {
+//         console.error("Error adding user ID to active volunteers:", error);
+//       }
+//     }
+//   };
+//   const handleDeleteLocation = () => {
+//     console.log("Delete clicked");
+//   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log("useEffect");
-      // Call a get request to check if the user is already registered
-      // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
-      // console.log(res);
-      const isActive = true;
-      if (isActive) {
-        setIsReadyToVolunteer(true);
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       console.log("useEffect");
+//       // Call a get request to check if the user is already registered
+//       // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
+//       // console.log(res);
+//       const isActive = true;
+//       if (isActive) {
+//         setIsReadyToVolunteer(true);
+//       }
+//     };
+
+  //   fetchData();
+  // }, [user]);
+
+  const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
+    const router = useRouter();
+    const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+  
+    const handleNoClick = () => {
+      console.log("No clicked");
+    };
+  
+    const handleYesClick = async () => {
+      console.log("Yes clicked");
+      setIsReadyToVolunteer(true);
+      console.log(user);
+      if (user && user.id) {
+        try {
+          const res = await fetch("/api/activeVolunteers", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user.id,
+            }),
+          });
+    
+          if (res.ok) {
+            console.log("User ID added to active volunteers");
+          } else {
+            console.error("Failed to add user ID to active volunteers");
+          }
+        } catch (error) {
+          console.error("Error adding user ID to active volunteers:", error);
+        }
       }
     };
-
-    fetchData();
-  }, [user]);
+  
+    const handleDeleteLocation = () => {
+      console.log("Delete clicked");
+    };
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        console.log("useEffect");
+        // Call a get request to check if the user is already registered
+        // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
+        // console.log(res);
+        const isActive = true;
+        if (isActive) {
+          setIsReadyToVolunteer(false); // Ensure isReadyToVolunteer is set to false initially
+        }
+      };
+  
+      fetchData();
+    }, [user]);
+  
+    // Rest of the component remains unchanged
+  
 
   const handleGetLocation = () => {
     try {
@@ -106,6 +182,8 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       }
     }
   };
+
+  
 
   return (
     <div className="text-center">
