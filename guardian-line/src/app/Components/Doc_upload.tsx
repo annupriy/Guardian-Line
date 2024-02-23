@@ -3,7 +3,7 @@ import React from 'react'
 import { NextPageContext } from "next";
 import router, { Router } from "next/router";
 import { ReactElement, useEffect, useRef, useState } from "react";
-import PdfViewer from "./pdfViewer";
+import PdfViewer from "./PdfViewer";
 
 const Doc_upload = () => {
     const [currentDoc, setCurrentDoc] = useState<{ path: string; title: string } | null>(null);
