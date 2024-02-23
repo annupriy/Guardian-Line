@@ -2,8 +2,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-// import { checkVolunteerStatus } from "@/server/db/checkVolunteerStatus";
 
 type User = {
   id?: string | null;
@@ -14,14 +12,13 @@ type UserInfo = {
   user: User;
 };
 const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
-  const router = useRouter();
   const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-//   const handleNoClick = () => {
-//     console.log("No clicked");
-//   };
+  const handleNoClick = () => {
+    console.log("No clicked");
+  };
 
   const handleYesClick = () => {
     setIsReadyToVolunteer(true);
@@ -81,28 +78,25 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         console.error(`Error: ${error.message}`);
       }
     };
-  
-    const handleDeleteLocation = () => {
-      console.log("Delete clicked");
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("useEffect");
+      // Call a get request to check if the user is already registered
+      // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
+      // console.log(res);
+      const isActive = true;
+      if (isActive) {
+        setIsReadyToVolunteer(false); // Ensure isReadyToVolunteer is set to false initially
+      }
     };
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        console.log("useEffect");
-        // Call a get request to check if the user is already registered
-        // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
-        // console.log(res);
-        const isActive = true;
-        if (isActive) {
-          setIsReadyToVolunteer(false); // Ensure isReadyToVolunteer is set to false initially
-        }
-      };
-  
-      fetchData();
-    }, [user]);
-  
-    // Rest of the component remains unchanged
-  
+
+    fetchData();
+  }, [user]);
+
+  // Rest of the component remains unchanged
 
   const handleGetLocation = () => {
     try {
@@ -158,7 +152,11 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     }
   };
   if (isLoading) {
-    return <div className="flex justify-center h-full align-middle"><span className="loading loading-spinner loading-lg"></span></div>;
+    return (
+      <div className="flex justify-center h-full align-middle">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
   }
   return (
     <div className="text-center">
