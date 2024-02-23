@@ -70,7 +70,6 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           // Once data is fetched, set isLoading to false
           setIsLoading(false);
           const isActive = data.isPresent;
-          console.log("isActive", isActive);
           setIsReadyToVolunteer(isActive);
         }, 2000);
       } catch (error: any) {
@@ -83,7 +82,6 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("useEffect");
       // Call a get request to check if the user is already registered
       // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
       // console.log(res);

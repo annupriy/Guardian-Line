@@ -25,7 +25,9 @@ export async function POST(req) {
         latitude: latitude,
         longitude: longitude,
         accuracy: accuracy,
-        timestamp: 0,
+        dateTime: new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata",
+        }),
       });
 
       // Respond with success message
