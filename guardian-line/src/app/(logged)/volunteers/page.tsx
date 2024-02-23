@@ -14,7 +14,7 @@ const page = async () => {
     if (!isVolunteer) {
       return <UnregisteredVolunteers user={authSession.user} />;
     } else {
-      return <RegisteredVolunteers/>;
+      return <RegisteredVolunteers user={authSession.user}/>;
     }
   }
 };
