@@ -1,5 +1,4 @@
-import { createHash } from 'crypto';
-import { FilebaseClient, File } from '@filebase/client' 
+import { FilebaseClient } from '@filebase/client' 
 const apiToken = process.env.API_TOKEN;
 
 export async function POST(req) {
@@ -23,9 +22,3 @@ export async function POST(req) {
         return new Response("Error parsing request body", {status:500})
     }
 }
-
-
-
-
-
-

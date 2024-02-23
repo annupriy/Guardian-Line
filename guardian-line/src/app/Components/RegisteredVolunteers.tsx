@@ -14,36 +14,71 @@ type UserInfo = {
   user: User;
 };
 const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
-  console.log(user);
   const router = useRouter();
   const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleNoClick = () => {
     console.log("No clicked");
   };
 
   const handleYesClick = () => {
-    console.log("Yes clicked");
     setIsReadyToVolunteer(true);
-    console.log(user);
     if (user && user.name) {
       handleGetLocation();
     }
   };
-  const handleDeleteLocation = () => {
-    console.log("Delete clicked");
+  const handleDeleteLocation = async () => {
+    // call a post request to delete the user location from ActiveVolunteers
+    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        addVolunteer: false,
+        userName: user.name,
+      }),
+    });
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+    } else if (res.status === 200) {
+      toast.dismiss();
+      console.log("Deleted");
+      setIsReadyToVolunteer(false);
+    } else {
+      toast.dismiss();
+      if (res.status === 401) {
+        toast.error("Error deleting Volunteer. Please try again.");
+      } else {
+        toast.error("Could not delete Volunteer");
+      }
+    }
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("useEffect");
-      // Call a get request to check if the user is already registered
-      // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
-      // console.log(res);
-      const isActive = true;
-      if (isActive) {
-        setIsReadyToVolunteer(true);
+      try {
+        // Call a get request to check if the user is already registered
+        const res = await fetch(
+          `http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`,
+          {
+            method: "GET",
+          }
+        );
+        const data = await res.json();
+        setTimeout(() => {
+          // Once data is fetched, set isLoading to false
+          setIsLoading(false);
+          const isActive = data.isPresent;
+          console.log("isActive", isActive);
+          setIsReadyToVolunteer(isActive);
+        }, 2000);
+      } catch (error: any) {
+        setError(error.message);
+        console.error(`Error: ${error.message}`);
       }
     };
 
@@ -52,10 +87,8 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
 
   const handleGetLocation = () => {
     try {
-      console.log("Getting location");
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log(position);
           if (user && user.name) {
             AddVolunteersLocation(user.name, position.coords); // Pass position.coords directly
           }
@@ -76,7 +109,6 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     userName: string,
     coords: GeolocationCoordinates
   ) => {
-    console.log("Adding volunteers location");
     // write code to POST volunteer registration to server
     const res = await fetch("http://localhost:3000/api/volunteersLocation", {
       method: "POST",
@@ -84,6 +116,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        addVolunteer: true,
         userName: userName,
         latitude: coords.latitude,
         longitude: coords.longitude,
@@ -96,7 +129,6 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     } else if (res.status === 200) {
       toast.dismiss();
       // reload the page
-      router.refresh();
     } else {
       toast.dismiss();
       if (res.status === 401) {
@@ -106,7 +138,9 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       }
     }
   };
-
+  if (isLoading) {
+    return <div className="flex justify-center h-full align-middle"><span className="loading loading-spinner loading-lg"></span></div>;
+  }
   return (
     <div className="text-center">
       {isReadyToVolunteer ? (
@@ -114,7 +148,9 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           <div className="text-green-600 text-3xl mb-8">
             Reports filed near you
           </div>
-          <button className="btn btn-outline" onClick={handleDeleteLocation}>Delete</button>
+          <button className="btn btn-outline" onClick={handleDeleteLocation}>
+            Delete
+          </button>
         </>
       ) : (
         <div>
