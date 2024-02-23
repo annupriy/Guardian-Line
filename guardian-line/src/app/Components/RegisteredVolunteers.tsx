@@ -19,9 +19,9 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleNoClick = () => {
-    console.log("No clicked");
-  };
+//   const handleNoClick = () => {
+//     console.log("No clicked");
+//   };
 
   const handleYesClick = () => {
     setIsReadyToVolunteer(true);
@@ -81,9 +81,28 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         console.error(`Error: ${error.message}`);
       }
     };
-
-    fetchData();
-  }, [user]);
+  
+    const handleDeleteLocation = () => {
+      console.log("Delete clicked");
+    };
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        console.log("useEffect");
+        // Call a get request to check if the user is already registered
+        // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
+        // console.log(res);
+        const isActive = true;
+        if (isActive) {
+          setIsReadyToVolunteer(false); // Ensure isReadyToVolunteer is set to false initially
+        }
+      };
+  
+      fetchData();
+    }, [user]);
+  
+    // Rest of the component remains unchanged
+  
 
   const handleGetLocation = () => {
     try {
