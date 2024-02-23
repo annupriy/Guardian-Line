@@ -83,7 +83,7 @@ type UserInfo = {
       console.log(user);
       if (user && user.id) {
         try {
-          const res = await fetch("/api/activeVolunteers", {
+          const res = await fetch("/api/ActiveVolunteers", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
