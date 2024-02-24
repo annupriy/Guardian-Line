@@ -4,8 +4,12 @@ import { useEffect, useRef, useState, ChangeEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
+import {SessionProvider, useSession } from 'next-auth/react';
 
 const Page = () => {
+
+  const { data: session } = useSession();
+
   const [toggleState, setToggleState] = useState(1);
   const [toggleState2, setToggleState2] = useState<number>(3);
   const [currentDoc, setCurrentDoc] = useState<{
@@ -84,11 +88,22 @@ const Page = () => {
     setState(event.target.value);
   };
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Description:", descriptionOfIncident);
     console.log("Type", typeOfIncident);
     console.log("Location:", incidentLocation);
+
+    if (!session) {
+      // Handle the case where there is no active session
+      return;
+    }
+
+    const userName = session.user.name;
+
+    console.log("Username:", userName);
+
     let uploadedDocPath: Array<any> = [];
     if (uploadedDocs.length > 0) {
       // Use Promise.all to wait for all asynchronous operations
@@ -117,6 +132,7 @@ const Page = () => {
           state,
           pincode,
           uploadedDocPath,
+          userName: userName, 
         }),
       }),
       {
@@ -972,4 +988,10 @@ const Page = () => {
   );
 };
 
-export default Page;
+const WrappedPage = () => (
+  <SessionProvider>
+    <Page />
+  </SessionProvider>
+);
+
+export default WrappedPage;
