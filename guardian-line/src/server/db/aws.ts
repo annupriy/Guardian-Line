@@ -1,8 +1,7 @@
 import aws from "aws-sdk";
-import { Timestamp } from "mongodb";
 
 const s3Bucket = process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME || "";
-
+console.log(process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID)
 aws.config.update({
   region: process.env.NEXT_PUBLIC_AWS_REGION,
   accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
@@ -15,7 +14,8 @@ export const uploadFile = async (file: File|null) => {
 
   // @ts-ignore
   // convert file name to file_timestamp(in milliseconds) format
-  const fileName = file?.name + "_" + Timestamp.now().toMillis();
+  // slice .png or .jpeg or anything after dot in file name
+  const fileName = file?.name.slice(0, file?.name.lastIndexOf(".")) + "_" + Date.now() + file?.name.slice(file?.name.lastIndexOf("."));
 
   const params = {
     Bucket: s3Bucket,

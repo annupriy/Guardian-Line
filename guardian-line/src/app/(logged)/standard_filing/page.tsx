@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import { useEffect, useRef, useState, ChangeEvent } from "react";
-import Doc_upload from "../../Components/Doc_upload";
 import toast, { Toaster } from "react-hot-toast";
+import PdfViewer from "../../Components/PdfViewer";
+import { uploadFile } from "@/server/db/aws";
 
 const Page = () => {
   const [toggleState, setToggleState] = useState(1);
@@ -24,7 +25,18 @@ const Page = () => {
     { file: File; title: string }[]
   >([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
+  const [typeOfIncident, setTypeOfIncident] = useState("");
+  const [descriptionOfIncident, setDescriptionOfIncident] = useState("");
+  const [incidentLocation, setIncidentLocation] = useState("");
+  const [personalInformation, setPersonalInformation] = useState("");
+  const [dateOfIncident, setDateOfIncident] = useState("");
+  const [timeOfIncident, setTimeOfIncident] = useState("");
+  // const [elaborateLocation, setElaborateLocation] = useState('')
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [error, setError] = useState("");
+  // const uploadedUrls: {title: string, url: string }[] = [];
   const handleDocsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
@@ -37,9 +49,6 @@ const Page = () => {
       setUploadedDocs((prevDocs) => [...prevDocs, ...newFiles]);
     }
   };
-
-  // next.config.js
-
   const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -55,6 +64,7 @@ const Page = () => {
   };
 
   const toggleDropdownMore = (index: number | null) => {
+    console.log(uploadedDocs);
     setDropdownIndex(index === dropdownIndex ? null : index);
   };
   const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
@@ -66,19 +76,6 @@ const Page = () => {
     });
     setDropdownIndex(null);
   };
-
-  const [typeOfIncident, setTypeOfIncident] = useState('')
-  const [descriptionOfIncident, setDescriptionOfIncident] = useState('')
-  const [incidentLocation, setIncidentLocation] = useState('')
-  const [personalInformation, setPersonalInformation] = useState('')
-  const [dateOfIncident, setDateOfIncident] = useState('')
-  const [timeOfIncident, setTimeOfIncident] = useState('')
-  // const [elaborateLocation, setElaborateLocation] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [pincode, setPincode] = useState('')
-  const [error, setError] = useState('');
-
   const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTypeOfIncident(event.target.value);
   };
@@ -89,35 +86,50 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Description:", descriptionOfIncident)
-    console.log("Type", typeOfIncident)
-    console.log("Location:", incidentLocation)
-
-    const res = await toast.promise(fetch("api/reports_2", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify({
-        typeOfIncident,
-        descriptionOfIncident,
-        incidentLocation,
-        personalInformation,
-        dateOfIncident,
-        timeOfIncident,
-        city,
-        state,
-        pincode,
+    console.log("Description:", descriptionOfIncident);
+    console.log("Type", typeOfIncident);
+    console.log("Location:", incidentLocation);
+    let uploadedDocPath: Array<any> = [];
+    if (uploadedDocs.length > 0) {
+      // Use Promise.all to wait for all asynchronous operations
+      await Promise.all(
+        uploadedDocs.map(async (doc, index) => {
+          const path = await uploadFile(doc.file);
+          uploadedDocPath.push({ path: path, title: doc.title });
+        })
+      );
+    }
+    console.log("Uploaded Docs:", uploadedDocPath);
+    const res = await toast.promise(
+      fetch("api/reports_2", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          typeOfIncident,
+          descriptionOfIncident,
+          incidentLocation,
+          personalInformation,
+          dateOfIncident,
+          timeOfIncident,
+          city,
+          state,
+          pincode,
+          uploadedDocPath,
+        }),
       }),
-    }), {
-      loading: "Submitting...",
-      success: "Submitted",
-      error: "Error submitting form. Please try again."
-    }, {
-      style: {
-        minWidth: "200px"
+      {
+        loading: "Submitting...",
+        success: "Submitted",
+        error: "Error submitting form. Please try again.",
+      },
+      {
+        style: {
+          minWidth: "200px",
+        },
       }
-    });
+    );
     if (!res) {
       toast.dismiss();
       toast.error("Error");
@@ -137,11 +149,10 @@ const Page = () => {
   return (
     <div className="p-6 relative z-10">
       <form
-        action=""
         className="shadow-xl border rounded-md border-gray-700 bg-white mx-auto w-2/3 relative z-20"
         onSubmit={handleSubmit}
       >
-        <Toaster/>
+        <Toaster />
         {/* <div className='w-full p-4 m-0 mx-auto border-gray-700'></div> */}
         <div className=" bg-white mt-2 p-4">
           <div className="text-md flex mb-3">
@@ -175,7 +186,11 @@ const Page = () => {
                   <p className="mr-2 font-normal text-sm ">Type of Incident</p>
                   <span className="text-red-500 text-lg ">*</span>
                 </div>
-                <select className="select border-black mt-0" onChange={handleTypeChange} value={typeOfIncident}>
+                <select
+                  className="select border-black mt-0"
+                  onChange={handleTypeChange}
+                  value={typeOfIncident}
+                >
                   <option disabled selected>
                     Accidents
                   </option>
@@ -195,14 +210,19 @@ const Page = () => {
                 ></textarea> */}
 
                 <div className="flex">
-                  <label htmlFor="Description of the Incident" className="mt-3 mr-2 font-normal text-sm">Description of the Incident</label>
-                  <input className="textarea textarea-bordered border-black mt-0"
-                  onChange={(e) => setDescriptionOfIncident(e.target.value)}
-                  value = {descriptionOfIncident}
-                  type="text"
-                  id="description"
+                  <label
+                    htmlFor="Description of the Incident"
+                    className="mt-3 mr-2 font-normal text-sm"
+                  >
+                    Description of the Incident
+                  </label>
+                  <input
+                    className="textarea textarea-bordered border-black mt-0"
+                    onChange={(e) => setDescriptionOfIncident(e.target.value)}
+                    value={descriptionOfIncident}
+                    type="text"
+                    id="description"
                   />
-
                 </div>
 
                 <div className="flex mt-6   text-sm">
@@ -235,7 +255,7 @@ const Page = () => {
                           type="text"
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setIncidentLocation(e.target.value)}
-                          value = {incidentLocation}
+                          value={incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
@@ -268,7 +288,7 @@ const Page = () => {
                             type="date"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setDateOfIncident(e.target.value)}
-                            value = {dateOfIncident}
+                            value={dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
                           />
@@ -287,7 +307,7 @@ const Page = () => {
                             type="time"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setTimeOfIncident(e.target.value)}
-                            value = {timeOfIncident}
+                            value={timeOfIncident}
                             placeholder=""
                             style={{ fontFamily: "" }}
                           />
@@ -306,7 +326,7 @@ const Page = () => {
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setIncidentLocation(e.target.value)}
-                          value = {incidentLocation}
+                          value={incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
@@ -338,7 +358,11 @@ const Page = () => {
                         >
                           {"State"}
                         </label>
-                        <select className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm" onChange = {handleTypeChangeForState} value = {state}>
+                        <select
+                          className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
+                          onChange={handleTypeChangeForState}
+                          value={state}
+                        >
                           <option value="">Select state</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
@@ -392,7 +416,7 @@ const Page = () => {
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setPincode(e.target.value)}
-                          value = {pincode}
+                          value={pincode}
                           placeholder={"Pin Code"}
                           style={{ fontFamily: "" }}
                         />
@@ -401,7 +425,117 @@ const Page = () => {
                   </div>
                 </div>
 
-                <Doc_upload />
+                <div>
+                  <div className="text-black flex">
+                    <p className="text-sm  mt-6 ml-1">
+                      {"Additional Documents"}
+                    </p>
+                  </div>
+                  <div className="">
+                    <div className="flex w-full">
+                      <div className="w-full">
+                        <div
+                          className="flex h-[125px] w-full rounded-[20px] border border-blue-700 hover:cursor-pointer"
+                          onClick={handleUploadClick}
+                        >
+                          <div className="m-auto">
+                            <span
+                              className="  text-xl font-medium text-blue-700"
+                              style={{ fontFamily: "__POPPINS_C17214" }}
+                            >
+                              <img
+                                src="/upload.svg"
+                                alt="See Options"
+                                className="inline -translate-y-1 w-6 h-6"
+                              />{" "}
+                              {"Drag and drop"}
+                            </span>
+                            <span
+                              className="  text-xl font-medium text-neutral-400"
+                              style={{ fontFamily: "__POPPINS_C17214" }}
+                            >
+                              {" "}
+                              {"or browse files"}
+                            </span>
+                          </div>
+                        </div>
+                        <input
+                          ref={fileInputRef}
+                          id="dropzone-file"
+                          type="file"
+                          onChange={handleDocsChange}
+                          multiple
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
+                    {currentDoc && (
+                      <div className="fixed top-0 left-0 z-[53] flex h-full w-full items-center justify-center bg-black bg-opacity-50 ">
+                        <div className="rounded-lg bg-white p-4">
+                          <PdfViewer
+                            url={currentDoc.path}
+                            type={
+                              currentDoc.title.toLowerCase().endsWith(".mp4")
+                                ? "video"
+                                : /\.(jpeg|jpg|gif|png)$/.test(
+                                    currentDoc.title.toLowerCase()
+                                  )
+                                ? "image"
+                                : "None"
+                            }
+                          />
+
+                          <button
+                            className="mt-4 rounded-lg bg-black px-4 py-2 text-white hover:bg-gray-700"
+                            onClick={() => setCurrentDoc(null)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    {uploadedDocs.length > 0 && (
+                      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+                        {uploadedDocs.map((doc, index) => (
+                          <div
+                            key={index}
+                            className="mb-3 flex h-20 w-72 justify-between rounded-[50px] border border-black bg-white md:w-full lg:m-3"
+                          >
+                            <div
+                              className="ml-4 flex items-center break-all   text-base font-medium text-black"
+                              style={{ fontFamily: "__POPPINS_C17214" }}
+                            >
+                              {doc.title}
+                            </div>
+                            <div
+                              className="relative ml-4 flex cursor-pointer items-center px-2   text-base font-medium text-black"
+                              onClick={() => toggleDropdownMore(index)}
+                              style={{ fontFamily: "" }}
+                            >
+                              <img src="/more.svg" className="inline" alt="" />
+                              {dropdownIndex === index && (
+                                <div className="absolute left-0 top-[2.7rem] w-36 overflow-hidden rounded-[10px] border border-neutral-900 bg-white shadow-lg">
+                                  <div
+                                    onClick={() => handleView(index)}
+                                    className="cursor-pointer py-2 px-4 hover:bg-gray-100"
+                                  >
+                                    {"View"}
+                                  </div>
+                                  <div
+                                    onClick={() => handleDelete(index)}
+                                    className="cursor-pointer py-2 px-4 hover:bg-gray-100"
+                                  >
+                                    {"Delete"}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="flex flex-col">
                   <p className="text-xl mt-6 font-medium">
                     {" "}
@@ -416,11 +550,11 @@ const Page = () => {
                     placeholder=""
                   ></textarea> */}
                   <input
-                  className="textarea textarea-bordered border-black"
-                  type="text"
-                  onChange={(e) => setPersonalInformation(e.target.value)}
-                  value = {personalInformation}
-                  style={{ fontFamily: "" }}
+                    className="textarea textarea-bordered border-black"
+                    type="text"
+                    onChange={(e) => setPersonalInformation(e.target.value)}
+                    value={personalInformation}
+                    style={{ fontFamily: "" }}
                   />
                 </div>
               </div>
@@ -446,7 +580,11 @@ const Page = () => {
                   <p className="mr-2 font-normal text-sm ">Type of Incident</p>
                   <span className="text-red-500 text-lg ">*</span>
                 </div>
-                <select className="select border-black mt-0" onChange={handleTypeChange} value = {typeOfIncident}>
+                <select
+                  className="select border-black mt-0"
+                  onChange={handleTypeChange}
+                  value={typeOfIncident}
+                >
                   <option disabled selected>
                     Accidents
                   </option>
@@ -461,15 +599,20 @@ const Page = () => {
                   <span className="text-red-500 text-lg mt-3">*</span>
                 </div> */}
 
-                  <div className="flex">
-                  <label htmlFor="Description of the Incident" className="mt-3 mr-2 font-normal text-sm">Description of the Incident</label>
-                  <input className="textarea textarea-bordered border-black mt-0"
-                  onChange={(e) => setDescriptionOfIncident(e.target.value)}
-                  value = {descriptionOfIncident}
-                  type="text"
-                  id="description"
+                <div className="flex">
+                  <label
+                    htmlFor="Description of the Incident"
+                    className="mt-3 mr-2 font-normal text-sm"
+                  >
+                    Description of the Incident
+                  </label>
+                  <input
+                    className="textarea textarea-bordered border-black mt-0"
+                    onChange={(e) => setDescriptionOfIncident(e.target.value)}
+                    value={descriptionOfIncident}
+                    type="text"
+                    id="description"
                   />
-
                 </div>
                 {/* <textarea
                   className="textarea textarea-bordered border-black mt-0"
@@ -505,7 +648,7 @@ const Page = () => {
                         <input
                           type="text"
                           onChange={(e) => setIncidentLocation(e.target.value)}
-                          value = {incidentLocation}
+                          value={incidentLocation}
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder=""
                           style={{ fontFamily: "" }}
@@ -539,7 +682,7 @@ const Page = () => {
                             type="date"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setDateOfIncident(e.target.value)}
-                            value = {dateOfIncident}
+                            value={dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
                           />
@@ -558,7 +701,7 @@ const Page = () => {
                             type="time"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setTimeOfIncident(e.target.value)}
-                            value = {timeOfIncident}
+                            value={timeOfIncident}
                             placeholder=""
                             style={{ fontFamily: "" }}
                           />
@@ -577,7 +720,7 @@ const Page = () => {
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setIncidentLocation(e.target.value)}
-                          value = {incidentLocation}
+                          value={incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
@@ -609,7 +752,11 @@ const Page = () => {
                         >
                           {"State"}
                         </label>
-                        <select className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm" onChange={handleTypeChange} value = {state}>
+                        <select
+                          className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
+                          onChange={handleTypeChange}
+                          value={state}
+                        >
                           <option value="">Select state</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
@@ -663,7 +810,7 @@ const Page = () => {
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setPincode(e.target.value)}
-                          value = {pincode}
+                          value={pincode}
                           placeholder={"Pin Code"}
                           style={{ fontFamily: "" }}
                         />
@@ -671,12 +818,122 @@ const Page = () => {
                     </div>
                   </div>
                 </div>
-                <Doc_upload />
+                <div>
+                  <div className="text-black flex">
+                    <p className="text-sm  mt-6 ml-1">
+                      {"Additional Documents"}
+                    </p>
+                  </div>
+                  <div className="">
+                    <div className="flex w-full">
+                      <div className="w-full">
+                        <div
+                          className="flex h-[125px] w-full rounded-[20px] border border-blue-700 hover:cursor-pointer"
+                          onClick={handleUploadClick}
+                        >
+                          <div className="m-auto">
+                            <span
+                              className="  text-xl font-medium text-blue-700"
+                              style={{ fontFamily: "__POPPINS_C17214" }}
+                            >
+                              <img
+                                src="/upload.svg"
+                                alt="See Options"
+                                className="inline -translate-y-1 w-6 h-6"
+                              />{" "}
+                              {"Drag and drop"}
+                            </span>
+                            <span
+                              className="  text-xl font-medium text-neutral-400"
+                              style={{ fontFamily: "__POPPINS_C17214" }}
+                            >
+                              {" "}
+                              {"or browse files"}
+                            </span>
+                          </div>
+                        </div>
+                        <input
+                          ref={fileInputRef}
+                          id="dropzone-file"
+                          type="file"
+                          onChange={handleDocsChange}
+                          multiple
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
+                    {currentDoc && (
+                      <div className="fixed top-0 left-0 z-[53] flex h-full w-full items-center justify-center bg-black bg-opacity-50 ">
+                        <div className="rounded-lg bg-white p-4">
+                          <PdfViewer
+                            url={currentDoc.path}
+                            type={
+                              currentDoc.title.toLowerCase().endsWith(".mp4")
+                                ? "video"
+                                : /\.(jpeg|jpg|gif|png)$/.test(
+                                    currentDoc.title.toLowerCase()
+                                  )
+                                ? "image"
+                                : "None"
+                            }
+                          />
+
+                          <button
+                            className="mt-4 rounded-lg bg-black px-4 py-2 text-white hover:bg-gray-700"
+                            onClick={() => setCurrentDoc(null)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    {uploadedDocs.length > 0 && (
+                      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
+                        {uploadedDocs.map((doc, index) => (
+                          <div
+                            key={index}
+                            className="mb-3 flex h-20 w-72 justify-between rounded-[50px] border border-black bg-white md:w-full lg:m-3"
+                          >
+                            <div
+                              className="ml-4 flex items-center break-all   text-base font-medium text-black"
+                              style={{ fontFamily: "__POPPINS_C17214" }}
+                            >
+                              {doc.title}
+                            </div>
+                            <div
+                              className="relative ml-4 flex cursor-pointer items-center px-2   text-base font-medium text-black"
+                              onClick={() => toggleDropdownMore(index)}
+                              style={{ fontFamily: "" }}
+                            >
+                              <img src="/more.svg" className="inline" alt="" />
+                              {dropdownIndex === index && (
+                                <div className="absolute left-0 top-[2.7rem] w-36 overflow-hidden rounded-[10px] border border-neutral-900 bg-white shadow-lg">
+                                  <div
+                                    onClick={() => handleView(index)}
+                                    className="cursor-pointer py-2 px-4 hover:bg-gray-100"
+                                  >
+                                    {"View"}
+                                  </div>
+                                  <div
+                                    onClick={() => handleDelete(index)}
+                                    className="cursor-pointer py-2 px-4 hover:bg-gray-100"
+                                  >
+                                    {"Delete"}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
                 <div className="flex flex-col">
                   <div className="flex">
                     <p className="text-xl mt-6 font-medium">
                       {" "}
-                      PERSONAL INFORMATION
+                      PERSONAL INFORMATION (Not Mandatory)
                     </p>
                     <span className="text-red-500">Optional</span>
                   </div>
@@ -690,11 +947,11 @@ const Page = () => {
                     placeholder=""
                   ></textarea> */}
                   <input
-                  className="textarea textarea-bordered border-black"
-                  type="text"
-                  onChange={(e) => setPersonalInformation(e.target.value)}
-                  value = {personalInformation}
-                  style={{ fontFamily: "" }}
+                    className="textarea textarea-bordered border-black"
+                    type="text"
+                    onChange={(e) => setPersonalInformation(e.target.value)}
+                    value={personalInformation}
+                    style={{ fontFamily: "" }}
                   />
                 </div>
               </div>
