@@ -28,5 +28,6 @@ export const uploadFile = async (file: File|null) => {
 
   // Get the public URL of the uploaded file
   const publicUrl = s3UploadResponse.Location;
+  console.log(publicUrl);
   return publicUrl;
 };
