@@ -1,12 +1,12 @@
 import clientPromise from "@/app/lib/mongodb";
 
 export async function POST(req) {
+  const client = await clientPromise;
   try {
     const {userName} = await req.json()
     // Connect to MongoDB
     console.log("username", userName);
-    const client = await clientPromise;
-    const db = client.db("GuardianLine");
+    const db = await client.db("GuardianLine");
     const collection = db.collection("Volunteers");
 
     // Insert the volunteer into the collection
@@ -25,5 +25,8 @@ export async function POST(req) {
     // Handle errors
     console.error("Error registering volunteer:", error);
     return new Response("Error registering volunteer", { status: 500 });
+  }
+  finally {
+    // await client.close();
   }
 }

@@ -1,12 +1,12 @@
 import clientPromise from "@/app/lib/mongodb";
 
 export async function POST(req) {
+  const client = await clientPromise;
   try {
     const { addVolunteer, userName, latitude, longitude, accuracy } =
       await req.json();
     // Connect to MongoDB
-    const client = await clientPromise;
-    const db = client.db("GuardianLine");
+    const db = await client.db("GuardianLine");
     const collection = db.collection("ActiveVolunteers");
     if (addVolunteer === false) {
       // Delete the user from the active volunteers
@@ -38,5 +38,8 @@ export async function POST(req) {
     // Handle errors
     console.error("Error adding location:", error);
     return new Response("Error fetching location", { status: 500 });
+  }
+  finally {
+    // await client.close();
   }
 }

@@ -14,5 +14,4 @@ if (!process.env.MONGODB_URL) {
 }
   client = new MongoClient(uri, options)
   clientPromise = client.connect()
-
 export default clientPromise

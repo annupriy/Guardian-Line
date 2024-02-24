@@ -2,6 +2,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import ActiveCrimesCards from "./ActiveCrimesCards";
 
 type User = {
   id?: string | null;
@@ -163,8 +164,9 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           <div className="text-green-600 text-3xl mb-8">
             Reports filed near you
           </div>
+          <ActiveCrimesCards />
           <button className="btn btn-outline" onClick={handleDeleteLocation}>
-            Delete
+            LOG OFF
           </button>
         </>
       ) : (

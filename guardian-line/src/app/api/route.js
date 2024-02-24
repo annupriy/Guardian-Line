@@ -16,7 +16,7 @@ async function connectToDatabase() {
         console.log('Connected to MongoDB Atlas cluster!');
 
         // Create a new database named `contactdb` if it doesn't exist
-        const db = client.db('GuardianLine');
+        const db = await client.db('GuardianLine');
         // await db.createCollection('UIDAI'); // Create the collection
         // await db.createCollection('Users'); // Create the collection
         // await db.createCollection('Volunteers'); // Create the collection
@@ -42,7 +42,7 @@ async function connectToDatabase() {
         console.error('Error connecting to MongoDB Atlas:', error);
     } finally {
         // Close the connection to MongoDB Atlas
-        await client.close();
+        // await client.close();
     }
 }
 

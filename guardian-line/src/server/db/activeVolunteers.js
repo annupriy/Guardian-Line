@@ -1,10 +1,10 @@
 import clientPromise from "@/app/lib/mongodb";
 
 export async function addActiveVolunteer(userName) {
+  const client = await clientPromise;
   try {
     // Connect to MongoDB
-    const client = await clientPromise;
-    const db = client.db("GuardianLine");
+    const db = await client.db("GuardianLine");
     const collection = db.collection("ActiveVolunteers");
 
     // Add the volunteer to the active volunteers collection
@@ -20,5 +20,8 @@ export async function addActiveVolunteer(userName) {
     console.error("Error adding volunteer to active volunteers:", error);
     return false; // Indicate failure
   }
+  // finally {
+  //   await client.close();
+  // }
 }
 

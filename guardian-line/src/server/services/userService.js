@@ -8,7 +8,7 @@ async function authenticate(userName, password) {
   console.log("username", userName);
   console.log("password", password);
   const client = await clientPromise;
-  const db = client.db("GuardianLine");
+  const db = await client.db("GuardianLine");
   const collection = db.collection("Users");
   if (!userName || !password) {
     throw new Error("invalid-credentials");
@@ -27,6 +27,5 @@ async function authenticate(userName, password) {
     id: user._id,
     name: user.userName,
   }; //(3)
-
   return user2; //(4)
 }
