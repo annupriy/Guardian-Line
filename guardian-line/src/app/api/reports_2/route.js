@@ -1,5 +1,4 @@
 import clientPromise from "@/app/lib/mongodb";
-import { NextResponse } from "next/server";
 
 export async function POST(req){
     const {
@@ -29,10 +28,10 @@ export async function POST(req){
                 state: state,
                 pincode: pincode
               });
-              return NextResponse.ok("Report added successfully");
+              return new Response("Volunteer registered successfully" ,{ status: 200 });
         } catch(error){
             console.error("Error adding Report:", error);
-            return NextResponse.error("Error adding Report");
+            return new Response("Error adding Report" ,{ status: 500 });
         }
     };
 

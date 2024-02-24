@@ -1,11 +1,8 @@
 "use client";
 import React from "react";
-// import {useState} from 'react';
-import { NextPageContext } from "next";
-import router, { Router } from "next/router";
-import { ReactElement, useEffect, useRef, useState, ChangeEvent } from "react";
+import { useEffect, useRef, useState, ChangeEvent } from "react";
 import Doc_upload from "../../Components/Doc_upload";
-import { response } from "express";
+import toast, { Toaster } from "react-hot-toast";
 
 const Page = () => {
   const [toggleState, setToggleState] = useState(1);
@@ -96,7 +93,7 @@ const Page = () => {
     console.log("Type", typeOfIncident)
     console.log("Location:", incidentLocation)
 
-    const res = await fetch("api_2/reports_2", {
+    const res = await toast.promise(fetch("api/reports_2", {
       method: "POST",
       headers: {
         "Content-type": "application/json"
@@ -112,9 +109,29 @@ const Page = () => {
         state,
         pincode,
       }),
+    }), {
+      loading: "Submitting...",
+      success: "Submitted",
+      error: "Error submitting form. Please try again."
+    }, {
+      style: {
+        minWidth: "200px"
+      }
     });
-
-    return new Response("Volunteer registered successfully" ,{ status: 200 });
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+    } else if (res.status === 200) {
+      toast.dismiss();
+      console.log("Deleted");
+    } else {
+      toast.dismiss();
+      if (res.status === 401) {
+        toast.error("Error submitting form. Please try again.");
+      } else {
+        toast.error("Could not submit form");
+      }
+    }
   };
 
   return (
@@ -124,6 +141,7 @@ const Page = () => {
         className="shadow-xl border rounded-md border-gray-700 bg-white mx-auto w-2/3 relative z-20"
         onSubmit={handleSubmit}
       >
+        <Toaster/>
         {/* <div className='w-full p-4 m-0 mx-auto border-gray-700'></div> */}
         <div className=" bg-white mt-2 p-4">
           <div className="text-md flex mb-3">
