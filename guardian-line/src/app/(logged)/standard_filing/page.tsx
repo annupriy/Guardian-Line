@@ -3,8 +3,9 @@ import React from "react";
 // import {useState} from 'react';
 import { NextPageContext } from "next";
 import router, { Router } from "next/router";
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState, ChangeEvent } from "react";
 import Doc_upload from "../../Components/Doc_upload";
+import { response } from "express";
 
 const Page = () => {
   const [toggleState, setToggleState] = useState(1);
@@ -69,11 +70,59 @@ const Page = () => {
     setDropdownIndex(null);
   };
 
+  const [typeOfIncident, setTypeOfIncident] = useState('')
+  const [descriptionOfIncident, setDescriptionOfIncident] = useState('')
+  const [incidentLocation, setIncidentLocation] = useState('')
+  const [personalInformation, setPersonalInformation] = useState('')
+  const [dateOfIncident, setDateOfIncident] = useState('')
+  const [timeOfIncident, setTimeOfIncident] = useState('')
+  // const [elaborateLocation, setElaborateLocation] = useState('')
+  const [city, setCity] = useState('')
+  const [state, setState] = useState('')
+  const [pincode, setPincode] = useState('')
+  const [error, setError] = useState('');
+
+  const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setTypeOfIncident(event.target.value);
+  };
+
+  const handleTypeChangeForState = (event: ChangeEvent<HTMLSelectElement>) => {
+    setState(event.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Description:", descriptionOfIncident)
+    console.log("Type", typeOfIncident)
+    console.log("Location:", incidentLocation)
+
+    const res = await fetch("api_2/reports_2", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        typeOfIncident,
+        descriptionOfIncident,
+        incidentLocation,
+        personalInformation,
+        dateOfIncident,
+        timeOfIncident,
+        city,
+        state,
+        pincode,
+      }),
+    });
+
+    return new Response("Volunteer registered successfully" ,{ status: 200 });
+  };
+
   return (
     <div className="p-6 relative z-10">
       <form
         action=""
         className="shadow-xl border rounded-md border-gray-700 bg-white mx-auto w-2/3 relative z-20"
+        onSubmit={handleSubmit}
       >
         {/* <div className='w-full p-4 m-0 mx-auto border-gray-700'></div> */}
         <div className=" bg-white mt-2 p-4">
@@ -108,7 +157,7 @@ const Page = () => {
                   <p className="mr-2 font-normal text-sm ">Type of Incident</p>
                   <span className="text-red-500 text-lg ">*</span>
                 </div>
-                <select className="select border-black mt-0">
+                <select className="select border-black mt-0" onChange={handleTypeChange} value={typeOfIncident}>
                   <option disabled selected>
                     Accidents
                   </option>
@@ -116,7 +165,7 @@ const Page = () => {
                   <option>Mob Lynching & Crowd Fights</option>
                   <option>Others</option>
                 </select>
-                <div className="flex">
+                {/* <div className="flex">
                   <p className="mt-3 mr-2 font-normal text-sm ">
                     Description of the Incident
                   </p>
@@ -125,7 +174,18 @@ const Page = () => {
                 <textarea
                   className="textarea textarea-bordered border-black mt-0"
                   placeholder=""
-                ></textarea>
+                ></textarea> */}
+
+                <div className="flex">
+                  <label htmlFor="Description of the Incident" className="mt-3 mr-2 font-normal text-sm">Description of the Incident</label>
+                  <input className="textarea textarea-bordered border-black mt-0"
+                  onChange={(e) => setDescriptionOfIncident(e.target.value)}
+                  value = {descriptionOfIncident}
+                  type="text"
+                  id="description"
+                  />
+
+                </div>
 
                 <div className="flex mt-6   text-sm">
                   <p className="mr-2">Does the Incident Live or Not ?</p>
@@ -156,6 +216,8 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setIncidentLocation(e.target.value)}
+                          value = {incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
@@ -187,6 +249,8 @@ const Page = () => {
                           <input
                             type="date"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                            onChange={(e) => setDateOfIncident(e.target.value)}
+                            value = {dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
                           />
@@ -204,6 +268,8 @@ const Page = () => {
                           <input
                             type="time"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                            onChange={(e) => setTimeOfIncident(e.target.value)}
+                            value = {timeOfIncident}
                             placeholder=""
                             style={{ fontFamily: "" }}
                           />
@@ -221,6 +287,8 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setIncidentLocation(e.target.value)}
+                          value = {incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
@@ -235,6 +303,8 @@ const Page = () => {
                         </label>
                         <input
                           type="text"
+                          onChange={(e) => setCity(e.target.value)}
+                          value={city}
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder="city"
                           style={{ fontFamily: "" }}
@@ -250,7 +320,7 @@ const Page = () => {
                         >
                           {"State"}
                         </label>
-                        <select className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm">
+                        <select className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm" onChange = {handleTypeChangeForState} value = {state}>
                           <option value="">Select state</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
@@ -303,6 +373,8 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setPincode(e.target.value)}
+                          value = {pincode}
                           placeholder={"Pin Code"}
                           style={{ fontFamily: "" }}
                         />
@@ -321,10 +393,17 @@ const Page = () => {
                   <p className="mt-3 text-sm italic ">
                     Tell us about your appearance to Identify you correctly
                   </p>
-                  <textarea
+                  {/* <textarea
                     className="textarea textarea-bordered border-black"
                     placeholder=""
-                  ></textarea>
+                  ></textarea> */}
+                  <input
+                  className="textarea textarea-bordered border-black"
+                  type="text"
+                  onChange={(e) => setPersonalInformation(e.target.value)}
+                  value = {personalInformation}
+                  style={{ fontFamily: "" }}
+                  />
                 </div>
               </div>
             </div>
@@ -349,7 +428,7 @@ const Page = () => {
                   <p className="mr-2 font-normal text-sm ">Type of Incident</p>
                   <span className="text-red-500 text-lg ">*</span>
                 </div>
-                <select className="select border-black mt-0">
+                <select className="select border-black mt-0" onChange={handleTypeChange} value = {typeOfIncident}>
                   <option disabled selected>
                     Accidents
                   </option>
@@ -357,16 +436,27 @@ const Page = () => {
                   <option>Mob Lynching & Crowd Fights</option>
                   <option>Others</option>
                 </select>
-                <div className="flex">
+                {/* <div className="flex">
                   <p className="mt-3 mr-2 font-normal text-sm ">
                     Description of the Incident
                   </p>
                   <span className="text-red-500 text-lg mt-3">*</span>
+                </div> */}
+
+                  <div className="flex">
+                  <label htmlFor="Description of the Incident" className="mt-3 mr-2 font-normal text-sm">Description of the Incident</label>
+                  <input className="textarea textarea-bordered border-black mt-0"
+                  onChange={(e) => setDescriptionOfIncident(e.target.value)}
+                  value = {descriptionOfIncident}
+                  type="text"
+                  id="description"
+                  />
+
                 </div>
-                <textarea
+                {/* <textarea
                   className="textarea textarea-bordered border-black mt-0"
                   placeholder=""
-                ></textarea>
+                ></textarea> */}
 
                 <div className="flex mt-6 font-light  text-sm">
                   <p className="mr-2">Does the Incident Live or Not ?</p>
@@ -396,6 +486,8 @@ const Page = () => {
                         </label>
                         <input
                           type="text"
+                          onChange={(e) => setIncidentLocation(e.target.value)}
+                          value = {incidentLocation}
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder=""
                           style={{ fontFamily: "" }}
@@ -428,6 +520,8 @@ const Page = () => {
                           <input
                             type="date"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                            onChange={(e) => setDateOfIncident(e.target.value)}
+                            value = {dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
                           />
@@ -445,6 +539,8 @@ const Page = () => {
                           <input
                             type="time"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                            onChange={(e) => setTimeOfIncident(e.target.value)}
+                            value = {timeOfIncident}
                             placeholder=""
                             style={{ fontFamily: "" }}
                           />
@@ -462,6 +558,8 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setIncidentLocation(e.target.value)}
+                          value = {incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
@@ -477,6 +575,8 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setCity(e.target.value)}
+                          value={city}
                           placeholder="city"
                           style={{ fontFamily: "" }}
                         />
@@ -491,7 +591,7 @@ const Page = () => {
                         >
                           {"State"}
                         </label>
-                        <select className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm">
+                        <select className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm" onChange={handleTypeChange} value = {state}>
                           <option value="">Select state</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
@@ -544,6 +644,8 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setPincode(e.target.value)}
+                          value = {pincode}
                           placeholder={"Pin Code"}
                           style={{ fontFamily: "" }}
                         />
@@ -565,10 +667,17 @@ const Page = () => {
                     Tell us about victim&apos;s appearance to Identify victim
                     correctly
                   </p>
-                  <textarea
+                  {/* <textarea
                     className="textarea textarea-bordered border-black"
                     placeholder=""
-                  ></textarea>
+                  ></textarea> */}
+                  <input
+                  className="textarea textarea-bordered border-black"
+                  type="text"
+                  onChange={(e) => setPersonalInformation(e.target.value)}
+                  value = {personalInformation}
+                  style={{ fontFamily: "" }}
+                  />
                 </div>
               </div>
             </div>
