@@ -3,7 +3,7 @@ import React from 'react'
 // import {useState} from 'react';
 import { NextPageContext } from "next";
 import router, { Router } from "next/router";
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef, useState, ChangeEvent } from "react";
 import PdfViewer from "../../Components/PdfViewer";
 import Doc_upload from '../../Components/Doc_upload';
 
@@ -65,9 +65,41 @@ const Page = () => {
           setDropdownIndex(null);
         };    
 
+        const [typeOfIncident, setTypeOfIncident] = useState('')
+        const [descriptionOfIncident, setDescriptionOfIncident] = useState('')
+        const [incidentLocation, setIncidentLocation] = useState('')
+        const [personalInformation, setPersonalInformation] = useState('')
+        
+        const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
+            setTypeOfIncident(event.target.value);
+        };
+
+        const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            console.log("Description:", descriptionOfIncident)
+            console.log("Type", typeOfIncident)
+            console.log("Location:", incidentLocation)
+        
+            const res = await fetch("api/reports_2", {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json"
+              },
+              body: JSON.stringify({
+                typeOfIncident,
+                descriptionOfIncident,
+                incidentLocation,
+                personalInformation,
+              }),
+            });
+        
+            return new Response("Volunteer registered successfully" ,{ status: 200 });
+          };
+        
+
     return (
         <div className='p-6'>
-            <form action="" className='shadow-lg border rounded-md border-gray-700 bg-white mx-auto w-2/3'>
+            <form action="" className='shadow-lg border rounded-md border-gray-700 bg-white mx-auto w-2/3' onSubmit={handleSubmit}>
                 {/* <div className='w-full p-4 m-0 mx-auto border-gray-700'></div> */}
                 <div className=' bg-white mt-2 p-4'>
                 <div className='text-md flex mb-3'><span className="text-red-500 pr-2 text-lg">*</span><span>Required Fields</span></div>                    
@@ -79,14 +111,20 @@ const Page = () => {
                             <hr className=' border border-gray-500' />
                             <div className='mt-6 grid grid-cols'>
                                 <div className='flex'><p className='mr-2 font-normal text-sm font-mono'>Type of Incident</p><span className='text-red-500 text-lg '>*</span></div>
-                                <select className="select border-black mt-0">
+                                <select className="select border-black mt-0" onChange={handleTypeChange} value={typeOfIncident}>
                                     <option disabled selected>Accidents</option>
                                     <option>Harassment</option>
                                     <option>Mob Lynching & Crowd Fights</option>
                                     <option>Others</option>
                                 </select>
                                 <div className='flex'><p className='mt-3 mr-2 font-normal text-sm font-mono' >Description of the Incident</p><span className='text-red-500 text-lg mt-3'>*</span></div>
-                                <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea>
+                                {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
+                                <input className="textarea textarea-bordered border-black mt-0"
+                                    onChange={(e) => setDescriptionOfIncident(e.target.value)}
+                                    value = {descriptionOfIncident}
+                                    type="text"
+                                    id="description"
+                                />
                     
                                 <div className="grid grid-rows-2 items-center   mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                                     <div>
@@ -96,6 +134,8 @@ const Page = () => {
                                         <input
                                             type="text"
                                             className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                                            onChange={(e) => setIncidentLocation(e.target.value)}
+                                            value = {incidentLocation}
                                             placeholder=""
                                             style={{ fontFamily: "" }}
                                         />
@@ -143,7 +183,14 @@ const Page = () => {
                             <p className='text-xl mt-6 font-medium'> PERSONAL INFORMATION</p>
                             <hr className='border border-gray-500'/>
                             <p className='mt-3 text-sm italic font-mono'>Tell us about your appearance to Identify you correctly</p>
-                            <textarea className="textarea textarea-bordered border-black" placeholder=""></textarea>
+                            {/* <textarea className="textarea textarea-bordered border-black" placeholder=""></textarea> */}
+                            <input
+                                className="textarea textarea-bordered border-black"
+                                type="text"
+                                onChange={(e) => setPersonalInformation(e.target.value)}
+                                value = {personalInformation}
+                                style={{ fontFamily: "" }}
+                            />
                         </div>                     
                         </div> 
                         </div>
