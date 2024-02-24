@@ -315,7 +315,7 @@ const Page = () => {
                 <div className="flex flex-col">
                   <p className="text-xl mt-6 font-medium">
                     {" "}
-                    PERSONAL INFORMATION
+                    PERSONAL INFORMATION(Not Mandatory)
                   </p>
                   <hr className="border border-gray-500" />
                   <p className="mt-3 text-sm italic ">
@@ -579,7 +579,7 @@ const Page = () => {
               Cancel
             </button>
             <button className="btn btn-success btn-xs  sm:btn-sm md:btn-md w-1/3 rounded-xl">
-              Review & Submit
+              Submit
             </button>
           </div>
         </div>
