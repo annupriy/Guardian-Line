@@ -4,8 +4,12 @@ import { ReactElement, useEffect, useRef, useState, ChangeEvent } from "react";
 import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
+import {SessionProvider, useSession } from 'next-auth/react';
 
 const Page = () => {
+
+    const { data: session } = useSession();
+
   const [toggleState, setToggleState] = useState(1);
   const [toggleState2, setToggleState2] = useState<number>(3);
   const [currentDoc, setCurrentDoc] = useState<{
@@ -111,6 +115,16 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!session) {
+        // Handle the case where there is no active session
+        return;
+      }
+  
+      const userName = session.user.name;
+  
+      console.log("Username:", userName);
+
     console.log("Description:", descriptionOfIncident);
     console.log("Type", typeOfIncident);
     console.log("Location:", incidentLocation);
@@ -137,6 +151,7 @@ const Page = () => {
           incidentLocation,
           personalInformation,
           uploadedDocPath,
+          userName: userName, 
         }),
       }),
       {
@@ -592,4 +607,10 @@ const Page = () => {
   );
 };
 
-export default Page;
+const WrappedPage = () => (
+  <SessionProvider>
+    <Page />
+  </SessionProvider>
+);
+
+export default WrappedPage;
