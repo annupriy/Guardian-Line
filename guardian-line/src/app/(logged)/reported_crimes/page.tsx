@@ -34,7 +34,7 @@ const Page = () => {
       }
 
       try {
-        const response = await fetch(`https://localhost:3002/api/findReports?userName=${session.user.name}`);
+        const response = await fetch(`/api/findReports?userName=${session.user.name}`);
         if (response.ok) {
           const { reportsPresent } = await response.json();
           setReportsPresent(reportsPresent);
