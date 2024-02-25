@@ -4,6 +4,7 @@ import Image from 'next/image'
 import logo from './logo4.jpg'
 import { useEffect, useState } from 'react';
 import { createHash } from 'crypto';
+import * as IPFS from 'ipfs-core'
 
 const Page = () => {
   const [aadharNumber, setAadharNumber] = useState<string>('');
@@ -15,6 +16,28 @@ const Page = () => {
   const handleTabClick = async () => {
     const hashedAadharNumber = createHash('sha256').update(aadharNumber).digest('hex');
     console.log(hashedAadharNumber)
+
+  //   const verify = await fetch('/api/getUIDAI',{
+  //      method: 'POST',
+  //      body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
+  //      headers: {
+  //        'Content-Type': 'application/json'
+  //      }
+  //     })
+
+  //   if(verify.status === 200){
+  //       const responseData = await verify.json();
+  //       const phoneNumber = responseData.phoneNumber;
+  //       console.log('Phone Number:', phoneNumber);
+  //    }else if (verify.status === 405) {
+  //       console.log('Aadhar number not found');
+  //   }else {
+  //     console.error('Failed to fetch data:', verify.statusText);
+  //  }
+
+ 
+
+
     const response = await fetch('/api/addAadhar', {
       method: 'POST',
       body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
@@ -22,13 +45,11 @@ const Page = () => {
         'Content-Type': 'application/json'
       }
     })
-    // const data= await response.json();
-    // const parsedData = data ? JSON.parse(data) : {};
-    // console.log(data);
+
   };
 
 
-// ipfs://bafyreib4pff766vhpbxbhjbqqnsh5emeznvujayjj4z2iu533cprgbz23m/metadata.json
+
 
   return (
     <div className="container md:px-0 bg-white">
@@ -40,7 +61,7 @@ const Page = () => {
           <div className=" ">
             <div className='ml-15 mr-15 mt-6 '>
               <h2 className="text-center  mt-1 text-2xl font-bold">Create your account</h2>
-              <p className='text-center text-sm text-gray-500'>It&apos;s quick and easy</p>
+              <p className='text-center text-sm text-gray-500'>It's quick and easy</p>
             </div>
             <hr className='mt-4 border border-gray-300' />
             <form action="#" className="flex flex-col gap-4 mt-6 items-center justify-center">
