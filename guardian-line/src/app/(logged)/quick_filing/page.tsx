@@ -126,9 +126,17 @@ const Page = () => {
   
       const userName = session.user.name;
 
-      const timestamp = Date.now();
+      const currentDate = new Date();
 
-      const reportid = userName + timestamp.toString();
+      const year = currentDate.getFullYear();
+      const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+      const day = currentDate.getDate().toString().padStart(2, '0');
+      const hours = currentDate.getHours().toString().padStart(2, '0');
+
+      const timestamp = `${year}${month}${day}${hours}`;
+
+      // const reportid = userName + timestamp.toString();
+      const reportid = `${userName}_${timestamp}`;
   
       console.log("Username:", userName);
       console.log("Report ID:", reportid);
