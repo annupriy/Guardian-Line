@@ -5,6 +5,7 @@ import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
 import {SessionProvider, useSession } from 'next-auth/react';
+import { timeStamp } from "console";
 
 const Page = () => {
 
@@ -124,8 +125,14 @@ const Page = () => {
       let mp4Urls: Array<string> = [];
   
       const userName = session.user.name;
+
+      const timestamp = Date.now();
+
+      const reportid = userName + timestamp.toString();
   
       console.log("Username:", userName);
+      console.log("Report ID:", reportid);
+
 
     console.log("Description:", descriptionOfIncident);
     console.log("Type", typeOfIncident);
@@ -162,6 +169,7 @@ const Page = () => {
           personalInformation,
           uploadedDocPath,
           userName: userName, 
+          reportid,
         }),
       }),
       {
