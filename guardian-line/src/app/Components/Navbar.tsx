@@ -1,16 +1,27 @@
-'use client'
+"use client";
 import React from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
+import toast,{Toaster} from "react-hot-toast";
 
 const Navbar = () => {
   const handleLogout = async () => {
-    await signOut();
+    await toast.promise(signOut(), {
+      loading: "Logging out...",
+      success: "Logged out",
+      error: "Error logging out",
+    }),
+      {
+        style: {
+          maxWidth: "200px",
+        },
+      };
   };
   return (
     <>
       <div className="navbar bg-emerald-600 w-full flex-end justify-between items-center h-[15%] top-0 right-0 border-b-2 border-slate-300">
+        <Toaster />
         <img
           src={"./Guardian Line-logos_transparent.png"}
           alt=""

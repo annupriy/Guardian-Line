@@ -1,6 +1,3 @@
-import { createHash } from 'crypto';
-// import { FilebaseClient, File } from '@filebase/client' 
-// const apiToken = process.env.API_TOKEN;
 const JWT = process.env.JWT;
 import axios from "axios";
 import fs from 'fs';
@@ -78,10 +75,11 @@ export async function POST(req) {
         console.error('Error parsing request body:', error);
         return new Response("Error parsing request body", { status: 500 })
     }
+
+    const content = new Blob([hashedAadharNumber]);
+    return new Response("send successfully", { status: 200 });
+  } catch (error) {
+    console.error("Error parsing request body:", error);
+    return new Response("Error parsing request body", { status: 500 });
+  }
 }
-
-
-
-
-
-

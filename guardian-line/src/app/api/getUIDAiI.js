@@ -27,9 +27,10 @@ console.log('inside1')
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error connecting to MongoDB Atlas' }); // Provide specific error messages
-    } finally {
-        await client.close(); // Always close the connection even on errors
-    }
+     } 
+    // finally {
+    //     await client.close(); // Always close the connection even on errors
+    // }
 }
 
 export default apiHandler(getUIDAI); // Apply API handler middleware

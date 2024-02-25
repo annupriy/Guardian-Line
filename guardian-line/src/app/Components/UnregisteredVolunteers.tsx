@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import toast, { Toaster } from "react-hot-toast";
-import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
 type User = {
   id?: string | null;
@@ -21,7 +20,6 @@ const UnregisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
 
   const handleToggleChange = () => {
     setIsChecked(!isChecked);
-    console.log(user);
     if (user && user.name) {
       handleVolunteerRegistration(user.name);
 
@@ -29,7 +27,6 @@ const UnregisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   };
 
   const handleVolunteerRegistration = async (userName: string) => {
-    console.log("registering volunteer");
     // write code to POST volunteer registration to server
     const res = await fetch("http://localhost:3000/api/volunteers", {
       method: "POST",
@@ -75,7 +72,6 @@ const UnregisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           style={{ marginLeft: "4px", marginTop: "-2px" }}
         />
       </div>
-
       <div className="form-control mt-4">
         <label className="label cursor-pointer">
           <span className="label-text text-xl font-semibold">

@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useRouter } from "next/navigation";
-// import { checkVolunteerStatus } from "@/server/db/checkVolunteerStatus";
+import ActiveCrimesCards from "./ActiveCrimesCards";
 
 type User = {
   id?: string | null;
@@ -13,49 +12,103 @@ type User = {
 type UserInfo = {
   user: User;
 };
+
+type Crime = {
+  description: string;
+  location: { latitude: number; longitude: number };
+  personalInformation: string;
+  time: string;
+  userName: string;
+};
+
 const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
-  console.log(user);
-  const router = useRouter();
   const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // Set an array of objects to store the active crimes
+  const [crimesAround, setCrimesAround] = useState<any[]>([]);
 
   const handleNoClick = () => {
     console.log("No clicked");
   };
 
   const handleYesClick = () => {
-    console.log("Yes clicked");
     setIsReadyToVolunteer(true);
-    console.log(user);
     if (user && user.name) {
       handleGetLocation();
     }
   };
-  const handleDeleteLocation = () => {
-    console.log("Delete clicked");
+  const handleDeleteLocation = async () => {
+    // call a post request to delete the user location from ActiveVolunteers
+    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        addVolunteer: false,
+        userName: user.name,
+      }),
+    });
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+    } else if (res.status === 200) {
+      toast.dismiss();
+      console.log("Deleted");
+      setIsReadyToVolunteer(false);
+    } else {
+      toast.dismiss();
+      if (res.status === 401) {
+        toast.error("Error deleting Volunteer. Please try again.");
+      } else {
+        toast.error("Could not delete Volunteer");
+      }
+    }
   };
+  // If isReadyToVolunteer is true, then fetch the data from /api/getActiveCrimes
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("useEffect");
-      // Call a get request to check if the user is already registered
-      // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
-      // console.log(res);
-      const isActive = true;
-      if (isActive) {
-        setIsReadyToVolunteer(true);
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`
+        );
+        const data = await res.json();
+        setIsReadyToVolunteer(data.isPresent);
+        setIsLoading(false);
+      } catch (error: any) {
+        setError(error.message);
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [user]);
 
+  useEffect(() => {
+    const fetchActiveCrimes = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/getActiveCrimes?userName=${user.name}`
+        );
+        const data = await res.json();
+        console.log(data.crimesAround);
+        setCrimesAround(data.crimesAround);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    };
+
+    if (isReadyToVolunteer) {
+      fetchActiveCrimes();
+    }
+  }, [isReadyToVolunteer, user]);
+
   const handleGetLocation = () => {
     try {
-      console.log("Getting location");
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log(position);
           if (user && user.name) {
             AddVolunteersLocation(user.name, position.coords); // Pass position.coords directly
           }
@@ -76,7 +129,6 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     userName: string,
     coords: GeolocationCoordinates
   ) => {
-    console.log("Adding volunteers location");
     // write code to POST volunteer registration to server
     const res = await fetch("http://localhost:3000/api/volunteersLocation", {
       method: "POST",
@@ -84,6 +136,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        addVolunteer: true,
         userName: userName,
         latitude: coords.latitude,
         longitude: coords.longitude,
@@ -96,7 +149,6 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     } else if (res.status === 200) {
       toast.dismiss();
       // reload the page
-      router.refresh();
     } else {
       toast.dismiss();
       if (res.status === 401) {
@@ -106,7 +158,13 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       }
     }
   };
-
+  if (isLoading) {
+    return (
+      <div className="flex justify-center h-full align-middle">
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
   return (
     <div className="text-center">
       {isReadyToVolunteer ? (
@@ -114,7 +172,23 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           <div className="text-green-600 text-3xl mb-8">
             Reports filed near you
           </div>
-          <button className="btn btn-outline" onClick={handleDeleteLocation}>Delete</button>
+          {/* Create a grid with 2 cards in one row */}
+          <div className="grid grid-cols-2 gap-4">
+          {Array.isArray(crimesAround) &&
+            crimesAround.map((crime, index) => (
+              <ActiveCrimesCards
+                key={index}
+                descriptionOfIncident={crime.descriptionOfIncident}
+                incidentLocation={crime.incidentLocation}
+                personalInformation={crime.personalInformation}
+                timeOfIncident={crime.timeOfIncident}
+                userName={crime.userName}
+              />
+            ))}
+            </div>
+          <button className="mt-4 btn btn-outline" onClick={handleDeleteLocation}>
+            LOG OFF
+          </button>
         </>
       ) : (
         <div>
