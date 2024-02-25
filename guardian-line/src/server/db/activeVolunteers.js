@@ -10,6 +10,7 @@ export async function addActiveVolunteer(userName) {
     // Add the volunteer to the active volunteers collection
     await collection.insertOne({
       userName: userName,
+      activeCrimes: [],
       // You can add additional fields here if needed
     });
 

@@ -18,29 +18,24 @@ export async function POST(req) {
   const client = await clientPromise;
   try {
     const db = await client.db("GuardianLine");
-    //   const collection = db.collection("ReportsData");
+      const collection = db.collection("ReportsData");
 
-    // await collection.insertOne({
-    //   typeOfIncident: typeOfIncident,
-    //   descriptionOfIncident: descriptionOfIncident,
-    //   incidentLocation: incidentLocation,
-    //   personalInformation: personalInformation,
-    //   dateOfIncident: dateOfIncident,
-    //   timeOfIncident: timeOfIncident,
-    //   city: city,
-    //   state: state,
-    //   pincode: pincode,
-    //   uploadedDocPath: uploadedDocPath,
-    //   userName: userName,
-    //   });
-    //   return new Response("Volunteer registered successfully", { status: 200 });
-    // } catch (error) {
-    //   console.error("Error adding Report:", error);
-    //   return new Response("Error adding Report", { status: 500 });
-    // }
+    await collection.insertOne({
+      typeOfIncident: typeOfIncident,
+      descriptionOfIncident: descriptionOfIncident,
+      incidentLocation: incidentLocation,
+      personalInformation: personalInformation,
+      dateOfIncident: dateOfIncident,
+      timeOfIncident: timeOfIncident,
+      city: city,
+      state: state,
+      pincode: pincode,
+      uploadedDocPath: uploadedDocPath,
+      userName: userName,
+      }); 
     // In the incident Location we will have longitude and latitude using that we find the nearest volunteer from ActiveVolunteers collection that are near 1 km from the longitute and latitude of the incident location
-    const collection = await db.collection("ActiveVolunteers");
-    const volunteers = await collection.find({}).toArray();
+    const collectionActive = await db.collection("ActiveVolunteers");
+    const volunteers = await collectionActive.find({}).toArray();
     const volunteerNearby = volunteers
       .map((volunteer) => {
         const distance = getDistance(
@@ -81,8 +76,8 @@ export async function POST(req) {
         }
       );
     });
-
-    console.log("Volunteer registered successfully");
+    
+    console.log("Crime registered successfully");
     return new Response("Volunteer registered successfully", { status: 200 });
   } catch (error) {
     console.error("Error:", error);

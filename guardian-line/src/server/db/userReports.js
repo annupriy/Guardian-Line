@@ -17,6 +17,6 @@ export async function hasReported(userName) {
     return null;
   }
   finally {
-    await client.close();
+    // await client.close();
   }
 }

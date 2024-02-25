@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use } from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ActiveCrimesCards from "./ActiveCrimesCards";
@@ -12,10 +12,21 @@ type User = {
 type UserInfo = {
   user: User;
 };
+
+type Crime = {
+  description: string;
+  location: { latitude: number; longitude: number };
+  personalInformation: string;
+  time: string;
+  userName: string;
+};
+
 const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  // Set an array of objects to store the active crimes
+  const [crimesAround, setCrimesAround] = useState<any[]>([]);
 
   const handleNoClick = () => {
     console.log("No clicked");
@@ -55,47 +66,44 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       }
     }
   };
+  // If isReadyToVolunteer is true, then fetch the data from /api/getActiveCrimes
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Call a get request to check if the user is already registered
         const res = await fetch(
-          `http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`,
-          {
-            method: "GET",
-          }
+          `http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`
         );
         const data = await res.json();
-        setTimeout(() => {
-          // Once data is fetched, set isLoading to false
-          setIsLoading(false);
-          const isActive = data.isPresent;
-          setIsReadyToVolunteer(isActive);
-        }, 2000);
+        setIsReadyToVolunteer(data.isPresent);
+        setIsLoading(false);
       } catch (error: any) {
         setError(error.message);
-        console.error(`Error: ${error.message}`);
+        setIsLoading(false);
       }
     };
+
     fetchData();
   }, [user]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      // Call a get request to check if the user is already registered
-      // const res = await fetch(`http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`);
-      // console.log(res);
-      const isActive = true;
-      if (isActive) {
-        setIsReadyToVolunteer(false); // Ensure isReadyToVolunteer is set to false initially
+    const fetchActiveCrimes = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/getActiveCrimes?userName=${user.name}`
+        );
+        const data = await res.json();
+        console.log(data.crimesAround);
+        setCrimesAround(data.crimesAround);
+      } catch (error: any) {
+        setError(error.message);
       }
     };
 
-    fetchData();
-  }, [user]);
-
-  // Rest of the component remains unchanged
+    if (isReadyToVolunteer) {
+      fetchActiveCrimes();
+    }
+  }, [isReadyToVolunteer, user]);
 
   const handleGetLocation = () => {
     try {
@@ -164,8 +172,21 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           <div className="text-green-600 text-3xl mb-8">
             Reports filed near you
           </div>
-          <ActiveCrimesCards />
-          <button className="btn btn-outline" onClick={handleDeleteLocation}>
+          {/* Create a grid with 2 cards in one row */}
+          <div className="grid grid-cols-2 gap-4">
+          {Array.isArray(crimesAround) &&
+            crimesAround.map((crime, index) => (
+              <ActiveCrimesCards
+                key={index}
+                descriptionOfIncident={crime.descriptionOfIncident}
+                incidentLocation={crime.incidentLocation}
+                personalInformation={crime.personalInformation}
+                timeOfIncident={crime.timeOfIncident}
+                userName={crime.userName}
+              />
+            ))}
+            </div>
+          <button className="mt-4 btn btn-outline" onClick={handleDeleteLocation}>
             LOG OFF
           </button>
         </>

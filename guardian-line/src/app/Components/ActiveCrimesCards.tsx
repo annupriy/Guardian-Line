@@ -1,6 +1,25 @@
 import React, { useState } from "react";
 
-const ActiveCrimesCards = () => {
+type IncidentLocation = {
+  latitude: number;
+  longitude: number;
+};
+
+type ActiveCrimesCardsProps = {
+  descriptionOfIncident: string;
+  incidentLocation: IncidentLocation;
+  personalInformation: string;
+  timeOfIncident: string;
+  userName: string;
+};
+
+const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
+  descriptionOfIncident,
+  incidentLocation,
+  personalInformation,
+  timeOfIncident,
+  userName,
+}) => {
   const [showButtons1, setShowButtons1] = useState(true);
   const [showButtons2, setShowButtons2] = useState(false);
   const [showCard, setShowCard] = useState(true);
@@ -28,23 +47,23 @@ const ActiveCrimesCards = () => {
     }, 5000);
   };
 
+  const  latitude = incidentLocation.latitude;
+  const  longitude = incidentLocation.longitude;
+
   return (
     <>
       {showCard && (
         <div className="card w-96 bg-amber-900 text-neutral-content">
           <div className="card-body text-center flex-nowrap">
             <div className="card-actions justify-between flex-nowrap items-center ">
-              <div className="card-title text-2xl">Mob Lynching</div>
+              <div className="card-title text-2xl">{descriptionOfIncident}</div>
               <div className="flex-col">
-                <h5 className="">0.792 km</h5>
-                <h5 className="">4:02 PM</h5>
+                <h5 className="">Latitude: {latitude}</h5>
+                <h5 className="">Longitude: {longitude}</h5>
+                <h5 className="">{timeOfIncident}</h5>
               </div>
             </div>
-            <p>
-              A 5-6 group of people are hitting a person who is badly injured.
-            </p>
-            <p>Coordinates: 28.7041° N, 77.1025° E</p>
-            <p>Personal Information: All of them are wearing black t-shirts</p>
+            <p>{personalInformation}</p>
             {showButtons1 && (
               <div className="card-actions justify-between flex-nowrap">
                 <button
