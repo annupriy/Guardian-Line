@@ -75,11 +75,4 @@ export async function POST(req) {
         console.error('Error parsing request body:', error);
         return new Response("Error parsing request body", { status: 500 })
     }
-
-    const content = new Blob([hashedAadharNumber]);
-    return new Response("send successfully", { status: 200 });
-  } catch (error) {
-    console.error("Error parsing request body:", error);
-    return new Response("Error parsing request body", { status: 500 });
-  }
 }
