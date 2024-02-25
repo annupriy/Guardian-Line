@@ -120,6 +120,8 @@ const Page = () => {
         // Handle the case where there is no active session
         return;
       }
+
+      let mp4Urls: Array<string> = [];
   
       const userName = session.user.name;
   
@@ -135,9 +137,17 @@ const Page = () => {
         uploadedDocs.map(async (doc, index) => {
           const path = await uploadFile(doc.file);
           uploadedDocPath.push({ path: path, title: doc.title });
+
+          const fileExtension = doc.file.name.split('.').pop()?.toLowerCase();
+          if (fileExtension === 'mp4') {
+            const mp4Url = await uploadFile(doc.file);
+            mp4Urls.push(mp4Url);
+          }
         })
       );
+
     }
+    console.log("mp4Urls: ",mp4Urls);
     console.log("Uploaded Docs:", uploadedDocPath);
     const res = await toast.promise(
       fetch("api/reports_2", {

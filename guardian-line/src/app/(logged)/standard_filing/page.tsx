@@ -105,13 +105,23 @@ const Page = () => {
     console.log("Username:", userName);
 
     let uploadedDocPath: Array<any> = [];
+
+    // let mp4Urls: Array<string> = [];
+
     if (uploadedDocs.length > 0) {
       // Use Promise.all to wait for all asynchronous operations
       await Promise.all(
         uploadedDocs.map(async (doc, index) => {
           const path = await uploadFile(doc.file);
           uploadedDocPath.push({ path: path, title: doc.title });
+
+        //   const fileExtension = doc.file.name.split('.').pop()?.toLowerCase();
+        //   if (fileExtension === 'mp4') {
+        //     const mp4Url = await uploadFile(doc.file);
+        //       mp4Urls.push(mp4Url);
+        // }
         })
+
       );
     }
     console.log("Uploaded Docs:", uploadedDocPath);
