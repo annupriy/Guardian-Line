@@ -1,0 +1,60 @@
+
+
+.sidebar {
+    background-color: #333; /* Adjust background color as desired */
+    color: white; /* Adjust text color as desired */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 250px; /* Adjust width as desired */
+    /* max-height: 100vh;  */
+    overflow-y: auto;
+    /* height: 100vh; Full viewport height */
+    display: flex; /* Enable vertical layout */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    position: fixed; /* Fix sidebar to the left */
+    top: 40;
+    left: 0;
+    transition: left 0.3s ease; /* Smooth open/close transition */
+  }
+  
+  
+  .menu-item {
+    padding: 40px 2px; /* Adjust padding as desired */
+    cursor: pointer; /* Indicate hover/click interaction */
+    transition: background-color 0.3s ease; /* Smoother hover effect */
+  }
+  
+  /* .menu-item:hover {
+    background-color: #222; /* Adjust hover background color */
+  /* } */ 
+  
+  .menu-link {
+    text-decoration: none;
+    color: white; /* Adjust text color */
+    display: flex; /* Enable horizontal layout for icons and text */
+    align-items: center; /* Align icons and text vertically */
+    gap: 10px; /* Space between icons and text */
+  }
+  
+  /* .icon { */
+    /* Style your icons here (font-size, color, etc.) */
+  /* } */
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 200px; /* Adjust width for smaller screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .sidebar {
+      width: 180px; /* Adjust width for even smaller screens */
+    }
+    .menu-item {
+      font-size: 14px; /* Adjust font size for smaller screens */
+    }
+  }
+  
