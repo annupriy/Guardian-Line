@@ -1,86 +1,8 @@
-// import clientPromise from "@/app/lib/mongodb";
-
-// export async function GET(req, res) {
-//   const { searchParams } = new URL(req.url);
-//   const reportid = searchParams.get("reportid");
-
-//   try {
-//     const client = await clientPromise;
-//     const db = client.db("GuardianLine");
-//     const collection = db.collection("ReportsData");
-//     const presentReportOfUser = await collection.findOne({ reportid: reportid });
-    
-//     // if (presentReportOfUser) {
-//         const uploadedDocPath = presentReportOfUser.uploadedDocPath;
-//         // Now you can use the uploadedDocPath
-//         console.log("Uploaded Doc Path:", uploadedDocPath);
-        
-//         // Send response with the uploadedDocPath
-//         // res.writeHead(200, { "Content-Type": "application/json" });
-//         return Response(JSON.stringify({ uploadedDocPath }));
-//     //   } else {
-//     //     // Report not found
-//     //     res.writeHead(404, { "Content-Type": "application/json" });
-//     //     res.end(JSON.stringify({ message: "Report not found" }));
-//     //   }
-    
-//   } catch (error) {
-//     console.error("Error:", error);
-//     return Response.error("Error fetching url");
-//   }
-// }
-
-
-// const crypto = require("crypto");
-// const fs = require("fs");
-
-// // Function to calculate the MD5 hash of a file
-// function calculateMD5(filePath) {
-//   return new Promise((resolve, reject) => {
-//     const hash = crypto.createHash("md5");
-//     const input = fs.createReadStream(filePath);
-
-//     input.on("error", reject);
-
-//     input.on("data", (chunk) => {
-//       hash.update(chunk);
-//     });
-
-//     input.on("end", () => {
-//       resolve(hash.digest("hex"));
-//     });
-//   });
-// }
-
-// // Function to compare MD5 hashes of two files
-// async function compareVideos(videoPath1, videoPath2) {
-//   const hash1 = await calculateMD5(videoPath1);
-//   const hash2 = await calculateMD5(videoPath2);
-
-//   return hash1 === hash2;
-// }
-
-// // Example usage
-// const videoPath1 = "video1.mp4";
-// const videoPath2 = "video3.mp4";
-
-// compareVideos(videoPath1, videoPath2)
-//   .then((isSame) => {
-//     if (isSame) {
-//       console.log("The videos are exactly the same.");
-//     } else {
-//       console.log("The videos are not the same.");
-//     }
-//   })
-//   .catch((error) => {
-//     console.error("Error:", error);
-//   });
-
 import clientPromise from "@/app/lib/mongodb";
 // import {SessionProvider, useSession } from 'next-auth/react';
 
-const crypto = require("crypto");
-const fs = require("fs");
+import axios from "axios";
+import crypto from "crypto";
 
 // const userName = session.user.name;
 
@@ -95,30 +17,38 @@ const fs = require("fs");
 
 //       // const reportid = userName + timestamp.toString();
 //       const reportid = `${userName}_${timestamp}`;
-
-// Function to calculate the MD5 hash of a file
-function calculateMD5(filePath) {
-  return new Promise((resolve, reject) => {
-    const hash = crypto.createHash("md5");
-    const input = fs.createReadStream(filePath);
-
-    input.on("error", reject);
-
-    input.on("data", (chunk) => {
-      hash.update(chunk);
-    });
-
-    input.on("end", () => {
-      resolve(hash.digest("hex"));
-    });
-  });
+// Function to calculate the MD5 hash of a buffer
+function calculateMD5(buffer) {
+  const hash = crypto.createHash("md5");
+  hash.update(buffer);
+  return hash.digest("hex");
 }
 
-async function compareVideos(videoPath1, videoPath2) {
-  const hash1 = await calculateMD5(videoPath1);
-  const hash2 = await calculateMD5(videoPath2);
+// Function to download a video from a URL
+async function downloadVideo(url) {
+  const response = await axios.get(url, { responseType: "arraybuffer" });
+  return response.data;
+}
 
-  return hash1 === hash2;
+// Function to compare two videos from their URLs
+async function compareVideos(videoUrl1, videoUrl2) {
+  try {
+    // Download the first video
+    const videoData1 = await downloadVideo(videoUrl1);
+
+    // Download the second video
+    const videoData2 = await downloadVideo(videoUrl2);
+
+    // Calculate MD5 hashes of the videos
+    const hash1 = calculateMD5(videoData1);
+    const hash2 = calculateMD5(videoData2);
+
+    // Compare the hashes
+    return hash1 === hash2;
+  } catch (error) {
+    console.error("Error:", error);
+    return false; // Return false in case of any errors
+  }
 }
 
 export async function GET(req, res) {
@@ -129,34 +59,46 @@ export async function GET(req, res) {
     const client = await clientPromise;
     const db = client.db("GuardianLine");
     const collection = db.collection("ReportsData");
-    const presentReportOfUser = await collection.findOne({ reportid: reportid });
-    
+    const presentReportOfUser = await collection.findOne({
+      reportid: reportid,
+    });
+
     if (presentReportOfUser) {
       const uploadedDocPath = presentReportOfUser.uploadedDocPath;
-      
+
       // Now you can use the uploadedDocPath
       console.log("Uploaded Doc Path:", uploadedDocPath);
-      
-      // Example usage
-      const videoPath1 = "video1.mp4";
-      const videoPath2 = uploadedDocPath; // Assuming uploadedDocPath is the path to the second video
 
-      // Comparing the videos
-      const isSame = await compareVideos(videoPath1, videoPath2);
-      
+      // Array to store promises of comparisons
+      const comparisonPromises = uploadedDocPath.map(async (element) => {
+        const videoPath1 =
+          "https://guardianline.s3.eu-north-1.amazonaws.com/guardianline/IMG_0969_1709018509952.mp4";
+        const videoPath2 = element.path; // Assuming uploadedDocPath is the path to the second video
+        const result = await compareVideos(videoPath1, videoPath2);
+        if (result) {
+          console.log(result)
+          console.log("Videos are the same");
+          return true;
+        } else {
+          console.log("Videos are not the same");
+          return false;
+        }
+      });
+
+      // Wait for all comparisons to finish
+      const results = await Promise.all(comparisonPromises);
+
+      // Check if any of the comparisons resulted in true
+      const isSame = results.some((result) => result);
+
       // Send response based on comparison result
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ isSame }));
+      return Response.json({ isSame });
     } else {
       // Report not found
-      res.writeHead(404, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "Report not found" }));
+      return Response.json({ message: "Report not found" });
     }
-    
   } catch (error) {
     console.error("Error:", error);
-    res.writeHead(500, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ message: "Internal Server Error" }));
+    return Response.error({ message: "Internal Server Error" });
   }
 }
-

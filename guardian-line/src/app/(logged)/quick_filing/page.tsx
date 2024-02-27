@@ -288,7 +288,6 @@ const Page = () => {
   return (
     <div className="p-6">
       <form
-        action=""
         className="shadow-lg border rounded-md border-gray-700 bg-white mx-auto w-2/3"
         onSubmit={handleSubmit}
       >
