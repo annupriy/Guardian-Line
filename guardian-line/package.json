@@ -33,7 +33,9 @@
     "react-tooltip": "^5.26.3",
     "react-type-animation": "^3.2.0",
     "tooltip": "^1.6.1",
+    "twilio": "^4.22.0",
     "typewriter-effect": "^2.21.0",
+    "unirest": "^0.6.0",
     "web3.storage": "^4.5.5"
   },
   "devDependencies": {

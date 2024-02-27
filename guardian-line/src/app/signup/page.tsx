@@ -3,50 +3,92 @@ import React from 'react'
 import Image from 'next/image'
 import logo from './logo4.jpg'
 import { useEffect, useState } from 'react';
-import { createHash } from 'crypto';
-import * as IPFS from 'ipfs-core'
+import { createHash, verify } from 'crypto';
+// import * as IPFS from 'ipfs-core'
 
 const Page = () => {
   const [aadharNumber, setAadharNumber] = useState<string>('');
+  const [inputCount, setInputCount] = useState(0);
+  const [otpValue, setOtpValue] = useState('');
+  const[getOtp, setGetOtp]= useState('');
+  const[inputValue, setInputValue]= useState<string>('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAadharNumber(event.target.value);
   };
 
+  const   HandleOtpChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOtpValue(event.target.value);
+  };
+
+  // let otp=""
   const handleTabClick = async () => {
+    
+    console.log("hi")
     const hashedAadharNumber = createHash('sha256').update(aadharNumber).digest('hex');
     console.log(hashedAadharNumber)
+      const fetchData = async () => {
+        console.log("hooo")
+        try {
+          const res = await fetch(
+            `http://localhost:3000/api/getUIDAI?hashedAadharNumber=${hashedAadharNumber}`
+          );
+          const data = await res.json();
+          console.log(typeof data);
+          if (data === "InValid Aadhar Number") {
+            setInputValue("InValid Aadhar Number");
+          } else {
+            setInputValue(""); // Reset inputValue if Aadhar number is valid
+          }
+          setInputCount(1);
+          if(data!= "InValid Aadhar Number"){
+              const verify= async() => {
+                try{
+                  const res= await fetch(
+                   `http://localhost:3000/api/otpVerify?data=${data.phoneNum}`
+                  );
+                  const otp= await res.json();
+                  setGetOtp(otp);
+                  return otp;
+                }catch(error: any){
+                  console.log(error.message);
+              }; 
+        }; verify(); 
+       }
+      }catch (error: any) {
+        console.log(error.message);
+      };
+    };fetchData();
 
-  //   const verify = await fetch('/api/getUIDAI',{
-  //      method: 'POST',
-  //      body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
-  //      headers: {
-  //        'Content-Type': 'application/json'
-  //      }
-  //     })
 
-  //   if(verify.status === 200){
-  //       const responseData = await verify.json();
-  //       const phoneNumber = responseData.phoneNumber;
-  //       console.log('Phone Number:', phoneNumber);
-  //    }else if (verify.status === 405) {
-  //       console.log('Aadhar number not found');
-  //   }else {
-  //     console.error('Failed to fetch data:', verify.statusText);
-  //  }
+
+
+
 
  
 
 
-    const response = await fetch('/api/addAadhar', {
-      method: 'POST',
-      body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    // const response = await fetch('/api/addAadhar', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
 
-  };
+  // };
+
+
+  }
+
+  const onSubmit = async () => {
+    if(getOtp === otpValue){
+    console.log("otp verified");
+    }
+    else{
+    console.log("Invalid Aadhar");
+    }
+};
 
 
 
@@ -72,6 +114,16 @@ const Page = () => {
                     className="bg-white border border-gray-400 py-1 px-12 w-full rounded-lg text-center"
                     onChange={handleInputChange}
                   />
+                 
+
+                   {/* {inputCount === 1 ? (
+                <div className='flex'>
+                <input type="text" placeholder="Input 1" />
+                <button type="submit">Submit</button>
+                </div>
+                  ): null} */}
+                   
+
 
                   <div className="tooltip flex" data-tip="Click Here for Authentication"
                     onClick={handleTabClick}>
@@ -79,6 +131,36 @@ const Page = () => {
                   </div>
                 </div>
               </div>
+
+                   
+                                {inputCount === 1 ? (
+                              // console.log(inputValue),
+                              inputValue == "Invalid Aadhar Number" ? (
+                                <div>
+                                <p>Invalid Aadhar Number</p>
+                              </div>
+
+                              ) : (
+                                <div className='flex flex-col gap-3'>
+                                <input 
+                                  type="text" 
+                                  placeholder="Enter the otp"  
+                                  className='w-full border border-black'
+                                  value={otpValue} 
+                                  onChange={HandleOtpChange} 
+                                /> 
+                                <button 
+                                  type="submit" 
+                                  className='border border-black w-full' 
+                                  onClick={onSubmit}
+                                >
+                                  Submit
+                                </button> 
+                              </div> 
+                              )
+                            ) : null}
+
+
 
               <div className=" flex flex-col gap-3 ">
                 <input type="text" placeholder="Username" className="bg-white py-1 px-12 border border-gray-400 rounded-lg text-center w-full" />
