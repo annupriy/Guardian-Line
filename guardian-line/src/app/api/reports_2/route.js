@@ -78,7 +78,8 @@ export async function POST(req) {
         }
       );
     });
-    
+    // const result = await fetch("http://127.0.0.1:5000/")
+    // console.log(await result.json())
     console.log("Crime registered successfully");
     return new Response("Volunteer registered successfully", { status: 200 });
   } catch (error) {

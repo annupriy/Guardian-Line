@@ -4,8 +4,12 @@ import { ReactElement, useEffect, useRef, useState, ChangeEvent } from "react";
 import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
-import {SessionProvider, useSession } from 'next-auth/react';
+import {SessionProvider, useSession} from 'next-auth/react';
 import { timeStamp } from "console";
+// import crypto from "crypto";
+// import fs from "fs";
+import axios from 'axios';
+
 
 const Page = () => {
 
@@ -164,6 +168,51 @@ const Page = () => {
     }
     console.log("mp4Urls: ",mp4Urls);
     console.log("Uploaded Docs:", uploadedDocPath);
+
+
+// // Function to calculate the MD5 hash of a file
+// function calculateMD5(filePath: string) {
+//   return new Promise((resolve, reject) => {
+//     const hash = crypto.createHash("md5");
+//     const input = fs.createReadStream(filePath);
+
+//     input.on("error", reject);
+
+//     input.on("data", (chunk: Buffer) => {
+//       hash.update(chunk);
+//     });
+
+//     input.on("end", () => {
+//       resolve(hash.digest("hex"));
+//     });
+//   });
+// }
+
+// // Function to compare MD5 hashes of two files
+// const videoPath = mp4Urls[0];
+// const videoPathData = "https://user-images.githubusercontent.com/64683866/168872267-7c6682f8-7294-4d9a-8a68-8c6f44c06df6.mp4"
+// async function compareVideos(videoPath1:string, videoPath2: string) {
+//   const hash1 = await calculateMD5(videoPath1);
+//   const hash2 = await calculateMD5(videoPath2);
+
+//   return hash1 === hash2;
+// }
+
+
+// compareVideos(videoPath, videoPathData)
+//   .then((isSame) => {
+//     if (isSame) {
+//       console.log("The videos are exactly the same.");
+//     } else {
+//       console.log("The videos are not the same.");
+//     }
+//   })
+//   .catch((error) => {
+//     console.error("Error:", error);
+//   });
+
+
+    
     const res = await toast.promise(
       fetch("api/reports_2", {
         method: "POST",
@@ -190,6 +239,8 @@ const Page = () => {
           minWidth: "200px",
         },
       }
+
+      
     );
     if (!res) {
       toast.dismiss();
@@ -205,6 +256,33 @@ const Page = () => {
         toast.error("Could not submit form");
       }
     }
+
+    try {
+      // Make a fetch request to the API route
+
+      
+      const res2 = await fetch(`api/videoUrl?reportid=${reportid}`, {
+        method: "GET",
+        headers: {
+          // "Content-type": "application/json",
+        },
+      });
+  
+      if (!res2.ok) {
+        throw new Error("Failed to fetch report data");
+      }
+  
+      // Parse the response
+      const data = await res2.json();
+  
+      // Handle the data as needed
+      console.log("Response:", data);
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error fetching report data");
+    }
+
+
   };
 
   return (
