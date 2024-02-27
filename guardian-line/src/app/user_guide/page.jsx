@@ -5,7 +5,7 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const page = () => {
+const Page = () => {
   const dudeRef = useRef(null);
   const contentRef = useRef(null);
   const arrowRef = useRef(null);
@@ -270,7 +270,7 @@ const page = () => {
         </div>
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">What's this?</h1>
+            <h1 className="dudeHeader">What&apos;s this?</h1>
           </div>
         </div>
         <div className="content-section"></div>
@@ -330,4 +330,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
