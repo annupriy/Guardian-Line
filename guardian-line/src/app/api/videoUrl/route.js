@@ -1,7 +1,8 @@
 import clientPromise from "@/app/lib/mongodb";
 
 export async function GET(req) {
-  const { reportid } = req.query; // Extracting the reportid from the query parameters
+  const { searchParams } = new URL(req.url);
+  const reportid = searchParams.get("reportid");
 
   const client = await clientPromise;
   try {
@@ -10,26 +11,16 @@ export async function GET(req) {
 
     // Find the report based on the reportid
     const presentReportOfUser = await collection.findOne({ reportid: reportid });
-    console.log("Hi");
 
     if (presentReportOfUser) {
       // If the report is found, return it as a response
-      return {
-        status: 200,
-        body: { report: presentReportOfUser }
-      };
+      return Response.json(presentReportOfUser);
     } else {
       // If the report is not found, return a 404 error
-      return {
-        status: 404,
-        body: { message: "Report not found" }
-      };
+      return Response.error({ message: "Report not found" });
     }
   } catch (error) {
     // If an error occurs, return a 500 error
-    return {
-      status: 500,
-      body: { message: "Internal Server Error" }
-    };
+    return Response.error({ message: "Internal Server Error" });
   }
 }

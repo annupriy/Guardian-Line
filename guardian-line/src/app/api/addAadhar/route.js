@@ -61,7 +61,6 @@ export async function POST(req) {
                 },
             }
         );
-        console.log(res.data);
         if(res.data && res.data.isDuplicate){
             console.log("Aadhar number already exists");
             return new Response("Aadhar number already exists", { status: 200 });

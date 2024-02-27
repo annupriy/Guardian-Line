@@ -1,5 +1,3 @@
-import { MongoClient } from 'mongodb';
-// import nextConnect from 'next-connect';
 import clientPromise from "@/app/lib/mongodb";
 // import apiHandler from '../apiHandler';
 
@@ -8,16 +6,12 @@ import clientPromise from "@/app/lib/mongodb";
 
 export async function POST(req) {
     try {
-        console.log('inside1')
         
         const {body } = await req.json();
         const client=  await clientPromise; // Ensure connection establishment before proceeding
-
-        console.log('inside1')
         try {
             const db = client.db('GuardianLine');
             const collection = db.collection('UIDAI');
-            console.log('inside')
             // Add filtering/validation based on query parameters if needed
             const { hashedAadharNumber } = body;
             const query = { AadharNum: hashedAadharNumber };
@@ -25,7 +19,7 @@ export async function POST(req) {
             const UIDAI = await collection.find(query);
             console.log(UIDAI)
 
-           return  new Response ((UIDAI.PhoneNum).json, {status:200});
+           return  new Response((UIDAI.PhoneNum).json, {status:200});
         } catch(error){
             return new Response ({ message: 'InValid Aadhar Number' }, {status : 405}); // Handle unsupported methods
         }
