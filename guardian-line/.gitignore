@@ -28,7 +28,9 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
-
+env
+__pycache__
+video
 
 # vercel
 .vercel

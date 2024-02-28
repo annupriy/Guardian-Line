@@ -83,7 +83,7 @@ const Sidebar = () => {
 
   return (
 
-    <ul className={`${styles.sidebar} menu menu-md h-full mx-2 flex-nowrap  bg-stone-600`}>
+    <ul className={`${styles.sidebar} menu menu-md h-full mx-2 flex-nowrap  bg-neutral-800`}>
       <li className={styles["menu-item"]}>
         <Link href="/reported_crimes" className={styles["menu-link"]}>
           <span className={styles.icon}>{/* Your icon component here */}</span>
