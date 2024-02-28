@@ -71,13 +71,18 @@
 
 // export default Sidebar;
 
+"use client"
 
-import React from "react";
+import React, { useState, } from "react";
 import Link from "next/link";
 import styles from "./sidebar.module.css";
 
+
+
 const Sidebar = () => {
+
   return (
+
     <ul className={`${styles.sidebar} menu menu-md h-full mx-2 flex-nowrap  bg-stone-600`}>
       <li className={styles["menu-item"]}>
         <Link href="/reported_crimes" className={styles["menu-link"]}>

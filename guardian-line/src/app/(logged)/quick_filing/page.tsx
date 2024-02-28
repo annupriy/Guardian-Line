@@ -286,7 +286,27 @@ const Page = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="overlay " 
+    style={{
+      // position: "fixed",
+      
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0)", 
+      zIndex: 9999, // Make sure it's above other content
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      
+  }}>
+    <div className="p-6" 
+    style={{
+      top: 135,
+      position: "relative",
+      zIndex: 10000, // Make sure it's above the overlay
+  }}>
       <form
         className="shadow-lg border rounded-md border-gray-700 bg-white mx-auto w-2/3"
         onSubmit={handleSubmit}
@@ -706,6 +726,7 @@ const Page = () => {
           </div>
         </div>
       </form>
+    </div>
     </div>
   );
 };

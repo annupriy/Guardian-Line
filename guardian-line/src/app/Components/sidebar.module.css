@@ -18,6 +18,17 @@
     left: 0;
     transition: left 0.3s ease; /* Smooth open/close transition */
   }
+
+  .sidebar.collapsed {
+    left: 0; /* Show the sidebar */
+  }
+  
+  .toggle-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999; /* Ensure the button is above the sidebar */
+  }
   
   
   .menu-item {
