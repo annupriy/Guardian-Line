@@ -227,6 +227,7 @@ const Page = () => {
           uploadedDocPath,
           userName: userName, 
           reportid,
+          status: "Live",
         }),
       }),
       {

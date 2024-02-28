@@ -14,7 +14,11 @@ export async function GET(req, res) {
     if (!volunteerLiveData.activeCrimes) {
       return new Response("No active crimes", { status: 200 });
     }
-    const crimesAround = await volunteerLiveData.activeCrimes;
+    let crimesAround = await volunteerLiveData.activeCrimes;
+    // Return only those crimesAround which has type of incident as not Harassment
+    crimesAround = crimesAround.filter(
+      (crime) => (crime.typeOfIncident !== "Harassment" && crime.status === "Live")
+    );
     // Return the active crimes array
     return Response.json({ crimesAround });
   } catch (error) {

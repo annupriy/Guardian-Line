@@ -14,6 +14,7 @@ export async function POST(req) {
     uploadedDocPath,
     userName,
     reportid,
+    status,
   } = await req.json();
 
   const client = await clientPromise;
@@ -34,6 +35,7 @@ export async function POST(req) {
       uploadedDocPath: uploadedDocPath,
       userName: userName,
       reportid: reportid,
+      status: status,
       }); 
     // In the incident Location we will have longitude and latitude using that we find the nearest volunteer from ActiveVolunteers collection that are near 1 km from the longitute and latitude of the incident location
     const collectionActive = await db.collection("ActiveVolunteers");
@@ -73,6 +75,7 @@ export async function POST(req) {
               descriptionOfIncident,
               timeOfIncident,
               personalInformation,
+              status,
             },
           },
         }

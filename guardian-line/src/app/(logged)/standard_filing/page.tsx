@@ -4,10 +4,9 @@ import { useEffect, useRef, useState, ChangeEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
-import {SessionProvider, useSession } from 'next-auth/react';
+import { SessionProvider, useSession } from "next-auth/react";
 
 const Page = () => {
-
   const { data: session } = useSession();
 
   const [toggleState, setToggleState] = useState(1);
@@ -29,7 +28,7 @@ const Page = () => {
     { file: File; title: string }[]
   >([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [typeOfIncident, setTypeOfIncident] = useState("");
+  const [typeOfIncident, setTypeOfIncident] = useState("Harassment");
   const [descriptionOfIncident, setDescriptionOfIncident] = useState("");
   const [incidentLocation, setIncidentLocation] = useState("");
   const [personalInformation, setPersonalInformation] = useState("");
@@ -40,6 +39,7 @@ const Page = () => {
   const [state, setState] = useState("");
   const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("Live");
   // const uploadedUrls: {title: string, url: string }[] = [];
   const handleDocsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -88,7 +88,6 @@ const Page = () => {
     setState(event.target.value);
   };
 
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Description:", descriptionOfIncident);
@@ -115,13 +114,12 @@ const Page = () => {
           const path = await uploadFile(doc.file);
           uploadedDocPath.push({ path: path, title: doc.title });
 
-        //   const fileExtension = doc.file.name.split('.').pop()?.toLowerCase();
-        //   if (fileExtension === 'mp4') {
-        //     const mp4Url = await uploadFile(doc.file);
-        //       mp4Urls.push(mp4Url);
-        // }
+          //   const fileExtension = doc.file.name.split('.').pop()?.toLowerCase();
+          //   if (fileExtension === 'mp4') {
+          //     const mp4Url = await uploadFile(doc.file);
+          //       mp4Urls.push(mp4Url);
+          // }
         })
-
       );
     }
     console.log("Uploaded Docs:", uploadedDocPath);
@@ -142,7 +140,8 @@ const Page = () => {
           state,
           pincode,
           uploadedDocPath,
-          userName: userName, 
+          userName: userName,
+          status,
         }),
       }),
       {
@@ -252,7 +251,7 @@ const Page = () => {
                 </div>
 
                 <div className="flex mt-6   text-sm">
-                  <p className="mr-2">Does the Incident Live or Not ?</p>
+                  <p className="mr-2">Is the Incident Live or Not ?</p>
                   <span className="text-red-500 text-lg">*</span>
                 </div>
                 <div
@@ -265,7 +264,10 @@ const Page = () => {
                     role="tab"
                     className="tab font-light  text-sm"
                     aria-label="LIVE"
-                    onClick={() => toggle2(3)}
+                    onClick={() => {
+                      toggle2(3);
+                      setStatus("Live");
+                    }}
                     checked={toggleState2 === 3 && toggleState === 1}
                   />
                   <div role="tabpanel" className="tab-content p-2">
@@ -294,7 +296,10 @@ const Page = () => {
                     role="tab"
                     className="tab text-sm  font-light"
                     aria-label="NOT LIVE"
-                    onClick={() => toggle2(4)}
+                    onClick={() => {
+                      toggle2(4);
+                      setStatus("Not Live");
+                    }}
                     checked={toggleState2 === 4 && toggleState === 1}
                   />
                   <div
@@ -659,7 +664,10 @@ const Page = () => {
                     role="tab"
                     className="tab font-light  text-sm"
                     aria-label="LIVE"
-                    onClick={() => toggle2(3)}
+                    onClick={() => {
+                      toggle2(3);
+                      setStatus("Live");
+                    }}
                     checked={toggleState2 === 3 && toggleState === 2}
                   />
                   <div role="tabpanel" className="tab-content p-2">
@@ -688,7 +696,10 @@ const Page = () => {
                     role="tab"
                     className="tab text-sm  font-light"
                     aria-label="NOT LIVE"
-                    onClick={() => toggle2(4)}
+                    onClick={() => {
+                      toggle2(4);
+                      setStatus("Not Live");
+                    }}
                     checked={toggleState2 === 4 && toggleState === 2}
                   />
                   <div
