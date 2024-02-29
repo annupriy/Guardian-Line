@@ -1,4 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
+import initiateVideoUrlExtract from "@/app/api/videoUrlextract/route";
 
 export async function POST(req) {
   const {
@@ -20,7 +21,7 @@ export async function POST(req) {
   const client = await clientPromise;
   try {
     const db = await client.db("GuardianLine");
-      const collection = db.collection("ReportsData");
+    const collection = db.collection("ReportsData");
 
     await collection.insertOne({
       typeOfIncident: typeOfIncident,
@@ -36,7 +37,7 @@ export async function POST(req) {
       userName: userName,
       reportid: reportid,
       status: status,
-      }); 
+    });
     // In the incident Location we will have longitude and latitude using that we find the nearest volunteer from ActiveVolunteers collection that are near 1 km from the longitute and latitude of the incident location
     const collectionActive = await db.collection("ActiveVolunteers");
     const volunteers = await collectionActive.find({}).toArray();
@@ -48,7 +49,7 @@ export async function POST(req) {
           incidentLocation.latitude,
           incidentLocation.longitude
         );
-        return { userName: volunteer.userName, distance: distance};
+        return { userName: volunteer.userName, distance: distance };
       })
       .filter((volunteer) => volunteer.distance <= 1);
 
@@ -76,20 +77,19 @@ export async function POST(req) {
               timeOfIncident,
               personalInformation,
               status,
+              reportid,
             },
           },
         }
       );
-    });
-    // const result = await fetch("http://127.0.0.1:5000/")
-    // console.log(await result.json())
+    })
     console.log("Crime registered successfully");
+    initiateVideoUrlExtract(reportid,uploadedDocPath);
     return new Response("Volunteer registered successfully", { status: 200 });
   } catch (error) {
     console.error("Error:", error);
     return new Response("Error", { status: 500 });
-  }
-  finally {
+  } finally {
     //  client.close();
   }
 }

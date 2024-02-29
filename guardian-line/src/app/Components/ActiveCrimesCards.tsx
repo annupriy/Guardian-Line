@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import toast, { Toaster } from "react-hot-toast";
 type IncidentLocation = {
   latitude: number;
   longitude: number;
@@ -11,6 +11,7 @@ type ActiveCrimesCardsProps = {
   personalInformation: string;
   timeOfIncident: string;
   userName: string;
+  reportid: string;
 };
 
 const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
@@ -19,6 +20,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
   personalInformation,
   timeOfIncident,
   userName,
+  reportid,
 }) => {
   const [showButtons1, setShowButtons1] = useState(true);
   const [showButtons2, setShowButtons2] = useState(false);
@@ -33,6 +35,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
 
   const handleSkip = () => {
     setShowCard(false);
+    removeCrimeReport();
   };
 
   const handleDone = () => {
@@ -45,6 +48,34 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
     setTimeout(() => {
       setShowThanksMessage(false);
     }, 5000);
+  };
+
+  const removeCrimeReport = async () => {
+    // Remove the object from ActiveCrimes from ActiveVolunteers Collection
+    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        removeReport: true,
+        reportid: reportid,
+      }),
+    });
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+    } else if (res.status === 200) {
+      toast.dismiss();
+      console.log("Deleted");
+    } else {
+      toast.dismiss();
+      if (res.status === 401) {
+        toast.error("Error skipping report. Please try again.");
+      } else {
+        toast.error("Could not skip report");
+      }
+    }
   };
 
   const  latitude = incidentLocation.latitude;

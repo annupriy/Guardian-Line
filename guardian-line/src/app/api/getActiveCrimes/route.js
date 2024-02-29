@@ -20,9 +20,12 @@ export async function GET(req, res) {
       (crime) => (crime.typeOfIncident !== "Harassment" && crime.status === "Live")
     );
     // Return the active crimes array
-    return Response.json({ crimesAround });
+    return Response.json({ activeCrimes: crimesAround});
   } catch (error) {
     console.error("Error:", error);
     return Response.error("Error fetching active crimes");
   }
 }
+
+// post function to remove the crime from activeCrimes from ActiveVolunteers collection
+

@@ -32,8 +32,12 @@ const Page = () => {
   const [descriptionOfIncident, setDescriptionOfIncident] = useState("");
   const [incidentLocation, setIncidentLocation] = useState("");
   const [personalInformation, setPersonalInformation] = useState("");
-  const [dateOfIncident, setDateOfIncident] = useState("");
-  const [timeOfIncident, setTimeOfIncident] = useState("");
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+  const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
+  
+  const [dateOfIncident, setDateOfIncident] = useState(formattedDate);
+  const [timeOfIncident, setTimeOfIncident] = useState(formattedTime);
   // const [elaborateLocation, setElaborateLocation] = useState('')
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
