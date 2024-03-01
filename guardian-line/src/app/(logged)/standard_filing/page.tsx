@@ -220,7 +220,7 @@ const Page = () => {
                   onChange={handleTypeChange}
                   value={typeOfIncident}
                 >
-                  <option disabled selected>
+                  <option>
                     Accidents
                   </option>
                   <option>Harassment</option>
@@ -622,7 +622,7 @@ const Page = () => {
                   onChange={handleTypeChange}
                   value={typeOfIncident}
                 >
-                  <option disabled selected>
+                  <option selected>
                     Accidents
                   </option>
                   <option>Harassment</option>

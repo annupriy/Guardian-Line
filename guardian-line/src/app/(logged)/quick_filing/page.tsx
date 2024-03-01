@@ -316,8 +316,7 @@ const Page = () => {
               <span className="text-red-500 pr-2 text-lg">*</span>
               <span>Required Fields</span>
             </div>
-            <span className="text-red-500 text-lg">*</span>
-            <span className="p-2">I am:</span>
+            
             <div
               role="tablist"
               className="tabs tabs-bordered tabs-lg grid grid-cols-2 border border-gray-400"
@@ -369,7 +368,7 @@ const Page = () => {
                     type="text"
                     id="description"
                   />
-                  <div className="flex mt-4">
+                  <div className="flex mt-4 font-normal text-sm font-mono">
                     <label htmlFor="label">Enable Current Location</label>
                     <input
                       type="checkbox"
@@ -396,8 +395,8 @@ const Page = () => {
                     </div>
                   )}
                   <div>
-                    <div className="text-black flex">
-                      <p className="text-sm  mt-6 ml-1">
+                    <div className="flex">
+                      <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
                         {"Additional Documents"}
                       </p>
                     </div>
@@ -567,29 +566,41 @@ const Page = () => {
                     </p>
                     <span className="text-red-500 text-lg mt-3">*</span>
                   </div>
-                  <textarea
-                    className="textarea textarea-bordered border-black mt-0"
-                    placeholder=""
-                  ></textarea>
-                  <div className="grid grid-rows-2 items-center   mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
-                    <div>
-                      <label
-                        className="font-light font-mono text-sm mt-3"
-                        style={{ fontFamily: "" }}
-                      >
-                        {"Location of Incident"}
-                      </label>
-                      <input
-                        type="text"
-                        className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                        placeholder=""
-                        style={{ fontFamily: "" }}
-                      />
+                  
+
+
+                   <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
+                      <div>
+                        <label
+                          className="font-light font-mono text-sm mt-2"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"}
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                        />
+                      </div>
                     </div>
+                  )}
                   </div>
                   <div>
-                    <div className="text-black flex">
-                      <p className="text-sm  mt-6 ml-1">
+                  <div>
+                    
+                    <div className=" flex">
+                      <p className=" font-light font-mono text-sm text-sm  mt-6 ml-1">
                         {"Additional Documents"}
                       </p>
                     </div>
