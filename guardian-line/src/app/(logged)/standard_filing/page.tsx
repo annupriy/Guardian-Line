@@ -188,8 +188,8 @@ const Page = () => {
             <span className="text-red-500 pr-2 text-lg">*</span>
             <span>Required Fields</span>
           </div>
-          <span className="text-red-500 text-lg">*</span>
-          <span className="p-2">I am:</span>
+          
+          
           <div
             role="tablist"
             className="tabs tabs-bordered tabs-lg grid grid-cols-2 border border-gray-400"
@@ -212,8 +212,8 @@ const Page = () => {
               <hr className=" border border-gray-500" />
               <div className="mt-6 grid grid-cols">
                 <div className="flex">
-                  <p className="mr-2 font-normal text-sm ">Type of Incident</p>
-                  <span className="text-red-500 text-lg ">*</span>
+                  <p className="mr-2 font-normal text-sm font-mono">Type of Incident</p>
+                  
                 </div>
                 <select
                   className="select border-black mt-0"
@@ -237,26 +237,26 @@ const Page = () => {
                   className="textarea textarea-bordered border-black mt-0"
                   placeholder=""
                 ></textarea> */}
+                
 
                 <div className="flex">
-                  <label
-                    htmlFor="Description of the Incident"
-                    className="mt-3 mr-2 font-normal text-sm"
-                  >
-                    Description of the Incident
-                  </label>
+                    <p className="mt-3 mr-2 font-normal text-sm font-mono">
+                      Description of the Incident</p><span className="text-red-500 text-lg mt-1.5">*</span>
+                    
+                  </div>
+                  {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
                   <input
                     className="textarea textarea-bordered border-black mt-0"
                     onChange={(e) => setDescriptionOfIncident(e.target.value)}
                     value={descriptionOfIncident}
                     type="text"
                     id="description"
+                    required
                   />
-                </div>
 
-                <div className="flex mt-6   text-sm">
+                <div className=" mt-6 font-normal text-sm font-mono">
                   <p className="mr-2">Is the Incident Live or Not ?</p>
-                  <span className="text-red-500 text-lg">*</span>
+      
                 </div>
                 <div
                   role="tablist"
@@ -281,15 +281,16 @@ const Page = () => {
                           className="font-light  text-sm mt-2"
                           style={{ fontFamily: "" }}
                         >
-                          {"Location of Incident"}
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
-                          className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          className="w-full font-normal text-sm font-mono rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setIncidentLocation(e.target.value)}
                           value={incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
                     </div>
@@ -313,10 +314,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8  md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm"
+                          className="font-light  text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Date of Incident"}
+                          {"Date of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <div className="relative text-gray-400 focus-within:text-gray-600">
                           <input
@@ -326,13 +327,14 @@ const Page = () => {
                             value={dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
+                            required
                           />
                         </div>
                       </div>
 
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"Time of Incident"}
@@ -352,10 +354,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Location of Incident"}
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
@@ -372,14 +374,14 @@ const Page = () => {
                           className=" font-light text-sm"
                           style={{ fontFamily: "" }}
                         >
-                          {"city"}
+                          {"City"}
                         </label>
                         <input
                           type="text"
                           onChange={(e) => setCity(e.target.value)}
                           value={city}
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          placeholder="city"
+                          placeholder="City"
                           style={{ fontFamily: "" }}
                         />
                       </div>
@@ -388,7 +390,7 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
                       <div>
                         <label
-                          className=" font-light text-sm"
+                          className=" font-light text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"State"}
@@ -398,7 +400,7 @@ const Page = () => {
                           onChange={handleTypeChangeForState}
                           value={state}
                         >
-                          <option value="">Select state</option>
+                          <option value="">Select State</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
                           </option>
@@ -442,17 +444,17 @@ const Page = () => {
                       </div>
                       <div>
                         <label
-                          className="text-sm  font-light"
+                          className="text-sm  font-light text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"pincode"}
+                          {"PIN Code"}
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setPincode(e.target.value)}
                           value={pincode}
-                          placeholder={"Pin Code"}
+                          placeholder={"PIN Code"}
                           style={{ fontFamily: "" }}
                         />
                       </div>
@@ -461,8 +463,8 @@ const Page = () => {
                 </div>
 
                 <div>
-                  <div className="text-black flex">
-                    <p className="text-sm  mt-6 ml-1">
+                  <div className=" flex">
+                    <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
                       {"Additional Documents"}
                     </p>
                   </div>
@@ -574,7 +576,7 @@ const Page = () => {
                 <div className="flex flex-col">
                   <p className="text-xl mt-6 font-medium">
                     {" "}
-                    PERSONAL INFORMATION(Not Mandatory)
+                    PERSONAL INFORMATION (Not Mandatory)
                   </p>
                   <hr className="border border-gray-500" />
                   <p className="mt-3 text-sm italic ">
@@ -612,8 +614,8 @@ const Page = () => {
               <hr className="border border-gray-500" />
               <div className="mt-6 grid grid-cols">
                 <div className="flex">
-                  <p className="mr-2 font-normal text-sm ">Type of Incident</p>
-                  <span className="text-red-500 text-lg ">*</span>
+                  <p className="mr-2 font-normal text-sm font-mono ">Type of Incident</p>
+                  
                 </div>
                 <select
                   className="select border-black mt-0"
@@ -634,33 +636,28 @@ const Page = () => {
                   <span className="text-red-500 text-lg mt-3">*</span>
                 </div> */}
 
-                <div className="flex">
-                  <label
-                    htmlFor="Description of the Incident"
-                    className="mt-3 mr-2 font-normal text-sm"
-                  >
-                    Description of the Incident
-                  </label>
+                    <div className="flex">
+                    <p className="mt-3 mr-2 font-normal text-sm font-mono"> 
+                      Description of the Incident
+                    </p><span className="text-red-500 text-lg mt-1.5">*</span>
+                  </div> 
+                  {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
                   <input
                     className="textarea textarea-bordered border-black mt-0"
                     onChange={(e) => setDescriptionOfIncident(e.target.value)}
                     value={descriptionOfIncident}
                     type="text"
                     id="description"
+                    required
                   />
-                </div>
-                {/* <textarea
-                  className="textarea textarea-bordered border-black mt-0"
-                  placeholder=""
-                ></textarea> */}
-
-                <div className="flex mt-6 font-light  text-sm">
-                  <p className="mr-2">Does the Incident Live or Not ?</p>
-                  <span className="text-red-500 text-lg">*</span>
+                
+                <div className="flex mt-6 font-normal text-sm font-mono">
+                  <p className="mr-2">Is the Incident Live or Not ?</p>
+                  
                 </div>
                 <div
                   role="tablist"
-                  className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-4"
+                  className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-2"
                 >
                   <input
                     type="radio"
@@ -678,10 +675,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Location of Incident"}
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
@@ -690,6 +687,7 @@ const Page = () => {
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder=""
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
                     </div>
@@ -713,10 +711,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8  md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm"
+                          className="font-light  text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Date of Incident"}
+                          {"Date of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <div className="relative text-gray-400 focus-within:text-gray-600">
                           <input
@@ -726,13 +724,14 @@ const Page = () => {
                             value={dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
+                            required
                           />
                         </div>
                       </div>
 
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"Time of Incident"}
@@ -752,10 +751,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Location of Incident"}
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
@@ -764,22 +763,23 @@ const Page = () => {
                           value={incidentLocation}
                           placeholder=""
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
 
                       <div>
                         <label
-                          className=" font-light text-sm"
+                          className=" font-light text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"city"}
+                          {"City"}
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setCity(e.target.value)}
                           value={city}
-                          placeholder="city"
+                          placeholder="City"
                           style={{ fontFamily: "" }}
                         />
                       </div>
@@ -788,7 +788,7 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
                       <div>
                         <label
-                          className=" font-light text-sm"
+                          className=" font-light text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"State"}
@@ -798,7 +798,7 @@ const Page = () => {
                           onChange={handleTypeChange}
                           value={state}
                         >
-                          <option value="">Select state</option>
+                          <option value="">Select State</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
                           </option>
@@ -842,17 +842,17 @@ const Page = () => {
                       </div>
                       <div>
                         <label
-                          className="text-sm  font-light"
+                          className="text-sm  font-light text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"pincode"}
+                          {"PIN Code"}
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setPincode(e.target.value)}
                           value={pincode}
-                          placeholder={"Pin Code"}
+                          placeholder={"PIN Code"}
                           style={{ fontFamily: "" }}
                         />
                       </div>
@@ -860,8 +860,8 @@ const Page = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="text-black flex">
-                    <p className="text-sm  mt-6 ml-1">
+                  <div className=" flex">
+                    <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
                       {"Additional Documents"}
                     </p>
                   </div>
@@ -976,7 +976,7 @@ const Page = () => {
                       {" "}
                       PERSONAL INFORMATION (Not Mandatory)
                     </p>
-                    <span className="text-red-500">Optional</span>
+                    
                   </div>
                   <hr className="border border-gray-500" />
                   <p className="mt-3 text-sm italic font-light">
