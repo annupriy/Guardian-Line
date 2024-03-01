@@ -37,6 +37,7 @@ export async function POST(req) {
       userName: userName,
       reportid: reportid,
       status: status,
+      vote: 0,
     });
     // In the incident Location we will have longitude and latitude using that we find the nearest volunteer from ActiveVolunteers collection that are near 1 km from the longitute and latitude of the incident location
     const collectionActive = await db.collection("ActiveVolunteers");
