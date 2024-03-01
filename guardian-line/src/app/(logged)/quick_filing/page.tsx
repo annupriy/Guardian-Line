@@ -342,7 +342,7 @@ const Page = () => {
                     <p className="mr-2 font-normal text-sm font-mono">
                       Type of Incident
                     </p>
-                    <span className="text-red-500 text-lg ">*</span>
+                    
                   </div>
                   <select
                     className="select border-black mt-0"
@@ -358,7 +358,7 @@ const Page = () => {
                     <p className="mt-3 mr-2 font-normal text-sm font-mono">
                       Description of the Incident
                     </p>
-                    <span className="text-red-500 text-lg mt-3">*</span>
+                   
                   </div>
                   {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
                   <input
@@ -385,11 +385,12 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setAddress(e.target.value)}
+                          required
                         />
                       </div>
                     </div>
@@ -513,7 +514,7 @@ const Page = () => {
                   <div className="flex flex-col">
                     <p className="text-xl mt-6 font-medium">
                       {" "}
-                      PERSONAL INFORMATION(Not Mandatory)
+                      PERSONAL INFORMATION (Not Mandatory)
                     </p>
                     <hr className="border border-gray-500" />
                     <p className="mt-3 text-sm italic font-mono">
@@ -550,10 +551,10 @@ const Page = () => {
                     <p className="mr-2 font-normal text-sm font-mono">
                       Type of Incident
                     </p>
-                    <span className="text-red-500 text-lg ">*</span>
+                    
                   </div>
                   <select className="select border-black mt-0">
-                    <option disabled selected>
+                    <option selected>
                       Accidents
                     </option>
                     <option>Harassment</option>
@@ -564,7 +565,7 @@ const Page = () => {
                     <p className="mt-3 mr-2 font-normal text-sm font-mono">
                       Description of the Incident
                     </p>
-                    <span className="text-red-500 text-lg mt-3">*</span>
+                    
                   </div>
                   
 
@@ -586,11 +587,12 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setAddress(e.target.value)}
+                          required
                         />
                       </div>
                     </div>
@@ -715,7 +717,7 @@ const Page = () => {
                   </div>
                   <div className="flex flex-col">
                     <p className="text-xl mt-6 font-medium">
-                      PERSONAL INFORMATION(Not Mandatory)
+                      PERSONAL INFORMATION (Not Mandatory)
                     </p>
                     <hr className="border border-gray-500" />
                     <p className="mt-3 text-sm italic font-mono">

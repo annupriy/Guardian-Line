@@ -30,7 +30,7 @@ const Page = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [typeOfIncident, setTypeOfIncident] = useState("Harassment");
   const [descriptionOfIncident, setDescriptionOfIncident] = useState("");
-  const [incidentLocation, setIncidentLocation] = useState("");
+  // const [incidentLocation, setIncidentLocation] = useState("");
   const [personalInformation, setPersonalInformation] = useState("");
   const currentDate = new Date();
   const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
@@ -44,7 +44,83 @@ const Page = () => {
   const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
   const [status, setStatus] = useState("Live");
+  const [address, setAddress] = useState("");
   // const uploadedUrls: {title: string, url: string }[] = [];
+
+  const [incidentLocation, setIncidentLocation] = useState<{
+    latitude: number;
+    longitude: number;
+    address: string;
+  }>({} as any);
+
+  const handleGetAddress = async (latitude: number, longitude: number) => {
+    try {
+      console.log("Key is: ", process.env.NEXT_PUBLIC_GEOCODING_API_KEY);
+      const res = await fetch(
+        `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${process.env.NEXT_PUBLIC_GEOCODING_API_KEY}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch address");
+      }
+      const data = await res.json();
+      console.log("Address:", data);
+      return data.display_name;
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error fetching address");
+    }
+  };
+
+  const handleGetCoordinates = async (address: string) => {
+    try {
+      const res = await fetch(
+        `https://geocode.maps.co/search?q=${address}&api_key=${process.env.NEXT_PUBLIC_GEOCODING_API_KEY}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch coordinates");
+      }
+      const data = await res.json();
+      console.log("Coordinates:", data);
+      setIncidentLocation({ latitude: data.lat, longitude: data.lon, address });
+      return { latitude: data[0].lat, longitude: data[0].lon };
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error fetching coordinates");
+    }
+  };
+  const [isCurrentLocationEnabled, setIsCurrentLocationEnabled] =
+    useState(false);
+
+  const handleToggleChange = () => {
+    setIsCurrentLocationEnabled(!isCurrentLocationEnabled);
+    if (!isCurrentLocationEnabled) {
+      handleGetLocation();
+    } else {
+      setAddress("");
+      setIncidentLocation({} as any);
+    }
+  };
+
+  const handleGetLocation = () => {
+    try {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const userAddress = await handleGetAddress(latitude, longitude);
+          setIncidentLocation({ latitude, longitude, address: userAddress });
+        },
+        (error) => {
+          //   setError(error.message);
+          console.error(`Geolocation error: ${error.message}`);
+        }
+      );
+    } catch (error: any) {
+      // Access error properties safely:
+      //   setError(error.message);
+      console.error(`Geolocation error: ${error.message}`);
+    }
+  };
+
   const handleDocsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
@@ -92,6 +168,7 @@ const Page = () => {
     setState(event.target.value);
   };
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Description:", descriptionOfIncident);
@@ -127,6 +204,24 @@ const Page = () => {
       );
     }
     console.log("Uploaded Docs:", uploadedDocPath);
+
+    let Loc = {};
+    if (address !== "") {
+      const obj = await handleGetCoordinates(address);
+      console.log("obj: ", obj);
+      if (!obj) {
+        return;
+      }
+      Loc = {
+        latitude: obj.latitude,
+        longitude: obj.longitude,
+        address: address,
+      };
+    } else {
+      Loc = incidentLocation;
+    }
+    console.log("incide:: ", Loc);
+
     const res = await toast.promise(
       fetch("api/reports_2", {
         method: "POST",
@@ -136,7 +231,7 @@ const Page = () => {
         body: JSON.stringify({
           typeOfIncident,
           descriptionOfIncident,
-          incidentLocation,
+          incidentLocation: Loc,
           personalInformation,
           dateOfIncident,
           timeOfIncident,
@@ -276,7 +371,35 @@ const Page = () => {
                   />
                   <div role="tabpanel" className="tab-content p-2">
                     <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
+                    <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
+                        <label
+                          className="font-light font-mono text-sm mt-2"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
                         <label
                           className="font-light  text-sm mt-2"
                           style={{ fontFamily: "" }}
@@ -286,13 +409,13 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full font-normal text-sm font-mono rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           placeholder=""
                           style={{ fontFamily: "" }}
                           required
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <input
@@ -352,7 +475,36 @@ const Page = () => {
                       </div>
                     </div>
                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
+
+                    <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
+                        <label
+                          className="font-light font-mono text-sm mt-2"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
                         <label
                           className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
@@ -362,12 +514,12 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
-                      </div>
+                      </div> */}
 
                       <div>
                         <label
@@ -375,7 +527,7 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"City"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           onChange={(e) => setCity(e.target.value)}
@@ -383,6 +535,7 @@ const Page = () => {
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder="City"
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
                     </div>
@@ -394,11 +547,12 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"State"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <select
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
                           onChange={handleTypeChangeForState}
                           value={state}
+                          required
                         >
                           <option value="">Select State</option>
                           <option value="AN">
@@ -461,6 +615,7 @@ const Page = () => {
                     </div>
                   </div>
                 </div>
+
 
                 <div>
                   <div className=" flex">
@@ -673,7 +828,35 @@ const Page = () => {
                   />
                   <div role="tabpanel" className="tab-content p-2">
                     <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
+                    <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
+                        <label
+                          className="font-light font-mono text-sm mt-2"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
                         <label
                           className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
@@ -682,14 +865,14 @@ const Page = () => {
                         </label>
                         <input
                           type="text"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder=""
                           style={{ fontFamily: "" }}
                           required
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <input
@@ -749,7 +932,36 @@ const Page = () => {
                       </div>
                     </div>
                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
+
+                    <div className="flex mt-4 font-normal text-sm font-mono text-gray-400">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
+                        <label
+                          className="font-light font-mono text-sm mt-2 text-gray-400"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text "
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
                         <label
                           className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
@@ -759,13 +971,13 @@ const Page = () => {
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           placeholder=""
                           style={{ fontFamily: "" }}
                           required
                         />
-                      </div>
+                      </div> */}
 
                       <div>
                         <label
@@ -773,7 +985,7 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"City"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
@@ -781,6 +993,7 @@ const Page = () => {
                           value={city}
                           placeholder="City"
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
                     </div>
@@ -792,11 +1005,12 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"State"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <select
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
                           onChange={handleTypeChange}
                           value={state}
+                          required
                         >
                           <option value="">Select State</option>
                           <option value="AN">
