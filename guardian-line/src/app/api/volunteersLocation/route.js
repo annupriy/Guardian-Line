@@ -32,6 +32,7 @@ export async function POST(req) {
       accuracy,
       removeReport,
       reportid,
+      vote,
     } = await req.json();
     // Connect to MongoDB
     const db = await client.db("GuardianLine");
@@ -47,30 +48,60 @@ export async function POST(req) {
       );
       console.log("User deleted successfully");
       return new Response("User deleted successfully", { status: 200 });
-    } else if (removeReport === true) {
+    } else if (removeReport === true && vote === 0) {
       // Remove the report from the active crimes array that has the reportid
       const authSession = await getServerAuthSession();
       const name = authSession?.user?.name;
-      console.log("Reportid:", reportid);
-      console.log("Username:", name);
       // Find the index of the report in the active crimes array where reportid matches
       const document = await collection.findOne({ userName: name });
 
       if (document) {
-        console.log(document.activeCrimes)
-        const index = document.activeCrimes.findIndex(
-          (crime) => crime.reportid === reportid
+        // Give an array which contains objects and the one of the object has reportid as value find the index of the object
+        document.activeCrimes.map((crime, idx) => {
+          if (crime.reportid === reportid) {
+            console.log("Index of the matching element:", idx);
+            document.activeCrimes.splice(idx, 1);
+          }
+        });
+        await collection.updateOne(
+          { userName: name },
+          { $set: { activeCrimes: document.activeCrimes } }
         );
-
-        if (index !== -1) {
-          console.log("Index of the matching element:", index);
-        } else {
-          console.log("Element with reportid not found in activeCrimes array.");
-        }
       } else {
         console.log("Document not found for userName:", name);
       }
       return new Response("Report removed successfully", { status: 200 });
+    } else if (removeReport === true && vote !== 0) {
+      const reportsCollection = db.collection("ReportsData");
+      const document2 = await reportsCollection.findOne({ reportid: reportid });
+      if (document2) {
+        await reportsCollection.updateOne(
+          { reportid: reportid },
+          { $set: { vote: (document2.vote || 0) + vote } }
+        );
+      } else {
+        console.log("Report validation didn't summed up for reportid:", reportid);
+      }
+      const authSession = await getServerAuthSession();
+      const name = authSession?.user?.name;
+      const document = await collection.findOne({ userName: name });
+      if (document) {
+        // Give an array which contains objects and the one of the object has reportid as value find the index of the object
+        document.activeCrimes.map((crime, idx) => {
+          if (crime.reportid === reportid) {
+            console.log("Index of the matching element:", idx);
+            document.activeCrimes.splice(idx, 1);
+          }
+        });
+        await collection.updateOne(
+          { userName: name },
+          { $set: { activeCrimes: document.activeCrimes } }
+        );
+      } else {
+        console.log("Document not found for userName:", name);
+      }
+      
+      return new Response("Report validated successfully", { status: 200 });
     } else {
       // Check if user already exists
       const userExists = await collection.findOne({ userName: userName });

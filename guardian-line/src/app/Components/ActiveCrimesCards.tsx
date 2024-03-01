@@ -60,6 +60,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
       body: JSON.stringify({
         removeReport: true,
         reportid: reportid,
+        vote: 0,
       }),
     });
     if (!res) {
@@ -78,8 +79,66 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
     }
   };
 
-  const  latitude = incidentLocation.latitude;
-  const  longitude = incidentLocation.longitude;
+  const handleVoteYes = async () => {
+    // Remove the object from ActiveCrimes from ActiveVolunteers Collection
+    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        vote: 1,
+        removeReport: true,
+        reportid: reportid,
+      }),
+    });
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+    } else if (res.status === 200) {
+      toast.dismiss();
+      console.log("Deleted");
+    } else {
+      toast.dismiss();
+      if (res.status === 401) {
+        toast.error("Error validating report. Please try again.");
+      } else {
+        toast.error("Could not validate");
+      }
+    }
+  };
+
+  const handleVoteNo = async () => {
+    // Remove the object from ActiveCrimes from ActiveVolunteers Collection
+    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        vote: -1,
+        removeReport: true,
+        reportid: reportid,
+      }),
+    });
+    if (!res) {
+      toast.dismiss();
+      toast.error("Error");
+    } else if (res.status === 200) {
+      toast.dismiss();
+      console.log("Deleted");
+    } else {
+      toast.dismiss();
+      if (res.status === 401) {
+        toast.error("Error validating report. Please try again.");
+      } else {
+        toast.error("Could not validate");
+      }
+    }
+  };
+
+  const latitude = incidentLocation.latitude;
+  const longitude = incidentLocation.longitude;
 
   return (
     <>
@@ -110,10 +169,22 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
             )}
             {showButtons2 && (
               <div className="card-actions justify-evenly flex-nowrap">
-                <button className="btn btn-primary" onClick={handleDone}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => {
+                    handleDone();
+                    handleVoteYes();
+                  }}
+                >
                   True Report
                 </button>
-                <button className="btn btn-ghost" onClick={handleDone}>
+                <button
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    handleDone();
+                    handleVoteNo();
+                  }}
+                >
                   False Report
                 </button>
               </div>
