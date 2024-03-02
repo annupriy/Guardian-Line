@@ -1,17 +1,14 @@
 "use client";
 import React from "react";
-import { ReactElement, useEffect, useRef, useState, ChangeEvent } from "react";
+import { useRef, useState, ChangeEvent } from "react";
 import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
 import { SessionProvider, useSession } from "next-auth/react";
-// import { redirect } from "next/navigation";
-import { useRouter} from "next/navigation";
-
+import { useRouter } from "next/navigation";
 
 const Page = () => {
-
-  // const router = useRouter();
+  const router = useRouter();
 
   const { data: session } = useSession();
 
@@ -19,9 +16,15 @@ const Page = () => {
   const [toggleState2, setToggleState2] = useState<number>(3);
   const [address, setAddress] = useState("");
   const currentDate = new Date();
-  const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-  const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
-  
+  const formattedDate = `${currentDate.getDate()}/${
+    currentDate.getMonth() + 1
+  }/${currentDate.getFullYear()}`;
+  const formattedTime = currentDate.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: false,
+  });
+
   const [dateOfIncident, setDateOfIncident] = useState(formattedDate);
   const [timeOfIncident, setTimeOfIncident] = useState(formattedTime);
   const [currentDoc, setCurrentDoc] = useState<{
@@ -162,9 +165,9 @@ const Page = () => {
     setTypeOfIncident(event.target.value);
   };
 
-// const handleCancel = () => {
-//   router.push('/dashboard');
-// };
+  // const handleCancel = () => {
+  //   router.push('/dashboard');
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -201,9 +204,6 @@ const Page = () => {
         })
       );
     }
-    console.log("mp4Urls: ", mp4Urls);
-    console.log("Uploaded Docs:", uploadedDocPath);
-    console.log("address: ", address);
     let Loc = {};
     if (address !== "") {
       const obj = await handleGetCoordinates(address);
@@ -219,7 +219,6 @@ const Page = () => {
     } else {
       Loc = incidentLocation;
     }
-    console.log("incide:: ", Loc);
     const res = await toast.promise(
       fetch("api/reports_2", {
         method: "POST",
@@ -234,7 +233,7 @@ const Page = () => {
           uploadedDocPath,
           dateOfIncident,
           timeOfIncident,
-          filingtime : new Date().getTime(),
+          filingtime: new Date().getTime(),
           userName: userName,
           reportid,
           status: "Live",
@@ -256,7 +255,8 @@ const Page = () => {
       toast.error("Error");
     } else if (res.status === 200) {
       toast.dismiss();
-      console.log("Deleted");
+      console.log("Submitted");
+      router.push("/dashboard");
     } else {
       toast.dismiss();
       if (res.status === 401) {
@@ -296,8 +296,8 @@ const Page = () => {
       className="overlay bg-stone-200"
       style={{
         // position: "fixed",
-        height: 'calc(100vh - 120px)', 
-        overflowY: 'auto', 
+        height: "calc(100vh - 120px)",
+        overflowY: "auto",
         top: 0,
         left: 0,
         width: "100%",
@@ -307,7 +307,7 @@ const Page = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: '120px',
+        marginTop: "120px",
       }}
     >
       <div
@@ -329,7 +329,7 @@ const Page = () => {
               <span className="text-red-500 pr-2 text-lg">*</span>
               <span>Required Fields</span>
             </div>
-            
+
             <div
               role="tablist"
               className="tabs tabs-bordered tabs-lg grid grid-cols-2 border border-gray-400"
@@ -355,7 +355,6 @@ const Page = () => {
                     <p className="mr-2 font-normal text-sm font-mono">
                       Type of Incident
                     </p>
-                    
                   </div>
                   <select
                     className="select border-black mt-0"
@@ -371,7 +370,6 @@ const Page = () => {
                     <p className="mt-3 mr-2 font-normal text-sm font-mono">
                       Description of the Incident
                     </p>
-                   
                   </div>
                   {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
                   <input
@@ -398,7 +396,8 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
-                        </label><span className="text-red-500 text-lg ">*</span>
+                        </label>
+                        <span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
@@ -564,12 +563,9 @@ const Page = () => {
                     <p className="mr-2 font-normal text-sm font-mono">
                       Type of Incident
                     </p>
-                    
                   </div>
                   <select className="select border-black mt-0">
-                    <option selected>
-                      Accidents
-                    </option>
+                    <option selected>Accidents</option>
                     <option>Harassment</option>
                     <option>Mob Lynching & Crowd Fights</option>
                     <option>Others</option>
@@ -578,12 +574,9 @@ const Page = () => {
                     <p className="mt-3 mr-2 font-normal text-sm font-mono">
                       Description of the Incident
                     </p>
-                    
                   </div>
-                  
 
-
-                   <div className="flex mt-4 font-normal text-sm font-mono">
+                  <div className="flex mt-4 font-normal text-sm font-mono">
                     <label htmlFor="label">Enable Current Location</label>
                     <input
                       type="checkbox"
@@ -600,7 +593,8 @@ const Page = () => {
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
-                        </label><span className="text-red-500 text-lg ">*</span>
+                        </label>
+                        <span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           className="w-full border border-neutral-900 rounded-lg px-4 py-3 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
@@ -610,10 +604,9 @@ const Page = () => {
                       </div>
                     </div>
                   )}
-                  </div>
+                </div>
+                <div>
                   <div>
-                  <div>
-                    
                     <div className=" flex">
                       <p className=" font-light font-mono text-sm text-sm  mt-6 ml-1">
                         {"Additional Documents"}
@@ -745,11 +738,18 @@ const Page = () => {
               </div>
             </div>
             <div className="mt-6 flex justify-between grid-cols-2">
-              <button className="btn  btn-error btn-xs sm:btn-sm md:btn-md w-1/3 rounded-xl " >
+              <button
+                className="btn  btn-error btn-xs sm:btn-sm md:btn-md w-1/3 rounded-xl "
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  router.push("/dashboard");
+                }}
+              >
                 Cancel
               </button>
               <button className="btn btn-success btn-xs  sm:btn-sm md:btn-md w-1/3 rounded-xl">
-                Review & Submit
+                Submit
               </button>
             </div>
           </div>

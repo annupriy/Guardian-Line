@@ -141,7 +141,7 @@ const Page = ({ searchParams }: PageProps) => {
                 <div className="px-2 w-full bg-white">
                   <div className="w-full mt-2 text-xs flex justify-between bg-slate-700 py-1 px-3 rounded-lg ">
                     <p className=" text-md text-white flex items-center">
-                      Forgotten account?
+                      Already have an account?
                     </p>
                     <button className=" py-2 px-4 bg-white border rounded-lg hover:scale-100 duration-300"
                       onClick={(e) => { e.stopPropagation(); e.preventDefault(); router.push("/signup") }}>
