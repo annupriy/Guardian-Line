@@ -3,8 +3,8 @@ import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import logo from "./logo4.jpg";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type LoginInput = {
   userName: string;
@@ -33,7 +33,7 @@ const Page = ({ searchParams }: PageProps) => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    console.log(inputs)
     setErrorMessage(null);
     const res = await toast.promise(
       signIn("credentials", {
@@ -73,84 +73,93 @@ const Page = ({ searchParams }: PageProps) => {
 
   useEffect(() => {
     setInputs((prevInputs) => ({ ...prevInputs, userName: "" }));
+    if (searchParams) {
+      const name = new URLSearchParams(searchParams).get("username");
+      if (name) {
+        setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
+
+      }
+    }
   }, []);
 
   return (
-    <div className="container md:px-0">
-      <section className=" m-5 flex justify-start h-screen">
-        <Image
-          src={logo}
-          alt="logo for it"
-          className="w-[30%] h-[60%] relative z-10 left-[3%] ml-10 "
-        />
-        <Toaster />
-        <div className="rounded-lg shadow-xl w-[30%] h-[50%] p-2 relative z-20 top-[15%]">
-          <div className=" ">
-            <div className="ml-15 mr-15 mt-6">
-              <h2 className="text-center  mt-1 text-2xl ">
-                Login to your account
-              </h2>
-            </div>
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-4 mt-4 items-center justify-center"
-            >
-              <div className="p-2 flex flex-col gap-3 ">
-                <label htmlFor="userName" className="text-md"> </label>
-                <input
-                  id="userName"
-                  name="userName"
-                  type="text"
-                  placeholder="Username"
-                  value={inputs.userName || ""}
-                  onChange={handleChange}
-                  className={`py-2 px-12 border ${
-                    userNameError ? "border-red-500" : "border-gray-400"
-                  } rounded-lg text-center w-full`}
-                />
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  className={`py-2 border ${
-                    passwordError ? "border-red-500" : "border-gray-400"
-                  } rounded-lg text-center w-full`}
-                  value={inputs.password || ""}
-                  onChange={handleChange}
-                />
+    <div className="container md:px-0 bg-white">
+      <section className="flex justify-center items-center h-screen w-screen  bg-white">
+
+        <div className='flex-col flex md:flex-row justify-center items-center md:translate-x-[-9rem] bg-white pt-2 '>
+
+          <Image
+            src={logo}
+            alt="logo for it"
+            className="w-[35vw] h-[20vh] md:w-[20rem] md:h-[20rem] md:relative z-10 left-[3rem] top-[-3rem] "
+          />
+          <Toaster />
+          <div className="rounded-lg shadow-xl h-[28rem] p-2 relative z-20  bg-white ">
+            <div className="bg-white ">
+              <h1 className='text-3xl text-center  text-teal-900 font-normal '>Guardian Line</h1>
+              <div className="ml-15 mr-15 bg-white">
+                <h2 className="text-center  mt-1 text-2xl  font-semibold">
+                  Login to your account
+                </h2>
+                <hr className="mt-2" />
               </div>
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4 items-center justify-center  bg-white"
+              >
+                <div className="p-2 flex flex-col gap-3 bg-white">
+                  <label htmlFor="userName" className="text-md"> </label>
+                  <input
+                    id="userName"
+                    name="userName"
+                    type="text"
+                    placeholder="Username"
+                    value={inputs.userName || ""}
+                    onChange={handleChange}
+                    className={`py-2 px-12 bg-yellow-100 border ${userNameError ? "border-red-500" : "border-gray-400"
+                      } rounded-lg text-center w-full`}
+                  />
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    className={`py-2 px-12 border bg-yellow-100 ${passwordError ? "border-red-500" : "border-gray-400"
+                      } rounded-lg text-center w-full`}
+                    value={inputs.password || ""}
+                    onChange={handleChange}
+                  />
+                </div>
 
-              <div className=" px-4 w-full">
-                <button
-                  type="submit"
-                  className="w-full  py-2 rounded-lg text-center text-black  border border-black border-3 text-md hover:bg-teal-300 hover:scale-100 duration-300 font-semibold"
-
-                  // onClick={() => {
-                  //   getUserName();
-                  //   matchCredentials();
-                  // }}
-                >
-                  Login
-                </button>
-              </div>
-
-              <div className="px-4 w-full">
-                <div className="w-full mt-2 text-xs flex justify-between bg-slate-700 py-2 rounded-lg px-4">
-                  <p className=" text-md text-white flex items-center">
-                    Forgotten account?
-                  </p>
-                  <button className=" p-2 px-4 bg-white border rounded-lg hover:scale-100 duration-300">
-                    Sign up
+                <div className=" px-2 w-full bg-white">
+                  <button
+                    type="submit"
+                    className="w-full py-2 px-12 rounded-lg text-center text-black  border border-black border-3 text-md hover:bg-teal-300 hover:scale-100 duration-300 font-semibold">
+                    Login
                   </button>
                 </div>
-              </div>
-              {searchParams.error && (
-                <p className="text-red-600 text-center capitalize">
-                  Login failed.
-                </p>
-              )}
-            </form>
+
+                <div className="px-2 w-full bg-white">
+                  <div className="w-full mt-2 text-xs flex justify-between bg-slate-700 py-1 px-3 rounded-lg ">
+                    <p className=" text-md text-white flex items-center">
+                      Forgotten account?
+                    </p>
+                    <button className=" py-2 px-4 bg-white border rounded-lg hover:scale-100 duration-300"
+                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); router.push("/signup") }}>
+                      Sign up
+                    </button>
+                  </div>
+                </div>
+                {searchParams.error && (
+                  <p className="text-red-600 text-center capitalize">
+                    Login failed.
+                  </p>
+                )}
+                <div className="w-full px-2 bg-white">
+                  <button className=" w-full py-2  bg-slate-700 text-white border-black rounded-lg hover:bg-teal-700 font-semibold hover:scale-100 duration-300" onClick={(e) => { e.stopPropagation(); e.preventDefault(); router.push("/login_admin") }}>Login as Admin</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </section>

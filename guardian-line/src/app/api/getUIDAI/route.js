@@ -7,6 +7,7 @@ export async function GET(req) {
     console.log("hello")
     const { searchParams } = new URL(req.url);
     const hashedAadharNumber = searchParams.get("hashedAadharNumber")
+    console.log(hashedAadharNumber)
     try {
         // Connect to MongoDB
         const client = await clientPromise;
@@ -21,7 +22,7 @@ export async function GET(req) {
         const phoneNum = AadharExists.PhoneNum;
         return Response.json({ phoneNum });
         }
-        return Response.json("InValid Aadhar Number");
+        return Response.json("InValid Aadhar Number",{status: 401});
       } catch (error) {
         console.error("Error:", error);
         return Response.error("Error checking if Aadhar is present");
