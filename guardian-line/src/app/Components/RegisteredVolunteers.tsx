@@ -3,6 +3,7 @@ import React, { use } from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ActiveCrimesCards from "./ActiveCrimesCards";
+import styles from "./RegisteredVolunteers.module.css"
 
 type User = {
   id?: string | null;
@@ -117,6 +118,8 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     }
   };
 
+  
+
   const AddVolunteersLocation = async (
     userName: string,
     coords: GeolocationCoordinates
@@ -179,22 +182,39 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
               />
             ))}
             </div>
-          <button className="mt-4 btn btn-outline" onClick={handleDeleteLocation}>
+            
+  
+          <button className="btn mr-2" onClick={handleDeleteLocation} style={{ padding: '10px 20px', fontSize: '1rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#4CAF50', border: 'none', borderRadius: '5px', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
             LOG OFF
           </button>
         </>
       ) : (
         <div>
-          <div className="text-3xl mb-4">Ready to help?</div>
-          <div className="mb-8">
+          {/* <div className="text-3xl mb-4">Ready to help?</div>
+            <div className="mb-8">
             <button onClick={handleYesClick} className="btn mr-2">
               Yes
             </button>
             <button onClick={handleNoClick} className="btn">
               No
             </button>
-          </div>
+          </div> */}
+
+<div className="container">
+  <div style={{ textAlign: 'center', padding: '40px 20px', borderRadius: '20px', boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)', backgroundColor: '#f9f9f9', width: '50%', margin: '225px auto'}}> 
+    <div style={{ fontSize: '2rem', marginBottom: '1rem', color: '#333', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Ready to help?</div>
+    <div>
+      <button onClick={handleYesClick} className="btn mr-2" style={{ padding: '10px 20px', fontSize: '1rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#4CAF50', border: 'none', borderRadius: '5px', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+        Yes
+      </button>
+      <button onClick={handleNoClick} className="btn" style={{ padding: '10px 20px', fontSize: '1rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#f44336', border: 'none', borderRadius: '5px', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
+        No
+      </button>
+    </div>
+  </div>
+</div>
         </div>
+          
       )}
     </div>
   );

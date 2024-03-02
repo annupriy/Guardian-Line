@@ -8,12 +8,12 @@ export default function RootLayout({
 }>) {
   return (
     <section>
-      <div className="h-screen flex-col">
+      <div className="h-screen flex-col" style={{ backgroundColor: '#f0f0f0'}}>
         <Navbar />
         <div className="flex h-[85%]">
           <div
             className="w-1/6 h-full"
-            style={{ borderRight: "1px solid gray" }}
+            // style={{ borderRight: "1px solid gray" }}
           >
             <Sidebar />
           </div>
