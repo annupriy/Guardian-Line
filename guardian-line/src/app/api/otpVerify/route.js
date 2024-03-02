@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
-    console.log(3)
     try {
         console.log("h1")
         if(!req.url){

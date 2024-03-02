@@ -80,14 +80,18 @@ const Page = ({ searchParams }: PageProps) => {
     const name = new URLSearchParams(searchParams).get("username");
     if (name !== undefined && name !== null && name !== "") {
       setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
+
     }
+
   }, []);
 
   return (
     <div className="container md:px-0 bg-white">
       <section className="flex justify-center items-center h-screen w-screen  bg-white">
-          <Toaster />
-        <div className="flex-col flex md:flex-row justify-center items-center md:translate-x-[-9rem] bg-white pt-2 ">
+
+        <Toaster />
+        <div className='flex-col flex md:flex-row justify-center items-center md:translate-x-[-9rem] bg-white pt-2 '>
+
           <Image
             src={logo}
             alt="logo for it"

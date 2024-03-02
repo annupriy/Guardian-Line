@@ -6,7 +6,6 @@ import { useRef, useEffect, useState } from 'react';
 import { createHash } from 'crypto';
 import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from 'next/navigation';
-import { Player } from "@lottiefiles/react-lottie-player";
 
 
 const Page = () => {
@@ -48,15 +47,15 @@ const Page = () => {
 
     // console.log("hi")
     console.log(aadharNumber)
-    const hashedAadharNumber = createHash('sha256').update(aadharNumber).digest('hex');
-    setHashedAadharNumber(hashedAadharNumber);
+    const hashedAadhar = createHash('sha256').update(aadharNumber).digest('hex');
+    setHashedAadharNumber(hashedAadhar);
 
-    console.log(hashedAadharNumber)
+    console.log(hashedAadhar)
     const fetchData = async () => {
       // console.log("hooo")
       try {
         const res = await fetch(
-          `/api/getUIDAI?hashedAadharNumber=${hashedAadharNumber}`
+          `/api/getUIDAI?hashedAadharNumber=${hashedAadhar}`
         );
         const data = await res.json();
         if (res.status === 401) {
