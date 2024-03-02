@@ -75,6 +75,7 @@ const Page = () => {
               if (res.status >= 200 && res.status < 300) {
                 const otp = await res.json();
                 setGetOtp(otp.otp);
+                console.log(otp.otp);
 
               }
             } catch (error: any) {
