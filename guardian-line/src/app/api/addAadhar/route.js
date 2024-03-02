@@ -64,8 +64,7 @@ export async function POST(req) {
         if(res.data && res.data.isDuplicate){
             console.log("Aadhar number already exists");
             return new Response("Aadhar number already exists", { status: 401});
-            // const responseObject = { user, message: "Aadhar number added successfully" };
-            // return new Response(JSON.stringify(responseObject), { status: 200 });
+           
         }
         console.log("Aadhar number added successfully");
         

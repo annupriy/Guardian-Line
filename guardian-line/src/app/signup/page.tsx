@@ -2,22 +2,18 @@
 import React from 'react'
 import Image from 'next/image'
 import logo from './logo4.jpg'
-import {  useRef, useEffect, useState, ChangeEvent } from 'react';
-import { createHash, verify } from 'crypto';
+import { useRef, useEffect, useState } from 'react';
+import { createHash } from 'crypto';
 import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from 'next/navigation';
 import { Player } from "@lottiefiles/react-lottie-player";
 
-
-// import * as IPFS from 'ipfs-core'
 
 const Page = () => {
   const [aadharNumber, setAadharNumber] = useState<string>('');
   const [inputCount, setInputCount] = useState(0);
   const [otpValue, setOtpValue] = useState('');
   const [getOtp, setGetOtp] = useState('');
-  const [inputValue, setInputValue] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [inputCount2, setInputCount2] = useState(0);
   const [userNameError, setUserNameError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
@@ -26,10 +22,7 @@ const Page = () => {
   const [intervalId, setIntervalId] = useState(null);
   const [hashedAadharNumber, setHashedAadharNumber] = useState<string>('');
   const [playerStarted, setPlayerStarted] = useState(false);
-  // const [inputs, setInputs] = useState({
-  //   password: "",
-  //   confirmPassword: "",  
-  // });
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -50,7 +43,7 @@ const Page = () => {
 
   const router = useRouter();
 
-  // let otp=""
+
   const handleTabClick = async () => {
 
     // console.log("hi")
@@ -63,12 +56,12 @@ const Page = () => {
       // console.log("hooo")
       try {
         const res = await fetch(
-          `http://localhost:3000/api/getUIDAI?hashedAadharNumber=${hashedAadharNumber}`
+          `/api/getUIDAI?hashedAadharNumber=${hashedAadharNumber}`
         );
         const data = await res.json();
         if (res.status === 401) {
           toast.error("Invalid Aadhar Number");
-          setErrorMessage("Invalid Aadhar Number");
+          return;
         }
         // console.log(data);
 
@@ -77,7 +70,7 @@ const Page = () => {
           const verify = async () => {
             try {
               const res = await fetch(
-                `http://localhost:3000/api/otpVerify?data=${data.phoneNum}`
+                `/api/otpVerify?data=${data.phoneNum}`
               );
               if (res.status >= 200 && res.status < 300) {
                 const otp = await res.json();
@@ -92,7 +85,6 @@ const Page = () => {
 
         if (res.status == 401) {
           toast.error("Invalid Aadhar Number");
-          setErrorMessage("Invalid Aadhar Number");
         }
         else if (res.status == 200) {
           setInputCount(1);
@@ -113,7 +105,6 @@ const Page = () => {
       toast.error("Passwords do not match");
     }
     if (inputCount2 === 1 && confirmPassword === password) {
-      // if (confirmPassword === password) {
       console.log("hi");
       const res = await fetch('/api/signup', {
         method: 'POST',
@@ -143,12 +134,6 @@ const Page = () => {
   };
 
 
-  //   const generateString = async () => {
-
-  //   const num= new Date().getTime();
-  //     return "User" + num;
-  // };
-
 
 
 
@@ -157,32 +142,32 @@ const Page = () => {
     console.log(typeof otpValue);
     if (getOtp == otpValue && timer > 0) {
       console.log("otp verified");
-      // const response = await fetch('/api/addAadhar', {
-      //   method: 'POST',
-      //   body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   }
-      // })
+      const response = await fetch('/api/addAadhar', {
+        method: 'POST',
+        body: JSON.stringify({ hashedAadharNumber: hashedAadharNumber }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
 
-      // if (response.status === 401) {
-      //   toast.error("Aadhar Number already exists");
-      //   setErrorMessage("Aadhar Number already exists");
-      // }
-      // else if (response.status === 200) {
-      //   setUsername('User' + new Date().getTime());
-      setInputCount2(1);
-      setUsername('User' + new Date().getTime());
-      // }
-     
+      if (response.status === 401) {
+        toast.error("Aadhar Number already exists");
+      }
+      else if (response.status === 200) {
+        setUsername('User' + new Date().getTime());
+        setInputCount2(1);
+        setTimeout(() => {
+          setPlayerStarted(true);
+        }, 2000);
+      }
+
 
     }
     else {
       toast.error("Invalid OTP");
-      setErrorMessage("Invalid OTP");
       console.log("Invalid Aadhar");
     }
-      setInputCount(0);
+    setInputCount(0);
   };
 
   useEffect(() => {
@@ -212,30 +197,24 @@ const Page = () => {
     // Check if passwords match and update error state accordingly
     if (value !== password) {
       setPasswordError(true); // Set error state to true
-      setErrorMessage("Passwords do not match");
     } else {
       setPasswordError(false); // Reset error state
-      setErrorMessage("");  // Reset error if passwords match
     }
   };
 
-   setTimeout(() => {
-    setPlayerStarted(true);
-  }, 2000);
 
+  // const inputRef = useRef<HTMLInputElement>(null);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  // useEffect(() => {
+  //   const input = inputRef.current;
 
-  useEffect(() => {
-    const input = inputRef.current;
-   
-    if (input) {
-      input.addEventListener("input", (event) => {
-        const filteredValue = (event.target as HTMLInputElement).value.replace(/\D/g, "").slice(0, 12);
-        input.value = formatNumber(filteredValue);
-      });
-    }
-  }, []);
+  //   if (input) {
+  //     input.addEventListener("input", (event) => {
+  //       const filteredValue = (event.target as HTMLInputElement).value.replace(/\D/g, "").slice(0, 12);
+  //       input.value = formatNumber(filteredValue);
+  //     });
+  //   }
+  // }, []);
 
   const formatNumber = (number: string) => {
     return number.split("").reduce((formattedNumber, digit, index) => {
@@ -259,14 +238,14 @@ const Page = () => {
               <div className='ml-15 mr-15  '>
                 <h1 className='text-3xl text-center  text-teal-900 font-normal '>Guardian Line</h1>
                 <h2 className="text-center  mt-1 text-2xl font-bold">Create your account</h2>
-                <p className='text-center text-sm text-gray-500'>It's quick and easy</p>
+                <p className='text-center text-sm text-gray-500'>It&apos;s quick and easy</p>
               </div>
               <hr className='mt-4 border border-gray-300' />
               <form className="flex flex-col gap-4 mt-6 items-center justify-center" onSubmit={(e) => e.preventDefault()}>
 
                 <div className="flex p-2 bg-white">
                   <div className='relative '>
-                    <input type="text" placeholder="Enter Your Aadhar Number" id="aadhar" ref={inputRef}
+                    <input type="text" placeholder="Enter Your Aadhar Number" id="aadhar"
                       className="bg-white border border-gray-400 py-1 px-12 w-full rounded-lg text-center"
                       onChange={handleInputChange}
                     />
@@ -284,13 +263,14 @@ const Page = () => {
                         />
                       ) : (
                         playerStarted && (
-                          <Player
-                            autoplay
-                            keepLastFrame
-                            src="/Animation-verify.json"
-                            className="h-10 w-10 absolute right-2"
-                            style={{ marginLeft: "4px", marginTop: "-2.3rem" }}
-                          />
+                          // <Player
+                          //   autoplay
+                          //   keepLastFrame
+                          //   src="/Animation-verify.json"
+                          //   className="h-10 w-10 absolute right-2"
+                          //   style={{ marginLeft: "4px", marginTop: "-2.3rem" }}
+                          // />
+                          <div></div>
                         )
                       )}
                     </div>

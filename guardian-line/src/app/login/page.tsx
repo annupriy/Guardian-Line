@@ -73,13 +73,12 @@ const Page = ({ searchParams }: PageProps) => {
 
   useEffect(() => {
     setInputs((prevInputs) => ({ ...prevInputs, userName: "" }));
-    if (searchParams) {
       const name = new URLSearchParams(searchParams).get("username");
-      if (name) {
+      if (name!==undefined && name!==null && name!=="") {
         setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
 
       }
-    }
+    
   }, []);
 
   return (
