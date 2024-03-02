@@ -422,12 +422,17 @@ const Page = () => {
     // Open the document in a new tab
     // window.open(docPath[0], "_blank");
     // console.log(docPath[0]);
-    if(docPath[0]!=null){
-      console.log(docPath[0].path)
-       window.open(docPath[0].path, "_blank");
-    }
+    // if(docPath[0]!=null){
+    //   console.log(docPath[0].path)
+    //    window.open(docPath[0].path, "_blank");
+    // }
+    docPath.forEach((doc) => {
+      if (doc.path) {
+        window.open(doc.path, "_blank");
+      }
+    });
   };
-  // db.test.find({'files.IyzkmGh4YGD61Tc3TJjaEY17hDldH': {'$exists': 1}})
+  
 
   if (loading) {
     return <p>Loading...</p>;
