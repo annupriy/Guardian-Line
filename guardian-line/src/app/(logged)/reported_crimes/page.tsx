@@ -374,7 +374,7 @@ type Report = {
   incidentLocation: IncidentLocation; // Change to IncidentLocation type
   typeOfIncident: string;
   reportid: string;
-  uploadedDocPath: string[];
+  uploadedDocPath: Array<any>[];
 };
 
 const Page = () => {
@@ -416,10 +416,18 @@ const Page = () => {
     setExpandedReport(expandedReport === reportId ? null : reportId);
   };
 
-  const handleViewDocument = (docPath: string[]) => {
+  
+
+  const handleViewDocument = (docPath: Array<any>) => {
     // Open the document in a new tab
-    window.open(docPath[0], "_blank");
+    // window.open(docPath[0], "_blank");
+    // console.log(docPath[0]);
+    if(docPath[0]!=null){
+      console.log(docPath[0].path)
+       window.open(docPath[0].path, "_blank");
+    }
   };
+  // db.test.find({'files.IyzkmGh4YGD61Tc3TJjaEY17hDldH': {'$exists': 1}})
 
   if (loading) {
     return <p>Loading...</p>;
@@ -437,6 +445,9 @@ const Page = () => {
                 {report.descriptionOfIncident != "" && <p className="text-gray-700">
                     <span className="font-semibold text-teal-700">Description of Incident: </span>{" "}
                     {report.descriptionOfIncident}</p>}
+                <p className="text-gray-700">
+                    <span className="font-semibold text-teal-700">Username: </span>{" "}
+                    {report.userName}</p>
           
               </div>
               <div className="px-6 py-4 flex justify-end">
@@ -472,30 +483,30 @@ const Page = () => {
                       {`${report.incidentLocation.address} (${report.incidentLocation.latitude}, ${report.incidentLocation.longitude})`}
                     </p>
 
-                    {/* {report.uploadedDocPath != null && (
-                    <button
+                    {report.uploadedDocPath && report.uploadedDocPath.length > 0 && (
+                      <button
                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                       onClick={() => handleViewDocument(report.uploadedDocPath)}
-                    >
+                      >
                       View Uploaded Document
-                    </button>
-                  )} */}
-                  {report.uploadedDocPath != null && report.uploadedDocPath.length > 0 && (
+                      </button>
+                    )}
+                  {/* {report.uploadedDocPath != null && report.uploadedDocPath.length > 0 && (
   <div>
-    {/* {report.uploadedDocPath.map((doc, index) => (
-      <div key={index}>
-        <a
-          href={doc.path}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 inline-block mb-2"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View {doc.name}
-        </a>
-      </div>
-    ))} */}
+    {report.uploadedDocPath.map((doc: Object, index: number) => (
+  <div key={index}>
+    <a
+      href={doc.path}
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 inline-block mb-2"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      View {doc.title}
+    </a>
   </div>
-)}
+))} */}
+  {/* </div>
+)} */}
 
                     
                 </div>
