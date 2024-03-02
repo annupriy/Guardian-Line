@@ -5,8 +5,14 @@ import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
 import { SessionProvider, useSession } from "next-auth/react";
+// import { redirect } from "next/navigation";
+import { useRouter} from "next/navigation";
+
 
 const Page = () => {
+
+  // const router = useRouter();
+
   const { data: session } = useSession();
 
   const [toggleState, setToggleState] = useState(1);
@@ -155,6 +161,10 @@ const Page = () => {
   const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTypeOfIncident(event.target.value);
   };
+
+// const handleCancel = () => {
+//   router.push('/dashboard');
+// };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -732,7 +742,7 @@ const Page = () => {
               </div>
             </div>
             <div className="mt-6 flex justify-between grid-cols-2">
-              <button className="btn  btn-error btn-xs sm:btn-sm md:btn-md w-1/3 rounded-xl ">
+              <button className="btn  btn-error btn-xs sm:btn-sm md:btn-md w-1/3 rounded-xl " >
                 Cancel
               </button>
               <button className="btn btn-success btn-xs  sm:btn-sm md:btn-md w-1/3 rounded-xl">
@@ -746,10 +756,12 @@ const Page = () => {
   );
 };
 
-const WrappedPage = () => (
-  <SessionProvider>
-    <Page />
-  </SessionProvider>
-);
+const WrappedPage = () => {
+  return (
+    <SessionProvider>
+      <Page />
+    </SessionProvider>
+  );
+};
 
 export default WrappedPage;

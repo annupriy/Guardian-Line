@@ -448,7 +448,7 @@ const Page = () => {
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setDateOfIncident(e.target.value)}
                             value={dateOfIncident}
-                            placeholder="25/02/2020"
+                            placeholder="dd/mm/yyyy"
                             style={{ fontFamily: "" }}
                             required
                           />
@@ -905,7 +905,7 @@ const Page = () => {
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setDateOfIncident(e.target.value)}
                             value={dateOfIncident}
-                            placeholder="25/02/2020"
+                            placeholder="dd/mm/yyyy"
                             style={{ fontFamily: "" }}
                             required
                           />
