@@ -51,7 +51,7 @@ const SidebarItem = ({ item }: { item: ISidebarItem }) => {
       >
         <div className="flex items-center space-x-2">
           <Icon size={20} />
-          <p className="text-sm font-semibold">{name} </p>
+          <p className="text-base font-semibold">{name} </p>
         </div>
         {items && items.length > 0 && <ChevronDown size={18} />}
       </div>
