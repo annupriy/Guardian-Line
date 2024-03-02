@@ -4,10 +4,9 @@ import { useEffect, useRef, useState, ChangeEvent } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
-import {SessionProvider, useSession } from 'next-auth/react';
+import { SessionProvider, useSession } from "next-auth/react";
 
 const Page = () => {
-
   const { data: session } = useSession();
 
   const [toggleState, setToggleState] = useState(1);
@@ -29,18 +28,99 @@ const Page = () => {
     { file: File; title: string }[]
   >([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [typeOfIncident, setTypeOfIncident] = useState("");
+  const [typeOfIncident, setTypeOfIncident] = useState("Harassment");
   const [descriptionOfIncident, setDescriptionOfIncident] = useState("");
-  const [incidentLocation, setIncidentLocation] = useState("");
+  // const [incidentLocation, setIncidentLocation] = useState("");
   const [personalInformation, setPersonalInformation] = useState("");
-  const [dateOfIncident, setDateOfIncident] = useState("");
-  const [timeOfIncident, setTimeOfIncident] = useState("");
+  const currentDate = new Date();
+  const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+  const formattedTime = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: false });
+  
+  const [dateOfIncident, setDateOfIncident] = useState(formattedDate);
+  const [timeOfIncident, setTimeOfIncident] = useState(formattedTime);
   // const [elaborateLocation, setElaborateLocation] = useState('')
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [pincode, setPincode] = useState("");
   const [error, setError] = useState("");
+  const [status, setStatus] = useState("Live");
+  const [address, setAddress] = useState("");
   // const uploadedUrls: {title: string, url: string }[] = [];
+
+  const [incidentLocation, setIncidentLocation] = useState<{
+    latitude: number;
+    longitude: number;
+    address: string;
+  }>({} as any);
+
+  const handleGetAddress = async (latitude: number, longitude: number) => {
+    try {
+      console.log("Key is: ", process.env.NEXT_PUBLIC_GEOCODING_API_KEY);
+      const res = await fetch(
+        `https://geocode.maps.co/reverse?lat=${latitude}&lon=${longitude}&api_key=${process.env.NEXT_PUBLIC_GEOCODING_API_KEY}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch address");
+      }
+      const data = await res.json();
+      console.log("Address:", data);
+      return data.display_name;
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error fetching address");
+    }
+  };
+
+  const handleGetCoordinates = async (address: string) => {
+    try {
+      const res = await fetch(
+        `https://geocode.maps.co/search?q=${address}&api_key=${process.env.NEXT_PUBLIC_GEOCODING_API_KEY}`
+      );
+      if (!res.ok) {
+        throw new Error("Failed to fetch coordinates");
+      }
+      const data = await res.json();
+      console.log("Coordinates:", data);
+      setIncidentLocation({ latitude: data.lat, longitude: data.lon, address });
+      return { latitude: data[0].lat, longitude: data[0].lon };
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Error fetching coordinates");
+    }
+  };
+  const [isCurrentLocationEnabled, setIsCurrentLocationEnabled] =
+    useState(false);
+
+  const handleToggleChange = () => {
+    setIsCurrentLocationEnabled(!isCurrentLocationEnabled);
+    if (!isCurrentLocationEnabled) {
+      handleGetLocation();
+    } else {
+      setAddress("");
+      setIncidentLocation({} as any);
+    }
+  };
+
+  const handleGetLocation = () => {
+    try {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const userAddress = await handleGetAddress(latitude, longitude);
+          setIncidentLocation({ latitude, longitude, address: userAddress });
+        },
+        (error) => {
+          //   setError(error.message);
+          console.error(`Geolocation error: ${error.message}`);
+        }
+      );
+    } catch (error: any) {
+      // Access error properties safely:
+      //   setError(error.message);
+      console.error(`Geolocation error: ${error.message}`);
+    }
+  };
+
   const handleDocsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
@@ -115,16 +195,33 @@ const Page = () => {
           const path = await uploadFile(doc.file);
           uploadedDocPath.push({ path: path, title: doc.title });
 
-        //   const fileExtension = doc.file.name.split('.').pop()?.toLowerCase();
-        //   if (fileExtension === 'mp4') {
-        //     const mp4Url = await uploadFile(doc.file);
-        //       mp4Urls.push(mp4Url);
-        // }
+          //   const fileExtension = doc.file.name.split('.').pop()?.toLowerCase();
+          //   if (fileExtension === 'mp4') {
+          //     const mp4Url = await uploadFile(doc.file);
+          //       mp4Urls.push(mp4Url);
+          // }
         })
-
       );
     }
     console.log("Uploaded Docs:", uploadedDocPath);
+
+    let Loc = {};
+    if (address !== "") {
+      const obj = await handleGetCoordinates(address);
+      console.log("obj: ", obj);
+      if (!obj) {
+        return;
+      }
+      Loc = {
+        latitude: obj.latitude,
+        longitude: obj.longitude,
+        address: address,
+      };
+    } else {
+      Loc = incidentLocation;
+    }
+    console.log("incide:: ", Loc);
+
     const res = await toast.promise(
       fetch("api/reports_2", {
         method: "POST",
@@ -134,7 +231,7 @@ const Page = () => {
         body: JSON.stringify({
           typeOfIncident,
           descriptionOfIncident,
-          incidentLocation,
+          incidentLocation: Loc,
           personalInformation,
           dateOfIncident,
           timeOfIncident,
@@ -142,7 +239,8 @@ const Page = () => {
           state,
           pincode,
           uploadedDocPath,
-          userName: userName, 
+          userName: userName,
+          status,
         }),
       }),
       {
@@ -185,8 +283,8 @@ const Page = () => {
             <span className="text-red-500 pr-2 text-lg">*</span>
             <span>Required Fields</span>
           </div>
-          <span className="text-red-500 text-lg">*</span>
-          <span className="p-2">I am:</span>
+          
+          
           <div
             role="tablist"
             className="tabs tabs-bordered tabs-lg grid grid-cols-2 border border-gray-400"
@@ -209,15 +307,15 @@ const Page = () => {
               <hr className=" border border-gray-500" />
               <div className="mt-6 grid grid-cols">
                 <div className="flex">
-                  <p className="mr-2 font-normal text-sm ">Type of Incident</p>
-                  <span className="text-red-500 text-lg ">*</span>
+                  <p className="mr-2 font-normal text-sm font-mono">Type of Incident</p>
+                  
                 </div>
                 <select
                   className="select border-black mt-0"
                   onChange={handleTypeChange}
                   value={typeOfIncident}
                 >
-                  <option disabled selected>
+                  <option>
                     Accidents
                   </option>
                   <option>Harassment</option>
@@ -234,26 +332,26 @@ const Page = () => {
                   className="textarea textarea-bordered border-black mt-0"
                   placeholder=""
                 ></textarea> */}
+                
 
                 <div className="flex">
-                  <label
-                    htmlFor="Description of the Incident"
-                    className="mt-3 mr-2 font-normal text-sm"
-                  >
-                    Description of the Incident
-                  </label>
+                    <p className="mt-3 mr-2 font-normal text-sm font-mono">
+                      Description of the Incident</p><span className="text-red-500 text-lg mt-1.5">*</span>
+                    
+                  </div>
+                  {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
                   <input
                     className="textarea textarea-bordered border-black mt-0"
                     onChange={(e) => setDescriptionOfIncident(e.target.value)}
                     value={descriptionOfIncident}
                     type="text"
                     id="description"
+                    required
                   />
-                </div>
 
-                <div className="flex mt-6   text-sm">
-                  <p className="mr-2">Does the Incident Live or Not ?</p>
-                  <span className="text-red-500 text-lg">*</span>
+                <div className=" mt-6 font-normal text-sm font-mono">
+                  <p className="mr-2">Is the Incident Live or Not ?</p>
+      
                 </div>
                 <div
                   role="tablist"
@@ -265,27 +363,59 @@ const Page = () => {
                     role="tab"
                     className="tab font-light  text-sm"
                     aria-label="LIVE"
-                    onClick={() => toggle2(3)}
+                    onClick={() => {
+                      toggle2(3);
+                      setStatus("Live");
+                    }}
                     checked={toggleState2 === 3 && toggleState === 1}
                   />
                   <div role="tabpanel" className="tab-content p-2">
                     <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
+                    <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
+                        <label
+                          className="font-light font-mono text-sm mt-2"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
                         <label
                           className="font-light  text-sm mt-2"
                           style={{ fontFamily: "" }}
                         >
-                          {"Location of Incident"}
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
-                          className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          className="w-full font-normal text-sm font-mono rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           placeholder=""
                           style={{ fontFamily: "" }}
+                          required
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <input
@@ -294,7 +424,10 @@ const Page = () => {
                     role="tab"
                     className="tab text-sm  font-light"
                     aria-label="NOT LIVE"
-                    onClick={() => toggle2(4)}
+                    onClick={() => {
+                      toggle2(4);
+                      setStatus("Not Live");
+                    }}
                     checked={toggleState2 === 4 && toggleState === 1}
                   />
                   <div
@@ -304,10 +437,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8  md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm"
+                          className="font-light  text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Date of Incident"}
+                          {"Date of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <div className="relative text-gray-400 focus-within:text-gray-600">
                           <input
@@ -317,13 +450,14 @@ const Page = () => {
                             value={dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
+                            required
                           />
                         </div>
                       </div>
 
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"Time of Incident"}
@@ -341,37 +475,67 @@ const Page = () => {
                       </div>
                     </div>
                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
+
+                    <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light font-mono text-sm mt-2"
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
+                        <label
+                          className="font-light  text-sm mt-2 text-gray-400"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           placeholder=""
                           style={{ fontFamily: "" }}
                         />
-                      </div>
+                      </div> */}
 
                       <div>
                         <label
                           className=" font-light text-sm"
                           style={{ fontFamily: "" }}
                         >
-                          {"city"}
-                        </label>
+                          {"City"}
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           onChange={(e) => setCity(e.target.value)}
                           value={city}
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          placeholder="city"
+                          placeholder="City"
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
                     </div>
@@ -379,17 +543,18 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
                       <div>
                         <label
-                          className=" font-light text-sm"
+                          className=" font-light text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"State"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <select
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
                           onChange={handleTypeChangeForState}
                           value={state}
+                          required
                         >
-                          <option value="">Select state</option>
+                          <option value="">Select State</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
                           </option>
@@ -433,17 +598,17 @@ const Page = () => {
                       </div>
                       <div>
                         <label
-                          className="text-sm  font-light"
+                          className="text-sm  font-light text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"pincode"}
+                          {"PIN Code"}
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setPincode(e.target.value)}
                           value={pincode}
-                          placeholder={"Pin Code"}
+                          placeholder={"PIN Code"}
                           style={{ fontFamily: "" }}
                         />
                       </div>
@@ -451,9 +616,10 @@ const Page = () => {
                   </div>
                 </div>
 
+
                 <div>
-                  <div className="text-black flex">
-                    <p className="text-sm  mt-6 ml-1">
+                  <div className=" flex">
+                    <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
                       {"Additional Documents"}
                     </p>
                   </div>
@@ -565,7 +731,7 @@ const Page = () => {
                 <div className="flex flex-col">
                   <p className="text-xl mt-6 font-medium">
                     {" "}
-                    PERSONAL INFORMATION(Not Mandatory)
+                    PERSONAL INFORMATION (Not Mandatory)
                   </p>
                   <hr className="border border-gray-500" />
                   <p className="mt-3 text-sm italic ">
@@ -603,15 +769,15 @@ const Page = () => {
               <hr className="border border-gray-500" />
               <div className="mt-6 grid grid-cols">
                 <div className="flex">
-                  <p className="mr-2 font-normal text-sm ">Type of Incident</p>
-                  <span className="text-red-500 text-lg ">*</span>
+                  <p className="mr-2 font-normal text-sm font-mono ">Type of Incident</p>
+                  
                 </div>
                 <select
                   className="select border-black mt-0"
                   onChange={handleTypeChange}
                   value={typeOfIncident}
                 >
-                  <option disabled selected>
+                  <option selected>
                     Accidents
                   </option>
                   <option>Harassment</option>
@@ -625,33 +791,28 @@ const Page = () => {
                   <span className="text-red-500 text-lg mt-3">*</span>
                 </div> */}
 
-                <div className="flex">
-                  <label
-                    htmlFor="Description of the Incident"
-                    className="mt-3 mr-2 font-normal text-sm"
-                  >
-                    Description of the Incident
-                  </label>
+                    <div className="flex">
+                    <p className="mt-3 mr-2 font-normal text-sm font-mono"> 
+                      Description of the Incident
+                    </p><span className="text-red-500 text-lg mt-1.5">*</span>
+                  </div> 
+                  {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
                   <input
                     className="textarea textarea-bordered border-black mt-0"
                     onChange={(e) => setDescriptionOfIncident(e.target.value)}
                     value={descriptionOfIncident}
                     type="text"
                     id="description"
+                    required
                   />
-                </div>
-                {/* <textarea
-                  className="textarea textarea-bordered border-black mt-0"
-                  placeholder=""
-                ></textarea> */}
-
-                <div className="flex mt-6 font-light  text-sm">
-                  <p className="mr-2">Does the Incident Live or Not ?</p>
-                  <span className="text-red-500 text-lg">*</span>
+                
+                <div className="flex mt-6 font-normal text-sm font-mono">
+                  <p className="mr-2">Is the Incident Live or Not ?</p>
+                  
                 </div>
                 <div
                   role="tablist"
-                  className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-4"
+                  className="tabs tabs-bordered tabs-sm p-1 grid grid-cols-2"
                 >
                   <input
                     type="radio"
@@ -659,27 +820,59 @@ const Page = () => {
                     role="tab"
                     className="tab font-light  text-sm"
                     aria-label="LIVE"
-                    onClick={() => toggle2(3)}
+                    onClick={() => {
+                      toggle2(3);
+                      setStatus("Live");
+                    }}
                     checked={toggleState2 === 3 && toggleState === 2}
                   />
                   <div role="tabpanel" className="tab-content p-2">
                     <div className="grid grid-rows-2 items-center mt-2  gap-8 md:grid-cols-2 md:grid-rows-none">
+                    <div className="flex mt-4 font-normal text-sm font-mono">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light font-mono text-sm mt-2"
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
+                        <label
+                          className="font-light  text-sm mt-2 text-gray-400"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           className="w-full font-light  text-sm rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder=""
                           style={{ fontFamily: "" }}
+                          required
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <input
@@ -688,7 +881,10 @@ const Page = () => {
                     role="tab"
                     className="tab text-sm  font-light"
                     aria-label="NOT LIVE"
-                    onClick={() => toggle2(4)}
+                    onClick={() => {
+                      toggle2(4);
+                      setStatus("Not Live");
+                    }}
                     checked={toggleState2 === 4 && toggleState === 2}
                   />
                   <div
@@ -698,10 +894,10 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8  md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm"
+                          className="font-light  text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"Date of Incident"}
+                          {"Date of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <div className="relative text-gray-400 focus-within:text-gray-600">
                           <input
@@ -711,13 +907,14 @@ const Page = () => {
                             value={dateOfIncident}
                             placeholder="25/02/2020"
                             style={{ fontFamily: "" }}
+                            required
                           />
                         </div>
                       </div>
 
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light  text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"Time of Incident"}
@@ -735,37 +932,68 @@ const Page = () => {
                       </div>
                     </div>
                     <div className="grid grid-rows-2 items-center   mt-4 gap-8 md:grid-cols-2 md:grid-rows-none">
+
+                    <div className="flex mt-4 font-normal text-sm font-mono text-gray-400">
+                    <label htmlFor="label">Enable Current Location</label>
+                    <input
+                      type="checkbox"
+                      className="toggle toggle-success ml-4"
+                      checked={isCurrentLocationEnabled}
+                      onChange={handleToggleChange}
+                    />
+                  </div>
+                  {!isCurrentLocationEnabled && (
+                    // <div className="grid grid-rows-2 items-center mt-2 gap-8 md:grid-cols-2 md:grid-rows-none">
                       <div>
                         <label
-                          className="font-light  text-sm mt-2"
+                          className="font-light font-mono text-sm mt-2 text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"Location of Incident"}
+                        </label><span className="text-red-500 text-lg ">*</span>
+                        <input
+                          type="text "
+                          className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setAddress(e.target.value)}
+                          required
+                        />
+                      </div>
+                    // </div>
+                  )}
+                  
+                      {/* <div>
+                        <label
+                          className="font-light  text-sm mt-2 text-gray-400"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"Location of Incident"} <span className="text-red-500 text-lg mt-3">*</span>
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                          onChange={(e) => setIncidentLocation(e.target.value)}
-                          value={incidentLocation}
+                          onChange={(e) => setAddress(e.target.value)}
+                          
                           placeholder=""
                           style={{ fontFamily: "" }}
+                          required
                         />
-                      </div>
+                      </div> */}
 
                       <div>
                         <label
-                          className=" font-light text-sm"
+                          className=" font-light text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"city"}
-                        </label>
+                          {"City"}
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setCity(e.target.value)}
                           value={city}
-                          placeholder="city"
+                          placeholder="City"
                           style={{ fontFamily: "" }}
+                          required
                         />
                       </div>
                     </div>
@@ -773,17 +1001,18 @@ const Page = () => {
                     <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
                       <div>
                         <label
-                          className=" font-light text-sm"
+                          className=" font-light text-sm text-gray-400"
                           style={{ fontFamily: "" }}
                         >
                           {"State"}
-                        </label>
+                        </label><span className="text-red-500 text-lg ">*</span>
                         <select
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
                           onChange={handleTypeChange}
                           value={state}
+                          required
                         >
-                          <option value="">Select state</option>
+                          <option value="">Select State</option>
                           <option value="AN">
                             Andaman and Nicobar Islands
                           </option>
@@ -827,17 +1056,17 @@ const Page = () => {
                       </div>
                       <div>
                         <label
-                          className="text-sm  font-light"
+                          className="text-sm  font-light text-gray-400"
                           style={{ fontFamily: "" }}
                         >
-                          {"pincode"}
+                          {"PIN Code"}
                         </label>
                         <input
                           type="text"
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           onChange={(e) => setPincode(e.target.value)}
                           value={pincode}
-                          placeholder={"Pin Code"}
+                          placeholder={"PIN Code"}
                           style={{ fontFamily: "" }}
                         />
                       </div>
@@ -845,8 +1074,8 @@ const Page = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="text-black flex">
-                    <p className="text-sm  mt-6 ml-1">
+                  <div className=" flex">
+                    <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
                       {"Additional Documents"}
                     </p>
                   </div>
@@ -961,7 +1190,7 @@ const Page = () => {
                       {" "}
                       PERSONAL INFORMATION (Not Mandatory)
                     </p>
-                    <span className="text-red-500">Optional</span>
+                    
                   </div>
                   <hr className="border border-gray-500" />
                   <p className="mt-3 text-sm italic font-light">

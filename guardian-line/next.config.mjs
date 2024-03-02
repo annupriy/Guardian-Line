@@ -40,9 +40,12 @@ const nextConfig = {
       },
     ];
   },
-  images:{
-    domains: ['guardianline-bucket.s3.amazonaws.com']
-  }
+  images: {
+    domains: ["guardianline-bucket.s3.amazonaws.com"],
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

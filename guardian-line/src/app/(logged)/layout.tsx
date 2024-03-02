@@ -1,5 +1,6 @@
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar";
+import React from "react";
 
 export default function RootLayout({
   children,
@@ -8,12 +9,11 @@ export default function RootLayout({
 }>) {
   return (
     <section>
-      <div className="h-screen flex-col">
+      <div className="h-screen flex-col" style={{ backgroundColor: '#f0f0f0'}}>
         <Navbar />
         <div className="flex h-[85%]">
           <div
             className="w-1/6 h-full"
-            style={{ borderRight: "1px solid gray" }}
           >
             <Sidebar />
           </div>

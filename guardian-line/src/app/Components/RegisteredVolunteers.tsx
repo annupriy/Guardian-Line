@@ -13,34 +13,25 @@ type UserInfo = {
   user: User;
 };
 
-type Crime = {
-  description: string;
-  location: { latitude: number; longitude: number };
-  personalInformation: string;
-  time: string;
-  userName: string;
-};
-
 const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   const [isReadyToVolunteer, setIsReadyToVolunteer] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // Set an array of objects to store the active crimes
-  const [crimesAround, setCrimesAround] = useState<any[]>([]);
+  const [activeCrimes, setactiveCrimes] = useState<any[]>([]);
 
   const handleNoClick = () => {
     console.log("No clicked");
   };
 
   const handleYesClick = () => {
-    setIsReadyToVolunteer(true);
     if (user && user.name) {
       handleGetLocation();
     }
   };
   const handleDeleteLocation = async () => {
     // call a post request to delete the user location from ActiveVolunteers
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +63,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`
+          `/api/checkVolunteerStatus?userName=${user.name}`
         );
         const data = await res.json();
         setIsReadyToVolunteer(data.isPresent);
@@ -89,12 +80,10 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   useEffect(() => {
     const fetchActiveCrimes = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:3000/api/getActiveCrimes?userName=${user.name}`
-        );
+        const res = await fetch(`/api/getActiveCrimes?userName=${user.name}`);
         const data = await res.json();
-        console.log(data.crimesAround);
-        setCrimesAround(data.crimesAround);
+        console.log(data.activeCrimes);
+        setactiveCrimes(data.activeCrimes);
       } catch (error: any) {
         setError(error.message);
       }
@@ -130,7 +119,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     coords: GeolocationCoordinates
   ) => {
     // write code to POST volunteer registration to server
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -148,6 +137,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       toast.error("Error");
     } else if (res.status === 200) {
       toast.dismiss();
+      setIsReadyToVolunteer(true);
       // reload the page
     } else {
       toast.dismiss();
@@ -166,40 +156,119 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     );
   }
   return (
-    <div className="text-center">
+    <div className="text-center bg-[#f0f0f0]">
       {isReadyToVolunteer ? (
-        <>
-          <div className="text-green-600 text-3xl mb-8">
-            Reports filed near you
+        <div>
+          <div className="text-green-900 text-4xl m-8 font-semibold">
+            Live Reports Near you
           </div>
-          {/* Create a grid with 2 cards in one row */}
-          <div className="grid grid-cols-2 gap-4">
-          {Array.isArray(crimesAround) &&
-            crimesAround.map((crime, index) => (
-              <ActiveCrimesCards
-                key={index}
-                descriptionOfIncident={crime.descriptionOfIncident}
-                incidentLocation={crime.incidentLocation}
-                personalInformation={crime.personalInformation}
-                timeOfIncident={crime.timeOfIncident}
-                userName={crime.userName}
-              />
-            ))}
-            </div>
-          <button className="mt-4 btn btn-outline" onClick={handleDeleteLocation}>
+          <div className="grid grid-cols-1 gap-4 p-8 relative lg:grid-cols-2 ml-24">
+            {Array.isArray(activeCrimes) &&
+              activeCrimes.map((crime, index) => (
+                <ActiveCrimesCards
+                  key={index}
+                  typeOfIncident={crime.typeOfIncident}
+                  distance={crime.distance}
+                  descriptionOfIncident={crime.descriptionOfIncident}
+                  incidentLocation={crime.incidentLocation}
+                  personalInformation={crime.personalInformation}
+                  timeOfIncident={crime.timeOfIncident}
+                  userName={crime.userName}
+                  reportid={crime.reportid}
+                />
+              ))}
+          </div>
+
+          <button
+            className="btn mr-2"
+            onClick={handleDeleteLocation}
+            style={{
+              padding: "10px 20px",
+              fontSize: "1rem",
+              fontWeight: "bold",
+              color: "#fff",
+              backgroundColor: "#4CAF50",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+            }}
+          >
             LOG OFF
           </button>
-        </>
+        </div>
       ) : (
         <div>
-          <div className="text-3xl mb-4">Ready to help?</div>
-          <div className="mb-8">
+          {/* <div className="text-3xl mb-4">Ready to help?</div>
+            <div className="mb-8">
             <button onClick={handleYesClick} className="btn mr-2">
               Yes
             </button>
             <button onClick={handleNoClick} className="btn">
               No
             </button>
+          </div> */}
+
+          <div className="container">
+            <div
+              style={{
+                textAlign: "center",
+                padding: "40px 20px",
+                borderRadius: "20px",
+                boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
+                backgroundColor: "#f9f9f9",
+                // width: "50%",
+                // margin: "225px auto",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "2rem",
+                  marginBottom: "1rem",
+                  color: "#333",
+                  fontWeight: "bold",
+                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                Ready to help?
+              </div>
+              <div>
+                <button
+                  onClick={handleYesClick}
+                  className="btn mr-2"
+                  style={{
+                    padding: "10px 20px",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "#fff",
+                    backgroundColor: "#4CAF50",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={handleNoClick}
+                  className="btn"
+                  style={{
+                    padding: "10px 20px",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "#fff",
+                    backgroundColor: "#f44336",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  No
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -4,10 +4,10 @@ const ContactUsInfo = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-semibold text-gray-800 mb-8 text-center">Contact Us</h1>
+        <h1 className="text-4xl font-semibold text-gray-700 mb-8 text-center " style={{textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}>Contact Us</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white shadow-md p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Get in Touch</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-zinc-600">Get in Touch</h2>
             <form>
               <div className="mb-4">
                 <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Name</label>
@@ -48,10 +48,10 @@ const ContactUsInfo = () => {
             </form>
           </div>
           <div className="bg-white shadow-md p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4">Contact Information</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-zinc-600	">Contact Information</h2>
             <div className="text-gray-700">
-              <p className="mb-2 flex items-center"><span className="font-semibold mr-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg> Address:</span> 123 Main Street, City, Country</p>
-              <p className="mb-2 flex items-center"><span className="font-semibold mr-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg> Phone:</span> +123 456 7890</p>
+              <p className="mb-2 flex items-center"><span className="font-semibold mr-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg> Address:</span> IIIT Lucknow, Uttar Pradesh, India</p>
+              <p className="mb-2 flex items-center"><span className="font-semibold mr-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg> Phone:</span> +91-88xxxxxxx1</p>
               <p className="mb-2 flex items-center"><span className="font-semibold mr-2"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg> Email:</span> help@gmail.com</p>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
+import { getServerAuthSession } from "@/server/auth";
 
 // Define getDistance function
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -23,8 +24,16 @@ function getDistance(lat1, lon1, lat2, lon2) {
 export async function POST(req) {
   const client = await clientPromise;
   try {
-    const { addVolunteer, userName, latitude, longitude, accuracy } =
-      await req.json();
+    const {
+      addVolunteer,
+      userName,
+      latitude,
+      longitude,
+      accuracy,
+      removeReport,
+      reportid,
+      vote,
+    } = await req.json();
     // Connect to MongoDB
     const db = await client.db("GuardianLine");
     const collection = db.collection("ActiveVolunteers");
@@ -39,6 +48,60 @@ export async function POST(req) {
       );
       console.log("User deleted successfully");
       return new Response("User deleted successfully", { status: 200 });
+    } else if (removeReport === true && vote === 0) {
+      // Remove the report from the active crimes array that has the reportid
+      const authSession = await getServerAuthSession();
+      const name = authSession?.user?.name;
+      // Find the index of the report in the active crimes array where reportid matches
+      const document = await collection.findOne({ userName: name });
+
+      if (document) {
+        // Give an array which contains objects and the one of the object has reportid as value find the index of the object
+        document.activeCrimes.map((crime, idx) => {
+          if (crime.reportid === reportid) {
+            console.log("Index of the matching element:", idx);
+            document.activeCrimes.splice(idx, 1);
+          }
+        });
+        await collection.updateOne(
+          { userName: name },
+          { $set: { activeCrimes: document.activeCrimes } }
+        );
+      } else {
+        console.log("Document not found for userName:", name);
+      }
+      return new Response("Report removed successfully", { status: 200 });
+    } else if (removeReport === true && vote !== 0) {
+      const reportsCollection = db.collection("ReportsData");
+      const document2 = await reportsCollection.findOne({ reportid: reportid });
+      if (document2) {
+        await reportsCollection.updateOne(
+          { reportid: reportid },
+          { $set: { vote: (document2.vote || 0) + vote } }
+        );
+      } else {
+        console.log("Report validation didn't summed up for reportid:", reportid);
+      }
+      const authSession = await getServerAuthSession();
+      const name = authSession?.user?.name;
+      const document = await collection.findOne({ userName: name });
+      if (document) {
+        // Give an array which contains objects and the one of the object has reportid as value find the index of the object
+        document.activeCrimes.map((crime, idx) => {
+          if (crime.reportid === reportid) {
+            console.log("Index of the matching element:", idx);
+            document.activeCrimes.splice(idx, 1);
+          }
+        });
+        await collection.updateOne(
+          { userName: name },
+          { $set: { activeCrimes: document.activeCrimes } }
+        );
+      } else {
+        console.log("Document not found for userName:", name);
+      }
+      
+      return new Response("Report validated successfully", { status: 200 });
     } else {
       // Check if user already exists
       const userExists = await collection.findOne({ userName: userName });
@@ -50,7 +113,7 @@ export async function POST(req) {
       // Find nearby reports
       const reportsCollection = db.collection("ReportsData");
       const reports = await reportsCollection
-        .find({ "incidentLocation.latitude": { $exists: true } })
+        .find({ status: "Live" })
         .toArray();
 
       // Filter reports with longitude and latitude at a distance of 2km from the volunteer
@@ -90,6 +153,8 @@ export async function POST(req) {
           descriptionOfIncident: report.descriptionOfIncident,
           timeOfIncident: report.timeOfIncident,
           personalInformation: report.personalInformation,
+          reportid: report.reportid,
+          status: report.status,
         };
       });
 
