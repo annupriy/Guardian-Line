@@ -163,16 +163,17 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   return (
     <div className="text-center">
       {isReadyToVolunteer ? (
-        <>
-          <div className="text-green-600 text-3xl mb-8">
-            Reports filed near you
+        <div>
+          <div className="text-green-900 text-4xl m-8 font-semibold">
+            Live Reports Near you
           </div>
-          {/* Create a grid with 2 cards in one row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 p-8 relative lg:grid-cols-2 ml-24">
           {Array.isArray(activeCrimes) &&
             activeCrimes.map((crime, index) => (
               <ActiveCrimesCards
                 key={index}
+                typeOfIncident={crime.typeOfIncident}
+                distance={crime.distance}
                 descriptionOfIncident={crime.descriptionOfIncident}
                 incidentLocation={crime.incidentLocation}
                 personalInformation={crime.personalInformation}
@@ -187,7 +188,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           <button className="btn mr-2" onClick={handleDeleteLocation} style={{ padding: '10px 20px', fontSize: '1rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#4CAF50', border: 'none', borderRadius: '5px', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
             LOG OFF
           </button>
-        </>
+        </div>
       ) : (
         <div>
           {/* <div className="text-3xl mb-4">Ready to help?</div>

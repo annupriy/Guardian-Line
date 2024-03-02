@@ -17,7 +17,7 @@
 }
 /* 
 body {
-  /* background-color: rgba(236, 247, 252, 1)} */ 
+  /* background-color: rgba(236, 247, 252, 1)} */
 
 @layer utilities {
   .text-balance {
@@ -131,12 +131,12 @@ body {
 
 .dudeHeader {
   padding: 0;
-  margin: .5em 0;
+  margin: 0.5em 0;
 }
 
 .dudeParagraph {
   padding: 0;
-  margin: .25em 0;
+  margin: 0.25em 0;
 }
 
 .dudea {
@@ -150,16 +150,24 @@ body {
 
 @keyframes arrow-float {
   0% {
-      transform: translateY(0);
-      animation-timing-function: ease-out;
+    transform: translateY(0);
+    animation-timing-function: ease-out;
   }
   60% {
-      transform: translateY(50%);
-      animation-timing-function: ease-in-out;
+    transform: translateY(50%);
+    animation-timing-function: ease-in-out;
   }
   100% {
-      transform: translateY(0);
-      animation-timing-function: ease-out;
+    transform: translateY(0);
+    animation-timing-function: ease-out;
   }
 }
 
+.threedbox {
+  transform: perspective(75em) rotateX(3deg);
+  box-shadow: rgba(22, 31, 39, 0.42) 0px 60px 123px -25px,
+    rgba(19, 26, 32, 0.08) 0px 35px 75px -35px;
+  border-radius: 10px;
+  border: 1px solid;
+  border-color: rgb(213, 220, 226) rgb(213, 220, 226) rgb(184, 194, 204);
+}
