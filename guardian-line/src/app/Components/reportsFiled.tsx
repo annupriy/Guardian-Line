@@ -16,6 +16,7 @@ type ActiveCrimesCardsProps = {
   reportid: string;
   typeOfIncident: string;
   distance: string;
+  uploadedDocPath: string;
 };
 
 const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
