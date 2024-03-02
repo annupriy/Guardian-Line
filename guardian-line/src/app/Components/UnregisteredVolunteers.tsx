@@ -28,7 +28,7 @@ const UnregisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
 
   const handleVolunteerRegistration = async (userName: string) => {
     // write code to POST volunteer registration to server
-    const res = await fetch("http://localhost:3000/api/volunteers", {
+    const res = await fetch("/api/volunteers", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

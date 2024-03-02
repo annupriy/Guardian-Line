@@ -34,6 +34,7 @@
     "react-lottie": "^1.2.4",
     "react-tooltip": "^5.26.3",
     "react-type-animation": "^3.2.0",
+    "sharp": "^0.33.2",
     "tooltip": "^1.6.1",
     "typewriter-effect": "^2.21.0",
     "web3.storage": "^4.5.5"
