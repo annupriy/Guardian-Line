@@ -9,7 +9,7 @@ if (!process.env.MONGODB_URL) {
   throw new Error("Add Mongo URI to .env.local");
 }
 
-if (!global._mongoClientPromise) {
+if (!global._clientPromise) {
   console.log("Creating new client");
   client = new MongoClient(uri);
   global._clientPromise = client.connect();
