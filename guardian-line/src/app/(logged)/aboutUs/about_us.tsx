@@ -137,7 +137,7 @@ const AboutUsInfo = () => {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ marginBottom: '60px' }}>
             <h4 style={{ position: 'relative', padding: '0', color: '#f91942', lineHeight: '1', letterSpacing: '0.3px', fontSize: '34px', fontWeight: '700', textAlign: 'center', textTransform: 'none', marginBottom: '30px' }}><span style={{ fontWeight: '700', paddingBottom: '5px', color: '#2f2f2f' }}>Why Choose</span> Us?</h4>
-            <p style={{ color: '#3d293d', fontSize: '16px', lineHeight: '28px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Guardian Line, where anonymity meets action, and together, let's build a safer tomorrow by empowering individuals to report crimes while safeguarding their privacy.</p>
+            <p style={{ color: '#3d293d', fontSize: '16px', lineHeight: '28px', textAlign: 'center', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Guardian Line, where anonymity meets action, and together, let&apos;s build a safer tomorrow by empowering individuals to report crimes while safeguarding their privacy.</p>
           </div>
           <div style={{ display: 'flex',  flexWrap: 'wrap', justifyContent: 'center' }}>
             <div style={{ flex: '0 0 calc(33.33333% - 30px)', maxWidth: 'calc(33.33333% - 30px)', marginRight: '30px', marginBottom: '30px', background: '#f8dcd3', textAlign: 'center', padding: '30px 25px', boxShadow: '0 0px 25px rgba(0, 0, 0, 0.07)', borderRadius: '20px', border: '5px solid rgba(0, 0, 0, 0.07)', transition: 'all 0.5s ease 0s' }}>
@@ -164,7 +164,7 @@ const AboutUsInfo = () => {
             <div style={{ flex: '0 0 calc(33.33333% - 30px)', maxWidth: 'calc(33.33333% - 30px)', marginRight: '30px', marginBottom: '30px', background: '#f8dcd3', textAlign: 'center', padding: '30px 25px', boxShadow: '0 0px 25px rgba(0, 0, 0, 0.07)', borderRadius: '20px', border: '5px solid rgba(0, 0, 0, 0.07)', transition: 'all 0.5s ease 0s' }}>
               <span style={{ fontSize: '40px', marginBottom: '25px', color: '#f9d2d2', width: '90px', height: '90px', lineHeight: '96px', borderRadius: '50px', background: 'rgba(247, 198, 5, 0.20)' }}><i className="fa fa-globe"></i></span>
               <h6 style={{ fontSize: '20px', marginBottom: '20px', color: '#2f2f2f', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Get Involved</h6>
-              <p style={{ fontSize: '15px', lineHeight: '26px', color: '#330033', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Whether you're seeking assistance, have information to share, or are interested in volunteering, Guardian Line welcomes your participation. Together, we can make a difference in combating crime and creating a safer environment for all.</p>
+              <p style={{ fontSize: '15px', lineHeight: '26px', color: '#330033', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Whether you&apos;re seeking assistance, have information to share, or are interested in volunteering, Guardian Line welcomes your participation. Together, we can make a difference in combating crime and creating a safer environment for all.</p>
             </div>
           </div>
         </div>

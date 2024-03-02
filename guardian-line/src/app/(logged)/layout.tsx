@@ -1,5 +1,6 @@
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar";
+import React from "react";
 
 export default function RootLayout({
   children,
