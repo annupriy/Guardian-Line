@@ -1,4 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
+import bcrypt from 'bcrypt';
 
 export const userService = {
   authenticate,
@@ -18,7 +19,9 @@ async function authenticate(userName, password) {
     throw new Error("invalid-username");
   }
   // Compare the hashed password with the provided password
-  const passwordMatch = password === user.password;
+  console.log("user.password:", user.password);
+  console.log("System password:", password);
+  const passwordMatch = bcrypt.compare(password, user.password);
   if (!passwordMatch) {
     throw new Error("invalid-password");
   }

@@ -1,34 +1,32 @@
 import clientPromise from "@/app/lib/mongodb";
-// import apiHandler from '../apiHandler';
 
-// import { apiHandler, nextConnect } from '../../../../../pages/api/utils/apiHandler';
-// const client = nextConnect(); // Connect to MongoDB using middleware
 
-export async function POST(req) {
+
+
+export async function GET(req) {
+    console.log("hello")
+    const { searchParams } = new URL(req.url);
+    const hashedAadharNumber = searchParams.get("hashedAadharNumber")
+    console.log(hashedAadharNumber)
     try {
+        // Connect to MongoDB
+        const client = await clientPromise;
+        const db = client.db("GuardianLine");
+        const collection = db.collection("UIDAI");
         
-        const {body } = await req.json();
-        const client=  await clientPromise; // Ensure connection establishment before proceeding
-        try {
-            const db = client.db('GuardianLine');
-            const collection = db.collection('UIDAI');
-            // Add filtering/validation based on query parameters if needed
-            const { hashedAadharNumber } = body;
-            const query = { AadharNum: hashedAadharNumber };
-
-            const UIDAI = await collection.find(query);
-            console.log(UIDAI)
-
-           return  new Response((UIDAI.PhoneNum).json, {status:200});
-        } catch(error){
-            return new Response ({ message: 'InValid Aadhar Number' }, {status : 405}); // Handle unsupported methods
+        // Check if user exists
+        const AadharExists = await collection.findOne({ AadharNum: hashedAadharNumber});
+        
+        // Return phoneNum of that corresponding aadhar number
+        if(AadharExists){
+        const phoneNum = AadharExists.PhoneNum;
+        return Response.json({ phoneNum });
         }
-    } catch (error) {
-        console.error(error);
-        return new Response ({ message: 'Error connecting to MongoDB Atlas' }, {status : 500}); // Provide specific error messages
-    } finally {
-        await client.close(); // Always close the connection even on errors
-    }
-}
+        return Response.json("InValid Aadhar Number",{status: 401});
+      } catch (error) {
+        console.error("Error:", error);
+        return Response.error("Error checking if Aadhar is present");
+      }
+    };
 
-// export default getUIDAI; // Apply API handler middleware
+   

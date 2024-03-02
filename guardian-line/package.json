@@ -19,6 +19,7 @@
     "animate.css": "^4.1.1",
     "aws-sdk": "^2.1565.0",
     "axios": "^1.6.7",
+    "bcrypt": "^5.1.1",
     "child_process": "^1.0.2",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
@@ -39,7 +40,9 @@
     "react-type-animation": "^3.2.0",
     "sharp": "^0.33.2",
     "tooltip": "^1.6.1",
+    "twilio": "^4.22.0",
     "typewriter-effect": "^2.21.0",
+    "unirest": "^0.6.0",
     "web3.storage": "^4.5.5"
   },
   "devDependencies": {
