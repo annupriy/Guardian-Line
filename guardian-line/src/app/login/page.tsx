@@ -33,7 +33,7 @@ const Page = ({ searchParams }: PageProps) => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(inputs)
+    console.log(inputs);
     setErrorMessage(null);
     const res = await toast.promise(
       signIn("credentials", {
@@ -62,6 +62,10 @@ const Page = ({ searchParams }: PageProps) => {
     } else {
       toast.dismiss();
       if (res.status == 401) {
+        if (res.error === "user-banned") {
+          router.push("/bannedUser");
+          return;
+        }
         toast.error("Invalid username or password");
         setErrorMessage("Invalid username or password");
       } else {
@@ -73,29 +77,27 @@ const Page = ({ searchParams }: PageProps) => {
 
   useEffect(() => {
     setInputs((prevInputs) => ({ ...prevInputs, userName: "" }));
-      const name = new URLSearchParams(searchParams).get("username");
-      if (name!==undefined && name!==null && name!=="") {
-        setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
-
-      }
-    
+    const name = new URLSearchParams(searchParams).get("username");
+    if (name !== undefined && name !== null && name !== "") {
+      setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
+    }
   }, []);
 
   return (
     <div className="container md:px-0 bg-white">
       <section className="flex justify-center items-center h-screen w-screen  bg-white">
-
-        <div className='flex-col flex md:flex-row justify-center items-center md:translate-x-[-9rem] bg-white pt-2 '>
-
+          <Toaster />
+        <div className="flex-col flex md:flex-row justify-center items-center md:translate-x-[-9rem] bg-white pt-2 ">
           <Image
             src={logo}
             alt="logo for it"
             className="w-[35vw] h-[20vh] md:w-[20rem] md:h-[20rem] md:relative z-10 left-[3rem] top-[-3rem] "
           />
-          <Toaster />
           <div className="rounded-lg shadow-xl h-[28rem] p-2 relative z-20  bg-white ">
             <div className="bg-white ">
-              <h1 className='text-3xl text-center  text-teal-900 font-normal '>Guardian Line</h1>
+              <h1 className="text-3xl text-center  text-teal-900 font-normal ">
+                Guardian Line
+              </h1>
               <div className="ml-15 mr-15 bg-white">
                 <h2 className="text-center  mt-1 text-2xl  font-semibold">
                   Login to your account
@@ -107,7 +109,9 @@ const Page = ({ searchParams }: PageProps) => {
                 className="flex flex-col gap-4 items-center justify-center  bg-white"
               >
                 <div className="p-2 flex flex-col gap-3 bg-white">
-                  <label htmlFor="userName" className="text-md"> </label>
+                  <label htmlFor="userName" className="text-md">
+                    {" "}
+                  </label>
                   <input
                     id="userName"
                     name="userName"
@@ -115,16 +119,18 @@ const Page = ({ searchParams }: PageProps) => {
                     placeholder="Username"
                     value={inputs.userName || ""}
                     onChange={handleChange}
-                    className={`py-2 px-12 bg-yellow-100 border ${userNameError ? "border-red-500" : "border-gray-400"
-                      } rounded-lg text-center w-full`}
+                    className={`py-2 px-12 bg-yellow-100 border ${
+                      userNameError ? "border-red-500" : "border-gray-400"
+                    } rounded-lg text-center w-full`}
                   />
                   <input
                     id="password"
                     name="password"
                     type="password"
                     placeholder="Password"
-                    className={`py-2 px-12 border bg-yellow-100 ${passwordError ? "border-red-500" : "border-gray-400"
-                      } rounded-lg text-center w-full`}
+                    className={`py-2 px-12 border bg-yellow-100 ${
+                      passwordError ? "border-red-500" : "border-gray-400"
+                    } rounded-lg text-center w-full`}
                     value={inputs.password || ""}
                     onChange={handleChange}
                   />
@@ -133,7 +139,8 @@ const Page = ({ searchParams }: PageProps) => {
                 <div className=" px-2 w-full bg-white">
                   <button
                     type="submit"
-                    className="w-full py-2 px-12 rounded-lg text-center text-black  border border-black border-3 text-md hover:bg-teal-300 hover:scale-100 duration-300 font-semibold">
+                    className="w-full py-2 px-12 rounded-lg text-center text-black  border border-black border-3 text-md hover:bg-teal-300 hover:scale-100 duration-300 font-semibold"
+                  >
                     Login
                   </button>
                 </div>
@@ -141,10 +148,16 @@ const Page = ({ searchParams }: PageProps) => {
                 <div className="px-2 w-full bg-white">
                   <div className="w-full mt-2 text-xs flex justify-between bg-slate-700 py-1 px-3 rounded-lg ">
                     <p className=" text-md text-white flex items-center">
-                      Already have an account?
+                      Don&apos;t have an account?
                     </p>
-                    <button className=" py-2 px-4 bg-white border rounded-lg hover:scale-100 duration-300"
-                      onClick={(e) => { e.stopPropagation(); e.preventDefault(); router.push("/signup") }}>
+                    <button
+                      className=" py-2 px-4 bg-white border rounded-lg hover:scale-100 duration-300"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        router.push("/signup");
+                      }}
+                    >
                       Sign up
                     </button>
                   </div>
@@ -155,7 +168,16 @@ const Page = ({ searchParams }: PageProps) => {
                   </p>
                 )}
                 <div className="w-full px-2 bg-white">
-                  <button className=" w-full py-2  bg-slate-700 text-white border-black rounded-lg hover:bg-teal-700 font-semibold hover:scale-100 duration-300" onClick={(e) => { e.stopPropagation(); e.preventDefault(); router.push("/login_admin") }}>Login as Admin</button>
+                  <button
+                    className=" w-full py-2  bg-slate-700 text-white border-black rounded-lg hover:bg-teal-700 font-semibold hover:scale-100 duration-300"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      router.push("/login_admin");
+                    }}
+                  >
+                    Login as Admin
+                  </button>
                 </div>
               </form>
             </div>

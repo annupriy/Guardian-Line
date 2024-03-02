@@ -295,8 +295,6 @@ const Page = () => {
     <div
       className="overlay bg-stone-200"
       style={{
-        // position: "fixed",
-        height: "calc(100vh - 120px)",
         overflowY: "auto",
         top: 0,
         left: 0,
@@ -307,15 +305,13 @@ const Page = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginTop: "120px",
+        translate: "0 14vh",
       }}
     >
       <div
         className="p-6 bg-stone-200"
         style={{
-          top: 135,
           position: "relative",
-          // zIndex: 10000, // Make sure it's above the overlay
         }}
       >
         <form

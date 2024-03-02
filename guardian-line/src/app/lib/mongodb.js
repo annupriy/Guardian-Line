@@ -10,6 +10,7 @@ if (!process.env.MONGODB_URL) {
 }
 
 if (!global._mongoClientPromise) {
+  console.log("Creating new client");
   client = new MongoClient(uri);
   global._clientPromise = client.connect();
 }

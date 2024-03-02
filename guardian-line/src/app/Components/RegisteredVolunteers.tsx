@@ -184,7 +184,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                 />
               ))
             ) : (
-              <div className="text-2xl font-semibold text-red-600">
+              <div className="text-2xl font-semibold text-red-600 -mr-96 style={{marginTop:'120px'}}">
                 No active crimes
               </div>
             )}
