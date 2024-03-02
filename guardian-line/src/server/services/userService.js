@@ -1,5 +1,6 @@
 import clientPromise from "@/app/lib/mongodb";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
+import { redirect } from "next/navigation";
 
 export const userService = {
   authenticate,
@@ -17,6 +18,13 @@ async function authenticate(userName, password) {
   const user = await collection.findOne({ userName: userName });
   if (!user) {
     throw new Error("invalid-username");
+  }
+  // Check if user is present in banned users list
+  const bannedCollection = db.collection("BannedUsers");
+  const bannedUser = await bannedCollection.findOne({ userName: userName });
+  if (bannedUser) {
+    console.log("User is banned");
+    throw new Error("user-banned");
   }
   // Compare the hashed password with the provided password
   console.log("user.password:", user.password);

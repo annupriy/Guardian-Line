@@ -132,7 +132,7 @@ import React from 'react';
 
 const AboutUsInfo = () => {
   return (
-    <div style={{ background: '#fceee9', paddingTop: '20px', paddingBottom: '20px' }}>
+    <div style={{ background: '#fceee9', paddingTop: '20px', paddingBottom: '20px',translate:"0 14.5vh" }}>
       <div style={{ margin: '0 auto', maxWidth: '1140px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div style={{ marginBottom: '60px' }}>

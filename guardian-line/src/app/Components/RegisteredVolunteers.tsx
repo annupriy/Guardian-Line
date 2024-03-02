@@ -82,8 +82,14 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       try {
         const res = await fetch(`/api/getActiveCrimes?userName=${user.name}`);
         const data = await res.json();
-        console.log(data.activeCrimes);
-        setactiveCrimes(data.activeCrimes);
+        console.log(data);
+        // filter out those activeCrimes where current time minus timeOfIncident is less than 2 hour
+        const currentTime = new Date().getTime();
+        const filteredCrimes = data.activeCrimes.filter(
+          (crime: any) =>
+            currentTime - crime.filingtime < 7200000
+        );
+        setactiveCrimes(filteredCrimes);
       } catch (error: any) {
         setError(error.message);
       }
@@ -150,7 +156,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   };
   if (isLoading) {
     return (
-      <div className="flex justify-center h-full align-middle">
+      <div className="flex justify-center h-full align-middle" style={{marginTop:'120px'}}>
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
@@ -159,11 +165,11 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     <div className="text-center bg-[#f0f0f0]">
       {isReadyToVolunteer ? (
         <div>
-          <div className="text-green-900 text-4xl m-8 font-semibold">
+          <div className="text-green-900 text-4xl m-8 font-semibold" style={{marginTop:'120px'}}>
             Live Reports Near you
           </div>
           <div className="grid grid-cols-1 gap-4 p-8 relative lg:grid-cols-2 ml-24">
-            {Array.isArray(activeCrimes) &&
+            {Array.isArray(activeCrimes) && activeCrimes.length > 0 ? (
               activeCrimes.map((crime, index) => (
                 <ActiveCrimesCards
                   key={index}
@@ -176,7 +182,12 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                   userName={crime.userName}
                   reportid={crime.reportid}
                 />
-              ))}
+              ))
+            ) : (
+              <div className="text-2xl font-semibold text-red-600 -mr-96 style={{marginTop:'120px'}}">
+                No active crimes
+              </div>
+            )}
           </div>
 
           <button
@@ -217,8 +228,9 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                 borderRadius: "20px",
                 boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
                 backgroundColor: "#f9f9f9",
-                // width: "50%",
-                // margin: "225px auto",
+                width: "50%",
+                margin: "225px auto",
+                // marginTop:'200px',
               }}
             >
               <div

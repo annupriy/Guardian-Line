@@ -56,14 +56,14 @@ const UnregisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   };
 
   return (
-    <div className="h-full w-full bg-gradient-to-b from-red-50 to-blue-50 flex flex-col justify-center items-center">
+    <div className="h-full w-full bg-gradient-to-b from-red-50 to-blue-50 flex flex-col justify-center items-center" style={{marginTop:'120px'}}>
       <Toaster />
 
-      <div className="text-3xl mb-4 text-red-600">
+      <div className="text-3xl mb-4 text-red-600" style={{marginTop:'120px'}}>
         Oops! You are not registered as a volunteer :(
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center" style={{marginTop:'120px'}}>
         <Player
           autoplay
           loop
@@ -72,7 +72,7 @@ const UnregisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           style={{ marginLeft: "4px", marginTop: "-2px" }}
         />
       </div>
-      <div className="form-control mt-4">
+      <div className="form-control mt-4" style={{marginTop:'120px'}}>
         <label className="label cursor-pointer">
           <span className="label-text text-xl font-semibold">
             Register yourself as a volunteer
