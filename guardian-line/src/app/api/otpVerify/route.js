@@ -24,7 +24,7 @@ export async function GET(req) {
         //         flash: "1"
         //     }
         // });
-        console.log(response.data);
+        // console.log(response.data);
         return Response.json({ otp });
     }
     catch (error) {
