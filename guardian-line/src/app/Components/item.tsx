@@ -49,7 +49,7 @@ const SidebarItem = ({ item }: { item: ISidebarItem }) => {
     `}
         onClick={onClick}
       >
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 text-slate-200">
           <Icon size={20} />
           <p className="text-base font-semibold">{name} </p>
         </div>
