@@ -122,11 +122,11 @@
 "use client";
 import {
   LucideIcon,
-  LayoutDashboard,
-  BadgeDollarSign,
   CircleUserRound,
-  Settings,
-  WalletCards,
+  Contact,
+  Cctv,
+  HandHelping,
+  ShieldQuestion,
 } from "lucide-react";
 import SidebarItem from "./item";
 
@@ -151,35 +151,37 @@ const items: ISidebarItem[] = [
   {
     name: "Reported Crimes",
     path: "/reported_crimes",
-    icon: LayoutDashboard,
+    icon: Cctv,
   },
   {
     name: "Volunteers",
     path: "/volunteers",
-    icon: BadgeDollarSign,
+    icon: HandHelping,
   },
   {
     name: "About Us",
     path: "/aboutUs",
-    icon: WalletCards,
+    icon: ShieldQuestion,
   },
   {
     name: "Contact Us",
     path: "/contactUs",
-    icon: CircleUserRound,
+    icon: Contact,
   },
   
 ];
 
 const Sidebar = () => {
   return (
-    <div className="fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-10 p-4" style={{ marginTop: "120px" }}>
-      <div className="flex flex-col space-y-10 w-full " style={{ marginTop: "50px" }}>
-        <img className="h-10 w-fit" src="/logo-expanded.png" alt="Logo" />
-        <div className="flex flex-col space-y-2">
-          {items.map((item, index) => (
-            <SidebarItem key={index} item={item} />
-          ))}
+    <div className="fixed top-0 left-0 h-screen w-60 shadow-lg z-10 p-4 bg-stone-600" style={{ marginTop: "120px" }}>
+      <div className="flex flex-col space-y-10 w-full " style={{ marginTop: "40px" }}>
+        {/* <img className="h-10 w-fit" src="/logo-expanded.png" alt="Logo" /> */}
+        <div className="flex flex-col space-y-10 ">
+        {items.map((item, index) => (
+        <div key={index} className="hover:bg-stone-800 transition-colors duration-300 rounded-md"> {/* Added hover effect */}
+          <SidebarItem item={item} />
+        </div>
+      ))}
         </div>
       </div>
     </div>
