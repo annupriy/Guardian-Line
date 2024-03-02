@@ -150,7 +150,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
   return (
     <>
       {showCard && (
-        <div className="card w-96 bg-[#990011] text-neutral-content self-start threedbox">
+        <div className="card w-96 bg-[darkslategray] text-neutral-content self-start threedbox">
           <div className="card-body flex-nowrap">
             <div className="card-actions justify-between flex-nowrap items-center ">
               <div className="card-title text-2xl">{typeOfIncident}</div>
@@ -184,7 +184,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
             {showButtons1 && (
               <div className="card-actions justify-between flex-nowrap">
                 <button
-                  className="btn btn-primary"
+                  className="btn bg-amber-700"
                   onClick={handleGoingToValidate}
                 >
                   Going to validate or help?

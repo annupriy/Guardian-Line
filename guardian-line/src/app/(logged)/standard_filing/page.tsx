@@ -272,7 +272,7 @@ const Page = () => {
   };
 
   return (
-    <div className="p-6 relative z-10">
+    <div className="p-6 relative z-10 bg-stone-200" style={{marginTop: '120px', height: 'calc(100vh - 120px)', overflowY: 'auto' }}>
       <form
         className="shadow-xl border rounded-md border-gray-700 bg-white mx-auto w-2/3 relative z-20"
         onSubmit={handleSubmit}
@@ -449,7 +449,7 @@ const Page = () => {
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setDateOfIncident(e.target.value)}
                             value={dateOfIncident}
-                            placeholder="25/02/2020"
+                            placeholder="dd/mm/yyyy"
                             style={{ fontFamily: "" }}
                             required
                           />
@@ -620,7 +620,7 @@ const Page = () => {
 
                 <div>
                   <div className=" flex">
-                    <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
+                    <p className="text-sm  mt-6 ml-1 font-normal font-mono">
                       {"Additional Documents"}
                     </p>
                   </div>
@@ -906,7 +906,7 @@ const Page = () => {
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setDateOfIncident(e.target.value)}
                             value={dateOfIncident}
-                            placeholder="25/02/2020"
+                            placeholder="dd/mm/yyyy"
                             style={{ fontFamily: "" }}
                             required
                           />

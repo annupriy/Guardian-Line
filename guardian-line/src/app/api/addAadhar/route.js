@@ -63,12 +63,14 @@ export async function POST(req) {
         );
         if(res.data && res.data.isDuplicate){
             console.log("Aadhar number already exists");
-            return new Response("Aadhar number already exists", { status: 200 });
+            return new Response("Aadhar number already exists", { status: 401});
+           
         }
         console.log("Aadhar number added successfully");
         
         
-        return new Response("send successfully", { status: 200 });
+        return new Response('Aadhar number added successfully', { status: 200 });
+  
 
     } catch (error) {
         console.error('Error parsing request body:', error);

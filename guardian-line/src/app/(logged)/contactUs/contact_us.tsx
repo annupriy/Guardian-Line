@@ -41,7 +41,7 @@ const ContactUsInfo = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100" style={{marginTop:'120px'}}>
       <div className="container mx-auto px-4 py-8">
         <h1
           className="text-4xl font-semibold text-gray-700 mb-8 text-center "

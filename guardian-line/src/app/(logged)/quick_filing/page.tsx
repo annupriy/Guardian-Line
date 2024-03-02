@@ -5,8 +5,14 @@ import PdfViewer from "../../Components/PdfViewer";
 import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
 import { SessionProvider, useSession } from "next-auth/react";
+// import { redirect } from "next/navigation";
+import { useRouter} from "next/navigation";
+
 
 const Page = () => {
+
+  // const router = useRouter();
+
   const { data: session } = useSession();
 
   const [toggleState, setToggleState] = useState(1);
@@ -156,6 +162,10 @@ const Page = () => {
     setTypeOfIncident(event.target.value);
   };
 
+// const handleCancel = () => {
+//   router.push('/dashboard');
+// };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -283,27 +293,29 @@ const Page = () => {
 
   return (
     <div
-      className="overlay "
+      className="overlay bg-stone-200"
       style={{
         // position: "fixed",
-
+        height: 'calc(100vh - 120px)', 
+        overflowY: 'auto', 
         top: 0,
         left: 0,
         width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0)",
-        zIndex: 9999, // Make sure it's above other content
+        // height: "100%",
+        // backgroundColor: "rgba(0, 0, 0, 0)",
+        // zIndex: 9999, // Make sure it's above other content
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        marginTop: '120px',
       }}
     >
       <div
-        className="p-6"
+        className="p-6 bg-stone-200"
         style={{
           top: 135,
           position: "relative",
-          zIndex: 10000, // Make sure it's above the overlay
+          // zIndex: 10000, // Make sure it's above the overlay
         }}
       >
         <form
@@ -733,7 +745,7 @@ const Page = () => {
               </div>
             </div>
             <div className="mt-6 flex justify-between grid-cols-2">
-              <button className="btn  btn-error btn-xs sm:btn-sm md:btn-md w-1/3 rounded-xl ">
+              <button className="btn  btn-error btn-xs sm:btn-sm md:btn-md w-1/3 rounded-xl " >
                 Cancel
               </button>
               <button className="btn btn-success btn-xs  sm:btn-sm md:btn-md w-1/3 rounded-xl">
@@ -747,10 +759,12 @@ const Page = () => {
   );
 };
 
-const WrappedPage = () => (
-  <SessionProvider>
-    <Page />
-  </SessionProvider>
-);
+const WrappedPage = () => {
+  return (
+    <SessionProvider>
+      <Page />
+    </SessionProvider>
+  );
+};
 
 export default WrappedPage;
