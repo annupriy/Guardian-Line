@@ -201,7 +201,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
           </div> */}
 
 <div className="container">
-  <div style={{ textAlign: 'center', padding: '40px 20px', borderRadius: '20px', boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)', backgroundColor: '#f9f9f9', width: '50%', margin: '225px auto'}}> {/* Example styling */}
+  <div style={{ textAlign: 'center', padding: '40px 20px', borderRadius: '20px', boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.2)', backgroundColor: '#f9f9f9', width: '50%', margin: '225px auto'}}> 
     <div style={{ fontSize: '2rem', marginBottom: '1rem', color: '#333', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.1)' }}>Ready to help?</div>
     <div>
       <button onClick={handleYesClick} className="btn mr-2" style={{ padding: '10px 20px', fontSize: '1rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#4CAF50', border: 'none', borderRadius: '5px', cursor: 'pointer', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
