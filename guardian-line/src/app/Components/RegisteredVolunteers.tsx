@@ -150,7 +150,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   };
   if (isLoading) {
     return (
-      <div className="flex justify-center h-full align-middle">
+      <div className="flex justify-center h-full align-middle" style={{marginTop:'120px'}}>
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
@@ -159,7 +159,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     <div className="text-center bg-[#f0f0f0]">
       {isReadyToVolunteer ? (
         <div>
-          <div className="text-green-900 text-4xl m-8 font-semibold">
+          <div className="text-green-900 text-4xl m-8 font-semibold" style={{marginTop:'120px'}}>
             Live Reports Near you
           </div>
           <div className="grid grid-cols-1 gap-4 p-8 relative lg:grid-cols-2 ml-24">
@@ -217,8 +217,9 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                 borderRadius: "20px",
                 boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
                 backgroundColor: "#f9f9f9",
-                // width: "50%",
-                // margin: "225px auto",
+                width: "50%",
+                margin: "225px auto",
+                // marginTop:'200px',
               }}
             >
               <div

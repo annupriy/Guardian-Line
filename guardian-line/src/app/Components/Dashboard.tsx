@@ -32,7 +32,7 @@ const Dashboard: React.FC<UserInfo> = ({ user }) => {
     setPlayerStarted(true);
   }, 2000);
   return (
-    <main className="h-full w-full flex justify-center bg-neutral-100	">
+    <main className="h-full w-full flex justify-center bg-neutral-100	" style={{marginTop: '120px'}}>
       <div className="text-center mt-16 w-full">
         <h1 className="animatedText text-4xl font-semibold mb-4 text-gray-800">
           Welcome {user.name}

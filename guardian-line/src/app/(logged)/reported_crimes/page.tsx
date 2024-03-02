@@ -281,8 +281,8 @@ const Page = () => {
   return (
     <>
       {reportsPresent ? (
-        <div className="flex flex-wrap justify-center gap-4 min-h-screen py-8"
-        style={{background: '	#e8e3e3'}}>
+        <div className="flex flex-wrap justify-center gap-4 min-h-screen py-8 "
+        style={{background: '	#e8e3e3', marginTop:'120px'}}>
           {reportsData.map((report, index) => (
             <div
               key={index}
@@ -343,7 +343,7 @@ const Page = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-600 mt-8">No reports filed yet! Stay safe.</div>
+        <div className="text-center text-gray-600 mt-8" style={{marginTop:'120px'}}>No reports filed yet! Stay safe.</div>
       )}
     </>
   );
@@ -356,4 +356,3 @@ const WrappedPage = () => (
 );
 
 export default WrappedPage;
-

@@ -2,7 +2,7 @@ import React from 'react';
 
 const ContactUsInfo = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100" style={{marginTop:'120px'}}>
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-semibold text-gray-700 mb-8 text-center " style={{textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}>Contact Us</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
