@@ -1,48 +1,46 @@
-'use client'
+"use client";
 import React from "react";
 import toast from "react-hot-toast";
 
-const ContactUsInfo = () => {
-  const handleSupportMail = async (e:any) => {
+const ContactForBanned = () => {
+  const handleSupportMail = async (e: any) => {
     e.preventDefault();
     const { userName, pointOfContact, message } = e.target.elements;
     const formData = {
       userName: userName.value,
       pointOfContact: pointOfContact.value,
-      message: message.value
+      message: message.value,
     };
     const response = await toast.promise(
       fetch("/api/supportMail", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       }),
       {
         loading: "Sending...",
         success: "Message sent successfully",
-        error: "Error sending message"
+        error: "Error sending message",
       }
     );
-    if(response){
-      if(response.status === 200){
-        userName.value = '';
-        pointOfContact.value = '';
-        message.value = '';
-      }
-      else if(response.status===401){
+    if (response) {
+      if (response.status === 200) {
+        userName.value = "";
+        pointOfContact.value = "";
+        message.value = "";
+      } else if (response.status === 401) {
         toast.error("Unauthorized");
       }
-    }
-    else{
+    } else {
       toast.error("Error sending message");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100" style={{marginTop:'120px'}}>
-      <div className="container mx-auto px-4 py-8">
+    <div className="flex min-h-screen bg-gray-100">
+      <div className="container mx-auto px-4 py-4">
         <h1
           className="text-4xl font-semibold text-gray-700 mb-8 text-center "
           style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}
@@ -51,10 +49,10 @@ const ContactUsInfo = () => {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white shadow-md p-6 rounded-lg">
-            <h2 className="text-2xl font-semibold mb-4 text-zinc-600">
+            <h2 className="text-2xl font-semibold mb-4 text-center text-zinc-600">
               Get in Touch
             </h2>
-            <form onSubmit={handleSupportMail} >
+            <form onSubmit={handleSupportMail}>
               <div className="mb-4">
                 <label
                   htmlFor="userName"
@@ -133,7 +131,7 @@ const ContactUsInfo = () => {
                 </span>{" "}
                 IIIT Lucknow, Uttar Pradesh, India
               </p>
-              <p className="mb-2 flex items-center">
+              <div className="mb-2 flex">
                 <span className="font-semibold mr-2">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -151,10 +149,12 @@ const ContactUsInfo = () => {
                   </svg>{" "}
                   Phone:
                 </span>{" "}
-                +91-9636984353, 
-                +91-9818126297
-                +91-8847583701
-              </p>
+                <div className="mb-2">
+                  <div>+91-9636984353</div>
+                  <div>+91-9818126297</div>
+                  <div>+91-8847583701</div>
+                </div>
+              </div>
               <p className="mb-2 flex items-center">
                 <span className="font-semibold mr-2">
                   <svg
@@ -183,4 +183,4 @@ const ContactUsInfo = () => {
   );
 };
 
-export default ContactUsInfo;
+export default ContactForBanned;

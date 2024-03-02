@@ -152,6 +152,7 @@ export async function POST(req) {
           typeOfIncident: report.typeOfIncident,
           descriptionOfIncident: report.descriptionOfIncident,
           timeOfIncident: report.timeOfIncident,
+          filingtime: report.filingtime,
           personalInformation: report.personalInformation,
           reportid: report.reportid,
           status: report.status,

@@ -234,6 +234,7 @@ const Page = () => {
           uploadedDocPath,
           dateOfIncident,
           timeOfIncident,
+          filingtime : new Date().getTime(),
           userName: userName,
           reportid,
           status: "Live",

@@ -162,7 +162,8 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
               </div>
             </div>
             <div className="items-start">
-            <div className="italic">Description: {descriptionOfIncident}</div></div>
+              <div className="italic">Description: {descriptionOfIncident}</div>
+            </div>
             <div className="collapse collapse-arrow">
               <input type="checkbox" />
               <div className="collapse-title text-xl font-medium flex justify-between ">
@@ -170,14 +171,16 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
                 <div className="card-title text-sm">Time: {timeOfIncident}</div>
               </div>
               <div className="collapse-content border-transparent bg-[#e7c8c2] text-black rounded-xl ">
-                <p className = "mt-3">{address}</p>
+                <p className="mt-3">{address}</p>
                 <h5 className="mt-2">Latitude: {latitude}</h5>
                 <h5 className="">Longitude: {longitude}</h5>
               </div>
             </div>
-            <div className="mb-3">
-              <p>Personal Information: {personalInformation}</p>
-            </div>
+            {personalInformation && personalInformation!=="" && (
+              <div className="mb-3">
+                <p>Personal Information: {personalInformation}</p>
+              </div>
+            )}
             {showButtons1 && (
               <div className="card-actions justify-between flex-nowrap">
                 <button

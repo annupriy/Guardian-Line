@@ -9,6 +9,7 @@ export async function POST(req) {
     personalInformation,
     dateOfIncident,
     timeOfIncident,
+    filingtime,
     city,
     state,
     pincode,
@@ -17,7 +18,7 @@ export async function POST(req) {
     reportid,
     status,
   } = await req.json();
-
+  console.log("Report Data is being registered");
   const client = await clientPromise;
   try {
     const db = await client.db("GuardianLine");
@@ -30,6 +31,7 @@ export async function POST(req) {
       personalInformation: personalInformation,
       dateOfIncident: dateOfIncident,
       timeOfIncident: timeOfIncident,
+      filingtime: filingtime,
       city: city,
       state: state,
       pincode: pincode,
@@ -76,6 +78,7 @@ export async function POST(req) {
               typeOfIncident,
               descriptionOfIncident,
               timeOfIncident,
+              filingtime,
               personalInformation,
               status,
               reportid,
