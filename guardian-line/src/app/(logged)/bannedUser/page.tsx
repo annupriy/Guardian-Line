@@ -1,7 +1,6 @@
 "use client"
 import React, {useContext} from 'react';
 import { FaExclamationCircle } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import ContactUsInfo from './contactForBanned';
 
 const Page = () => {
@@ -10,16 +9,16 @@ const Page = () => {
       <div className="text-center">
         <div className="text-3xl text-red-600 mb-4 " style={{textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)'}}>
           <FaExclamationCircle className="inline-block mr-2" />
-          Uh oh, you're unable to use the platform!
+          Uh oh, you&apos;re unable to use the platform!
         </div>
         <p className="text-gray-700 mb-6">
-          We've received reports of you providing false information.
+          We&apos;ve received reports of you providing false information.
         </p>
         <p className="text-gray-700 mb-6">
-          Don't worry! If you believe this is a mistake, please let us know.
+          Don&apos;t worry! If you believe this is a mistake, please let us know.
         </p>
         <p>
-        If you believe you haven't falsely reported anything, please feel free to contact us.
+        If you believe you haven&apos;t falsely reported anything, please feel free to contact us.
         </p>
         < ContactUsInfo/ >
       </div>
