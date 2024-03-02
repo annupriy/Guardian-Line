@@ -416,6 +416,11 @@ const Page = () => {
     setExpandedReport(expandedReport === reportId ? null : reportId);
   };
 
+  const handleViewDocument = (docPath: string[]) => {
+    // Open the document in a new tab
+    window.open(docPath[0], "_blank");
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -466,6 +471,31 @@ const Page = () => {
                       <span className="font-semibold text-teal-700">Location of Incident:</span>{" "}
                       {`${report.incidentLocation.address} (${report.incidentLocation.latitude}, ${report.incidentLocation.longitude})`}
                     </p>
+
+                    {/* {report.uploadedDocPath != null && (
+                    <button
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+                      onClick={() => handleViewDocument(report.uploadedDocPath)}
+                    >
+                      View Uploaded Document
+                    </button>
+                  )} */}
+                  {report.uploadedDocPath != null && report.uploadedDocPath.length > 0 && (
+  <div>
+    {/* {report.uploadedDocPath.map((doc, index) => (
+      <div key={index}>
+        <a
+          href={doc.path}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 inline-block mb-2"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          View {doc.name}
+        </a>
+      </div>
+    ))} */}
+  </div>
+)}
 
                     
                 </div>

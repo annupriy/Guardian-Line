@@ -173,8 +173,8 @@ const items: ISidebarItem[] = [
 
 const Sidebar = () => {
   return (
-    <div className="fixed top-0 left-0 h-screen w-60 shadow-lg z-10 p-4 bg-stone-600" style={{ marginTop: "120px" }}>
-      <div className="flex flex-col space-y-10 w-full " style={{ marginTop: "40px" }}>
+    <div className="fixed top-0 left-0 h-screen w-60 shadow-lg z-10 p-4 bg-stone-600" >
+      <div className="flex flex-col space-y-10 w-full " style={{ marginTop: "120px" }}>
         {/* <img className="h-10 w-fit" src="/logo-expanded.png" alt="Logo" /> */}
         <div className="flex flex-col space-y-10 ">
         {items.map((item, index) => (
