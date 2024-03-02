@@ -271,7 +271,7 @@ const Page = () => {
   };
 
   return (
-    <div className="p-6 relative z-10">
+    <div className="p-6 relative z-10 bg-stone-200" style={{marginTop: '120px', height: 'calc(100vh - 120px)', overflowY: 'auto' }}>
       <form
         className="shadow-xl border rounded-md border-gray-700 bg-white mx-auto w-2/3 relative z-20"
         onSubmit={handleSubmit}
