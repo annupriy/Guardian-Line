@@ -73,18 +73,19 @@ const Page = ({ searchParams }: PageProps) => {
 
   useEffect(() => {
     setInputs((prevInputs) => ({ ...prevInputs, userName: "" }));
-      const name = new URLSearchParams(searchParams).get("username");
-      if (name!==undefined && name!==null && name!=="") {
-        setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
+    const name = new URLSearchParams(searchParams).get("username");
+    if (name !== undefined && name !== null && name !== "") {
+      setInputs((prevInputs) => ({ ...prevInputs, userName: name }));
 
-      }
-    
+    }
+
   }, []);
 
   return (
     <div className="container md:px-0 bg-white">
       <section className="flex justify-center items-center h-screen w-screen  bg-white">
 
+        <Toaster />
         <div className='flex-col flex md:flex-row justify-center items-center md:translate-x-[-9rem] bg-white pt-2 '>
 
           <Image
@@ -92,7 +93,6 @@ const Page = ({ searchParams }: PageProps) => {
             alt="logo for it"
             className="w-[35vw] h-[20vh] md:w-[20rem] md:h-[20rem] md:relative z-10 left-[3rem] top-[-3rem] "
           />
-          <Toaster />
           <div className="rounded-lg shadow-xl h-[28rem] p-2 relative z-20  bg-white ">
             <div className="bg-white ">
               <h1 className='text-3xl text-center  text-teal-900 font-normal '>Guardian Line</h1>
