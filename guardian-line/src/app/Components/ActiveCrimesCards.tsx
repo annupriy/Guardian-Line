@@ -52,7 +52,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
 
   const removeCrimeReport = async () => {
     // Remove the object from ActiveCrimes from ActiveVolunteers Collection
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
 
   const handleVoteYes = async () => {
     // Remove the object from ActiveCrimes from ActiveVolunteers Collection
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
 
   const handleVoteNo = async () => {
     // Remove the object from ActiveCrimes from ActiveVolunteers Collection
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

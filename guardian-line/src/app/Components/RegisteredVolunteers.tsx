@@ -33,7 +33,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   };
   const handleDeleteLocation = async () => {
     // call a post request to delete the user location from ActiveVolunteers
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +65,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/checkVolunteerStatus?userName=${user.name}`
+          `/api/checkVolunteerStatus?userName=${user.name}`
         );
         const data = await res.json();
         setIsReadyToVolunteer(data.isPresent);
@@ -83,7 +83,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     const fetchActiveCrimes = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/getActiveCrimes?userName=${user.name}`
+          `/api/getActiveCrimes?userName=${user.name}`
         );
         const data = await res.json();
         console.log(data.activeCrimes);
@@ -125,7 +125,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     coords: GeolocationCoordinates
   ) => {
     // write code to POST volunteer registration to server
-    const res = await fetch("http://localhost:3000/api/volunteersLocation", {
+    const res = await fetch("/api/volunteersLocation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
