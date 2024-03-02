@@ -82,8 +82,14 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       try {
         const res = await fetch(`/api/getActiveCrimes?userName=${user.name}`);
         const data = await res.json();
-        console.log(data.activeCrimes);
-        setactiveCrimes(data.activeCrimes);
+        console.log(data);
+        // filter out those activeCrimes where current time minus timeOfIncident is less than 2 hour
+        const currentTime = new Date().getTime();
+        const filteredCrimes = data.activeCrimes.filter(
+          (crime: any) =>
+            currentTime - crime.filingtime < 7200000
+        );
+        setactiveCrimes(filteredCrimes);
       } catch (error: any) {
         setError(error.message);
       }
@@ -163,7 +169,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
             Live Reports Near you
           </div>
           <div className="grid grid-cols-1 gap-4 p-8 relative lg:grid-cols-2 ml-24">
-            {Array.isArray(activeCrimes) &&
+            {Array.isArray(activeCrimes) && activeCrimes.length > 0 ? (
               activeCrimes.map((crime, index) => (
                 <ActiveCrimesCards
                   key={index}
@@ -176,7 +182,12 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                   userName={crime.userName}
                   reportid={crime.reportid}
                 />
-              ))}
+              ))
+            ) : (
+              <div className="text-2xl font-semibold text-red-600">
+                No active crimes
+              </div>
+            )}
           </div>
 
           <button
