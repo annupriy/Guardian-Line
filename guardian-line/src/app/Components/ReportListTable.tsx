@@ -140,12 +140,20 @@ const ReportListTable = ({
                         />
                       </div>
 
+
                       <ul
                         tabIndex={0}
                         className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
                       >
-                        <li>
-                          {/* <link href="../my_profile" className="justify-between"> */}
+                        <li
+
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            router.push(`/full_report?reportid=${document.reportid}`);
+
+                          }}
+                        >
                           Full Report
                           {/* <span className="badge">New</span> */}
                           {/* </link> */}
@@ -157,10 +165,45 @@ const ReportListTable = ({
                     </div>
                   </div>
                 </td>
+
               </tr>
             ))}
           </tbody>
         </table>
+
+      </div>
+      <div className="font-poppins mt-4 mb-6 flex flex-col justify-between text-[#8D8D8D] md:flex-row">
+        <tr>
+          <td>
+            <div className="mb-4 ml-6 flex items-center space-x-2 text-[14px] font-medium ">
+              <span>table.show</span>
+              <div className="flex items-center">
+                <select
+                  className="appearance-non rounded-lg border border-gray-400 bg-white py-0.5 px-2"
+                  onChange={(e) => setDocumentsPerPage(parseInt(e.target.value))}>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                </select>
+                <ul
+                  tabIndex={0}
+                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    {/* <link href="../my_profile" className="justify-between"> */}
+                    Full Report
+                    {/* <span className="badge">New</span> */}
+                    {/* </link> */}
+                  </li>
+                  <li>
+                    <button id="logoutButton">Resolved</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </td>
+        </tr>
       </div>
       <div className="font-poppins mt-4 mb-6 flex flex-col justify-between text-[#8D8D8D] md:flex-row">
         <div className="mb-4 ml-6 flex items-center space-x-2 text-[14px] font-medium ">
@@ -181,9 +224,8 @@ const ReportListTable = ({
 
         <div className="ml-6 flex items-center space-x-1 text-[12px] font-normal md:ml-0 md:mr-6 ">
           <button
-            className={` rounded-lg border py-1 px-2 ${
-              currentPage === 1 ? "border-[#0A43F0] text-[#0A43F0]" : ""
-            }`}
+            className={` rounded-lg border py-1 px-2 ${currentPage === 1 ? "border-[#0A43F0] text-[#0A43F0]" : ""
+              }`}
             onClick={firstPage}
           >
             First Page
@@ -207,18 +249,17 @@ const ReportListTable = ({
             &gt;
           </button>
           <button
-            className={`rounded-xl border py-1 px-2 ${
-              currentPage === totalPageCount
-                ? "border-[#0A43F0] text-[#0A43F0]"
-                : ""
-            }`}
+            className={`rounded-xl border py-1 px-2 ${currentPage === totalPageCount
+              ? "border-[#0A43F0] text-[#0A43F0]"
+              : ""
+              }`}
             onClick={lastPage}
           >
             Last Page
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
