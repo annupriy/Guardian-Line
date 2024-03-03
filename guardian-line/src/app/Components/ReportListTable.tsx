@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { signOut } from "next-auth/react";
-import toast, { Toaster } from "react-hot-toast";
+
 
 type DocumentStatus = "RESOLVED" | "NOT_RESOLVED"; // Define DocumentStatus type
 
@@ -46,6 +43,7 @@ const ReportListTable = ({ documentsData }: { documentsData: any }): JSX.Element
     function showDocument(documentId: number) {
         router.push(`/documents/${documentId}`);
     }
+    // console.log(currentDocuments);
 
     return (
         <div className="flex flex-col justify-between overflow-x-scroll rounded-3xl bg-slate-100 py-1 m-10  ">
@@ -61,6 +59,7 @@ const ReportListTable = ({ documentsData }: { documentsData: any }): JSX.Element
                     </thead>
                     {/* make it overflow-y-scroll on mobile */}
                     <tbody className="overflow-y-scroll">
+                        
                         {currentDocuments.map((document: any, index: number) => (
                             <tr
                                 key={index}
@@ -68,7 +67,7 @@ const ReportListTable = ({ documentsData }: { documentsData: any }): JSX.Element
                                 <td className="whitespace-nowrap ">{document.reportid || "#" + document.id}</td>
                                 <td className="whitespace-nowrap">{document.typeOfIncident || "#" + document.typeOfIncident}</td>
                                 <td className="whitespace-nowrap">{document.descriptionOfIncident || "#" + document.descriptionOfIncident}</td>
-                                <td className="whitespace-nowrap">{document.incidentLocation.address || "#" + document.incidentLocation.address}</td>
+                                <td className="whitespace-nowrap">{document.incidentLocation.address || "#" + document.incidentLocation.address}</td> 
                                 {/* <td className="whitespace-nowrap">{document.city || "#" + document.city}</td>
                             <td className="whitespace-nowrap">{document.state || "#" + document.state}</td>
                             <td className="whitespace-nowrap">{document.pincode || "#" + document.pincode}</td>
@@ -124,10 +123,16 @@ const ReportListTable = ({ documentsData }: { documentsData: any }): JSX.Element
                                                 tabIndex={0}
                                                 className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
                                             >
-                                                <li>
-                                                    {/* <link href="../my_profile" className="justify-between"> */}
-                                                    Full Report
+                                                <li
+                                                    
+                                                    onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
+                                                    router.push(`/full_report?reportid=${document.reportid}`);
 
+                                                    }}
+                                                    >
+                                                    Full Report
                                                     {/* <span className="badge">New</span> */}
                                                     {/* </link> */}
                                                 </li>
