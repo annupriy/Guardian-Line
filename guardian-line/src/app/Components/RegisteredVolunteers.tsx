@@ -3,6 +3,7 @@ import React, { use } from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ActiveCrimesCards from "./ActiveCrimesCards";
+import { Trophy } from 'lucide-react';
 
 type User = {
   id?: string | null;
@@ -162,7 +163,13 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     );
   }
   return (
+
     <div className="text-center bg-[#f0f0f0]">
+      <div className="" style={{ position: 'absolute', top: '8.75rem', right: '0', marginRight: '1.875rem', display: 'flex', alignItems: 'center' }}>
+    <p style={{ marginRight: '1rem' , color:"#ff9900"}}>Reputation Points:</p>
+    <p><Trophy color="#dab42b" size="2.5rem" /></p>
+</div>
+
       {isReadyToVolunteer ? (
         <div>
           <div className="text-green-900 text-4xl m-8 font-semibold" style={{marginTop:'120px'}}>
@@ -183,7 +190,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                   reportid={crime.reportid}
                 />
               ))
-            ) : (
+            ) : ( 
               <div className="text-2xl font-semibold text-red-600 -mr-96 style={{marginTop:'120px'}}">
                 No active crimes
               </div>
@@ -233,6 +240,11 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                 // marginTop:'200px',
               }}
             >
+              {/* <div>
+              <p className="absolute top-0 right-0 text-gray-700">
+              <Badge color="#dab42b" />
+              </p>
+            </div> */}
               <div
                 style={{
                   fontSize: "2rem",
