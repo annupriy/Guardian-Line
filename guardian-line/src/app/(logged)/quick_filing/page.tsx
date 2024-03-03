@@ -406,7 +406,7 @@ const Page = () => {
                   )}
                   <div>
                     <div className="flex">
-                      <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
+                      <p className="text-sm  mt-6 ml-1 font-normal font-mono">
                         {"Additional Documents"}
                       </p>
                     </div>
