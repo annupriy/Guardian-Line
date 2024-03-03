@@ -1,7 +1,7 @@
 import clientPromise from "@/app/lib/mongodb";
 
 export async function POST(req) {
-  const { reportId } = await req.json();
+  const { reportId, index, statement } = await req.json();
   console.log("Report Data is being resolved");
 
   const client = await clientPromise;
@@ -13,6 +13,7 @@ export async function POST(req) {
       {
         $set: {
           resolved: true,
+          adminStatement: statement,
         },
       }
     );

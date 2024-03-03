@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
+import { int } from "aws-sdk/clients/datapipeline";
 
 type ReportStatus = "Live" | "NotLive";
 type ReportResolution = "Resolved" | "Unresolved";
@@ -22,6 +23,30 @@ const ReportListTable = ({
     indexOfLastDocument
   );
 
+  type StatusFilterType = {
+    label: string;
+    value: string;
+  };
+  const statusFilters: StatusFilterType[] = [
+    { label: "True Report", value:"True Report" },
+    { label: "False Report", value: "False Report" },
+  ];
+
+ 
+
+  const [resolved, setResolved] = useState<number>(0);
+
+  const [dropdownVisible, setDropdownVisible] = useState<string>();
+
+  const toggle = (reportId: string) => {
+    setDropdownVisible((prev: string | undefined) => prev === reportId ? undefined : reportId);
+  };
+  
+  
+
+ 
+
+
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // State to track dropdown open/close
 
   const toggleDropdown = () => {
@@ -29,7 +54,7 @@ const ReportListTable = ({
   };
 
   const totalPageCount = Math.ceil(documentsData.length / documentsPerPage);
-  const resolveReport = async (reportId: number, index: number) => {
+  const resolveReport = async (reportId: number, index: number, statement: boolean) => {
     console.log(index);
     try {
       const res = await toast.promise(
@@ -38,7 +63,7 @@ const ReportListTable = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ reportId }),
+          body: JSON.stringify({ reportId, index, statement }),
         }),
         {
           loading: "Resolving report...",
@@ -106,20 +131,49 @@ const ReportListTable = ({
                 </td>
                 <td className="whitespace-nowrap">{document.status}</td>
                 <td className="whitespace-nowrap">
+
                   {document.resolved ? (
                     <button className="rounded-xl border border-green-400 py-1 px-2 bg-green-600 text-white">
                       Resolved
                     </button>
                   ) : (
-                    <button
-                      className="rounded-xl border border-gray-400 py-1 px-2 hover:bg-[#0A43F0] hover:text-white"
-                      onClick={() => {
-                        resolveReport(document.reportid, index);
-                      }}
-                    >
-                      Resolve
-                    </button>
-                  )}
+                    <div>
+                      <button
+                        className="rounded-xl border border-gray-400 py-1 px-2 hover:bg-[#0A43F0] hover:text-white"
+                        onClick={() => toggle(document.reportid)}
+                        style={{ backgroundColor: resolved === 1 ? 'green' : (resolved === -1 ? 'red' : '') }}
+                      >
+                        {resolved==1 ? 'Resolved' : 'Resolve'}
+                      </button>
+
+                      {dropdownVisible === document.reportid && (
+                        <div
+                          id="dropdownHover"
+                          className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
+                        >
+                          <ul className="py-2 text-sm text-gray-700">
+                            <li>
+                              <button
+                                className="block px-4 py-2 hover:bg-gray-100"
+                                onClick={() => {resolveReport(document.reportid, index, true), setResolved(1);}}
+                              >
+                                True Report
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                className="block px-4 py-2 hover:bg-gray-100"
+                                onClick={() => {resolveReport(document.reportid, index, false), setResolved(-1);}}
+                              >
+                                False Report
+                              </button>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                        )}
+
                 </td>
                 <td>
                   <div className="flex-none gap-2">
