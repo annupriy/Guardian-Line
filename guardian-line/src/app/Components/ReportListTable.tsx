@@ -102,7 +102,7 @@ const ReportListTable = ({
                 <td className="whitespace-nowrap ">{document.reportid}</td>
                 <td className="whitespace-nowrap">{document.typeOfIncident}</td>
                 <td className="whitespace-nowrap">
-                  {document.isSame ? "Fraud" : "Not fraud" || "-"}
+                  {document.isSame ? "Fraud" : document.vote < 0 ? "Fraud" : "Not Fraud"}
                 </td>
                 <td className="whitespace-nowrap">{document.status}</td>
                 <td className="whitespace-nowrap">
