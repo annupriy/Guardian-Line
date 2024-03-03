@@ -260,7 +260,7 @@ const Page = (props: any) => {
                       onClick={() => {
                         handleStatusFilterChange(status);
                         setShowStatusFilterOptions(false);
-                      }}
+                      }} 
                     >
                       {status.label}
                     </li>
