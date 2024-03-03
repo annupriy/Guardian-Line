@@ -2,16 +2,18 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ReportListTable from "@/app/Components/ReportListTable";
-type DocumentStatus = "Live" | "NotLive"; // Define DocumentStatus type
+type ReportStatus = "Live" | "NotLive";
+type ReportResolution = "Resolved" | "Unresolved";
 
 const Page = (props: any) => {
-  const router = useRouter();
   const [documents, setDocuments] = useState<any[]>([]);
   const [filteredDocuments, setFilteredDocuments] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [originalDocuments, setOriginalDocuments] = useState<any[]>([]);
   const [showStatusFilterOptions, setShowStatusFilterOptions] =
+    useState<boolean>(false);
+  const [showResolutionFilterOptions, setShowResolutionFilterOptions] =
     useState<boolean>(false);
   const [showCreatedFilterOptions, setShowCreatedFilterOptions] =
     useState<boolean>(false);
@@ -27,13 +29,24 @@ const Page = (props: any) => {
 
   type StatusFilterType = {
     label: string;
-    value: "ALL" | DocumentStatus;
+    value: "ALL" | ReportStatus;
+  };
+
+  type ResoltionFilterType = {
+    label: string;
+    value: "ALL" | ReportResolution;
   };
 
   const statusFilters: StatusFilterType[] = [
     { label: "All", value: "ALL" },
     { label: "Live", value: "Live" },
     { label: "Not Live", value: "NotLive" },
+  ];
+
+  const resolutionFilters: ResoltionFilterType[] = [
+    { label: "All", value: "ALL" },
+    { label: "Resolved", value: "Resolved" },
+    { label: "Unresolved", value: "Unresolved" },
   ];
 
   const createdFilter = [
@@ -50,6 +63,8 @@ const Page = (props: any) => {
   const [selectedCreatedFilter, setSelectedCreatedFilter] = useState<any>(
     createdFilter[0]
   );
+  const [selectedResolutionFilter, setSelectedResolutionFilter] =
+    useState<ResoltionFilterType>(resolutionFilters[0]);
 
   function handleSearchInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchQuery(event.target.value);
@@ -59,8 +74,12 @@ const Page = (props: any) => {
     if (searchQuery.trim() === "") {
       setDocuments(originalDocuments);
     } else {
-      const filteredDocs = originalDocuments.filter((document: any) =>
-        document.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const filteredDocs = originalDocuments.filter(
+        (document: any) =>
+          document.reportid?.includes(searchQuery) ||
+          document.typeOfIncident
+            ?.toLowerCase()
+            .includes(searchQuery.toLowerCase())
       );
       setDocuments(filteredDocs);
     }
@@ -92,16 +111,33 @@ const Page = (props: any) => {
 
   useEffect(() => {
     setFilteredDocuments(filterDocuments(documents));
-  }, [documents, selectedStatusFilter, selectedCreatedFilter]);
+  }, [
+    documents,
+    selectedStatusFilter,
+    selectedCreatedFilter,
+    selectedResolutionFilter,
+  ]);
 
   function filterDocuments(docs: any[]): any[] {
     let filteredDocs = docs;
 
     if (selectedStatusFilter.value !== "ALL") {
+      console.log(filteredDocs);
       filteredDocs = filteredDocs.filter(
         (d: any) => d.status === selectedStatusFilter.label
       );
     }
+    console.log(selectedResolutionFilter.value);
+    if (selectedResolutionFilter.value !== "ALL") {
+      filteredDocs = filteredDocs.filter((d: any) => {
+        if (selectedResolutionFilter.value === "Resolved") {
+          return d.resolved === true;
+        } else {
+          return d.resolved !== true;
+        }
+      });
+    }
+
     filteredDocs = filteredDocs.filter((doc: any) =>
       wasXDaysAgoOrLess(
         switchMonthAndDate(doc.dateOfIncident),
@@ -116,6 +152,10 @@ const Page = (props: any) => {
 
   function handleStatusFilterChange(status: StatusFilterType) {
     setSelectedStatusFilter(status);
+  }
+
+  function handleResolutionFilterChange(resolution: ResoltionFilterType) {
+    setSelectedResolutionFilter(resolution);
   }
 
   function wasXDaysAgoOrLess(documentDate: Date, lastXDays: number): boolean {
@@ -150,72 +190,117 @@ const Page = (props: any) => {
             Guardian Line Crime Reports
           </div>
         </div>
-
-        <div className="flex justify-end flex-row w-[90vw]" style={{marginTop:0}}>
-          <div className="relative mr-2">
-            <button
-              className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4 `}
-              onClick={() =>
-                setShowStatusFilterOptions(!showStatusFilterOptions)
-              }
-            >
-              <div className="flex items-center justify-center gap-2">
-                Status <img src="/ControlDownIcon.svg" alt="" />
-              </div>
-            </button>
-            {showStatusFilterOptions && (
-              <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51]">
-                {statusFilters.map((status, index) => (
-                  <li
-                    key={index}
-                    className={`m-3 cursor-pointer rounded-full px-4 py-3 text-[#0943F3] ${
-                      selectedStatusFilter.value === status.value
-                        ? "bg-blue-500 text-white"
-                        : "bg-white hover:bg-[#1146f3] hover:text-white"
-                    }`}
-                    onClick={() => {
-                      handleStatusFilterChange(status);
-                      setShowStatusFilterOptions(false);
-                    }}
-                  >
-                    {status.label}
-                  </li>
-                ))}
-              </ul>
-            )}
+        <div className="flex justify-center">
+          <div className="form-control">
+            <input
+              type="text"
+              placeholder="Search"
+              className="input input-bordered w-24 md:w-auto"
+              onChange={handleSearchInputChange}
+              onKeyDown={handleEnterKeyPress} // Add this line
+            />
           </div>
+          <div
+            className="flex justify-end flex-row w-[70vw]"
+            style={{ marginTop: 0 }}
+          >
+            <div className="relative mr-2">
+              <button
+                className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4 `}
+                onClick={() =>
+                  setShowResolutionFilterOptions(!showResolutionFilterOptions)
+                }
+              >
+                <div className="flex items-center justify-center gap-2">
+                  Resolution <img src="/ControlDownIcon.svg" alt="" />
+                </div>
+              </button>
+              {showResolutionFilterOptions && (
+                <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51]">
+                  {resolutionFilters.map((status, index) => (
+                    <li
+                      key={index}
+                      className={`m-3 cursor-pointer rounded-full px-4 py-3 text-[#0943F3] ${
+                        selectedResolutionFilter.value === status.value
+                          ? "bg-blue-500 text-white"
+                          : "bg-white hover:bg-[#1146f3] hover:text-white"
+                      }`}
+                      onClick={() => {
+                        handleResolutionFilterChange(status);
+                        setShowResolutionFilterOptions(false);
+                      }}
+                    >
+                      {status.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="relative mr-2">
+              <button
+                className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4 `}
+                onClick={() =>
+                  setShowStatusFilterOptions(!showStatusFilterOptions)
+                }
+              >
+                <div className="flex items-center justify-center gap-2">
+                  Status <img src="/ControlDownIcon.svg" alt="" />
+                </div>
+              </button>
+              {showStatusFilterOptions && (
+                <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51]">
+                  {statusFilters.map((status, index) => (
+                    <li
+                      key={index}
+                      className={`m-3 cursor-pointer rounded-full px-4 py-3 text-[#0943F3] ${
+                        selectedStatusFilter.value === status.value
+                          ? "bg-blue-500 text-white"
+                          : "bg-white hover:bg-[#1146f3] hover:text-white"
+                      }`}
+                      onClick={() => {
+                        handleStatusFilterChange(status);
+                        setShowStatusFilterOptions(false);
+                      }}
+                    >
+                      {status.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-          <div className="relative">
-            <button
-              className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4`}
-              onClick={() =>
-                setShowCreatedFilterOptions(!showCreatedFilterOptions)
-              }
-            >
-              <div className="flex items-center justify-center gap-3">
-                Created <img src="/ControlDownIcon.svg" alt="" />
-              </div>
-            </button>
-            {showCreatedFilterOptions && (
-              <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51]">
-                {createdFilter.map((created, index) => (
-                  <li
-                    key={index}
-                    className={`m-3 cursor-pointer rounded-full px-4 py-3 text-[#0943F3] ${
-                      selectedCreatedFilter.value === created.value
-                        ? "bg-blue-500 text-white"
-                        : "bg-white hover:bg-[#1146f3] hover:text-white"
-                    }`}
-                    onClick={() => {
-                      setSelectedCreatedFilter(created);
-                      setShowCreatedFilterOptions(false);
-                    }}
-                  >
-                    {created.label}
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div className="relative">
+              <button
+                className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4`}
+                onClick={() =>
+                  setShowCreatedFilterOptions(!showCreatedFilterOptions)
+                }
+              >
+                <div className="flex items-center justify-center gap-3">
+                  Created <img src="/ControlDownIcon.svg" alt="" />
+                </div>
+              </button>
+              {showCreatedFilterOptions && (
+                <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51]">
+                  {createdFilter.map((created, index) => (
+                    <li
+                      key={index}
+                      className={`m-3 cursor-pointer rounded-full px-4 py-3 text-[#0943F3] ${
+                        selectedCreatedFilter.value === created.value
+                          ? "bg-blue-500 text-white"
+                          : "bg-white hover:bg-[#1146f3] hover:text-white"
+                      }`}
+                      onClick={() => {
+                        setSelectedCreatedFilter(created);
+                        setShowCreatedFilterOptions(false);
+                      }}
+                    >
+                      {created.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
 
