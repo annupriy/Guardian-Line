@@ -228,13 +228,13 @@ const Page = () => {
       <div className="content" ref={contentRef}>
         <div className="content-section">
           <div>
-            <div className="text-5xl font-bold -translate-y-20">
+            <div className="text-5xl font-bold -translate-y-20 text-slate-800">
               GUARDIAN LINE
             </div>
-            <h1 className="text-3xl font-semibold -translate-y-12">
+            <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
               USER GUIDE
             </h1>
-            <h1 className="dudeHeader">Scroll to see</h1>
+            <h1 className="dudeHeader text-slate-600">Scroll to see</h1>
             <p className="arrow-animated" ref={arrowRef}>
               ↓
             </p>
@@ -243,34 +243,41 @@ const Page = () => {
 
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">Filing a report (standard, quick)</h1>
+          <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
+              STANDARD AND QUICK FILING
+            </h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">
+Whether you've got time to spare or need to act fast, we've got you covered with our two reporting options: Standard for when you've got the time, and Quick for when every second counts.</h1>
           </div>
         </div>
 
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">Volunteers, Police Admin</h1>
+          <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
+              VOLUNTEER APPROVAL AND POLICE ENFORCEMENT
+            </h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">Volunteers validate reports, Admins enforce — safeguarding neighborhoods, hand in hand!</h1>
           </div>
         </div>
 
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">Being a Volunteer - how will it work</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">Being a Volunteer - how will it work</h1>
           </div>
         </div>
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">Banning</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">Banning</h1>
           </div>
         </div>
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">Contact Us</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">Contact Us</h1>
           </div>
         </div>
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader">What&apos;s this?</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">What&apos;s this?</h1>
           </div>
         </div>
         <div className="content-section"></div>
