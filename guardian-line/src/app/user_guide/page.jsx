@@ -247,7 +247,7 @@ const Page = () => {
               STANDARD AND QUICK FILING
             </h1>
             <h1 className="dudeHeader text-slate-600 text-lg">
-Whether you've got time to spare or need to act fast, we've got you covered with our two reporting options: Standard for when you've got the time, and Quick for when every second counts.</h1>
+Whether you&apos;ve got time to spare or need to act fast, we&apos;ve got you covered with our two reporting options: Standard for when you&apos;ve got the time, and Quick for when every second counts.</h1>
           </div>
         </div>
 

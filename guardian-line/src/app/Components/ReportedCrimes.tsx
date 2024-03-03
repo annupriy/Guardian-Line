@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { IncidentLocation } from "./reportsFiled";
+import { CheckCheck } from 'lucide-react';
+
 
 type User = {
   name: string | null;
@@ -25,6 +27,7 @@ type Report = {
   reportid: string;
   uploadedDocPath: Array<any>[];
   personalInformation: string;
+  resolved: Boolean;
 };
 
 const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
@@ -102,13 +105,45 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                   </p>
                 )}
               </div>
-              <div className="px-6 py-4 flex justify-end">
+              {/* <div>
+              {report.resolved && (
+                <p className="text-gray-700">
+                <CheckCheck color="#5b9f2d" />
+              </p>
+              )}
+              </div> */}
+              {/* <div className="px-6 py-4 flex justify-end">
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                   onClick={() => handleExpand(report.reportid)}
                 >
                   View Full Report
                 </button>
+              </div> */}
+              <div className="px-6 py-4 flex justify-between items-center">
+              <div className="flex items-center">
+    {/* {report.resolved && (
+      <p className="text-gray-700">
+        Resolved<CheckCheck color="#5b9f2d" />
+      </p>
+    )} */}
+    <button
+      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ml-4"
+      onClick={() => handleExpand(report.reportid)}
+    >
+      View Full Report
+    </button>
+    {report.resolved && (
+      <p className="text-green-700 ml-4 font-semibold">Resolved</p>
+    )}
+    {report.resolved && (
+      <p className="text-gray-700">
+        <CheckCheck color="#5b9f2d" />
+      </p>
+    )}
+
+    
+  </div>
               </div>
               {expandedReport === report.reportid && (
                 <div className="px-6 py-4">
@@ -125,7 +160,7 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                     {report.timeOfIncident}
                   </p>
 
-                  {report.city != null && (
+                  {report.city != null && report.city !="" &&(
                     <p className="text-gray-700">
                       <span className="font-semibold text-teal-700">
                         City:{" "}
@@ -134,7 +169,7 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                     </p>
                   )}
 
-                  {report.state != null && (
+                  {report.state != null && report.state!="" &&(
                     <p className="text-gray-700">
                       <span className="font-semibold text-teal-700">
                         State:{" "}
@@ -143,7 +178,7 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                     </p>
                   )}
 
-                  {report.pincode != null && (
+                  {report.pincode != null && report.pincode!="" &&(
                     <p className="text-gray-700">
                       <span className="font-semibold text-teal-700">
                         PIN Code:{" "}
@@ -158,7 +193,7 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                     </span>{" "}
                     {`${report.incidentLocation.address} (${report.incidentLocation.latitude}, ${report.incidentLocation.longitude})`}
                   </p>
-                  {report.personalInformation != null && (
+                  {report.personalInformation != "" && report.personalInformation!=null &&(
                     <p className="text-gray-700">
                       <span className="font-semibold text-teal-700">
                         Personal Information:{" "}
@@ -175,14 +210,17 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                       View Uploaded Document
                     </button>
                   )} */}
+
                   {report.uploadedDocPath && report.uploadedDocPath.length > 0 && (
-  <button
-    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
-    onClick={() => handleViewDocument(report.uploadedDocPath)}
-  >
-    View Uploaded Document
-  </button>
-)}
+                    <div className="flex justify-center"> {/* Center the button */}
+                      <button
+                      className="bg-slate-300 hover:bg-slate-400 text-green-900 font-bold py-2 px-4 rounded transition-colors duration-300"
+                      onClick={() => handleViewDocument(report.uploadedDocPath)}
+                      >
+                        Download Uploaded Document
+                      </button>
+                    </div>
+                  )}
                      
                   
                 </div>
