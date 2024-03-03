@@ -24,6 +24,7 @@ type Report = {
   typeOfIncident: string;
   reportid: string;
   uploadedDocPath: Array<any>[];
+  personalInformation: string;
 };
 
 const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
@@ -157,6 +158,14 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                     </span>{" "}
                     {`${report.incidentLocation.address} (${report.incidentLocation.latitude}, ${report.incidentLocation.longitude})`}
                   </p>
+                  {report.personalInformation != null && (
+                    <p className="text-gray-700">
+                      <span className="font-semibold text-teal-700">
+                        Personal Information:{" "}
+                      </span>{" "}
+                      {report.personalInformation}
+                    </p>
+                  )}
 
                   {/* {report.uploadedDocPath != null && (
                     <button
