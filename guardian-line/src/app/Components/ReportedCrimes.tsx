@@ -23,7 +23,8 @@ type Report = {
   incidentLocation: IncidentLocation; // Change to IncidentLocation type
   typeOfIncident: string;
   reportid: string;
-  uploadedDocPath: string[];
+  uploadedDocPath: Array<any>[];
+  personalInformation: string;
 };
 
 const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
@@ -59,9 +60,12 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
     setExpandedReport(expandedReport === reportId ? null : reportId);
   };
 
-  const handleViewDocument = (docPath: string[]) => {
-    // Open the document in a new tab
-    window.open(docPath[0], "_blank");
+  const handleViewDocument = (docPath: Array<any>) => {
+    docPath.forEach((doc) => {
+      if (doc.path) {
+        window.open(doc.path, "_blank");
+      }
+    });
   };
 
   if (loading) {
@@ -154,6 +158,14 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                     </span>{" "}
                     {`${report.incidentLocation.address} (${report.incidentLocation.latitude}, ${report.incidentLocation.longitude})`}
                   </p>
+                  {report.personalInformation != null && (
+                    <p className="text-gray-700">
+                      <span className="font-semibold text-teal-700">
+                        Personal Information:{" "}
+                      </span>{" "}
+                      {report.personalInformation}
+                    </p>
+                  )}
 
                   {/* {report.uploadedDocPath != null && (
                     <button
@@ -163,23 +175,16 @@ const ReportedCrimes: React.FC<UserInfo> = ({ user }) => {
                       View Uploaded Document
                     </button>
                   )} */}
-                  {report.uploadedDocPath != null &&
-                    report.uploadedDocPath.length > 0 && (
-                      <div>
-                        {/* {report.uploadedDocPath.map((doc, index) => (
-      <div key={index}>
-        <a
-          href={doc.path}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 inline-block mb-2"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          View {doc.name}
-        </a>
-      </div>
-    ))} */}
-                      </div>
-                    )}
+                  {report.uploadedDocPath && report.uploadedDocPath.length > 0 && (
+  <button
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+    onClick={() => handleViewDocument(report.uploadedDocPath)}
+  >
+    View Uploaded Document
+  </button>
+)}
+                     
+                  
                 </div>
               )}
             </div>

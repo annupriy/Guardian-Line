@@ -1006,6 +1006,7 @@ const Page = () => {
                     </div>
 
                     <div className="grid grid-rows-2 items-center gap-8 md:grid-cols-2 md:grid-rows-none mt-4">
+                    
                       <div>
                         <label
                           className=" font-light text-sm text-gray-400"
@@ -1016,7 +1017,7 @@ const Page = () => {
                         <span className="text-red-500 text-lg ">*</span>
                         <select
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
-                          onChange={handleTypeChange}
+                          onChange={handleTypeChangeForState}
                           value={state}
                           required={status === "Not Live"}
                         >
@@ -1061,7 +1062,24 @@ const Page = () => {
                           <option value="UT">Uttarakhand</option>
                           <option value="WB">West Bengal</option>
                         </select>
+                      
+                      <div>
+                        <label
+                          className="text-sm  font-light text-gray-400"
+                          style={{ fontFamily: "" }}
+                        >
+                          {"PIN Code"}
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
+                          onChange={(e) => setPincode(e.target.value)}
+                          value={pincode}
+                          placeholder={"PIN Code"}
+                          style={{ fontFamily: "" }}
+                        />
                       </div>
+                    </div>
                       <div>
                         <label
                           className="text-sm  font-light text-gray-400"

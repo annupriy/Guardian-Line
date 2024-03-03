@@ -571,6 +571,14 @@ const Page = () => {
                       Description of the Incident
                     </p>
                   </div>
+                  {/* <textarea className="textarea textarea-bordered border-black mt-0" placeholder=""></textarea> */}
+                  <input
+                    className="textarea textarea-bordered border-black mt-0"
+                    onChange={(e) => setDescriptionOfIncident(e.target.value)}
+                    value={descriptionOfIncident}
+                    type="text"
+                    id="description"
+                  />
 
                   <div className="flex mt-4 font-normal text-sm font-mono">
                     <label htmlFor="label">Enable Current Location</label>
