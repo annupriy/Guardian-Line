@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 
-type DocumentStatus = "Live" | "NotLive"; // Define DocumentStatus type
+type ReportStatus = "Live" | "NotLive";
+type ReportResolution = "Resolved" | "Unresolved";
 
 const ReportListTable = ({
   documentsData,
@@ -12,13 +13,6 @@ const ReportListTable = ({
   const router = useRouter();
   const [documentsPerPage, setDocumentsPerPage] = useState<number>(5);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const handleDownload = (url: string) => {
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = document.title;
-    anchor.click();
-  };
   const [isResolved, setIsResolved] = useState<boolean[]>([]);
 
   const indexOfLastDocument = currentPage * documentsPerPage;
@@ -27,6 +21,13 @@ const ReportListTable = ({
     indexOfFirstDocument,
     indexOfLastDocument
   );
+
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // State to track dropdown open/close
+
+  const toggleDropdown = () => {
+    setDropdownOpen((prev) => !prev); // Toggle dropdown state
+  };
+
   const totalPageCount = Math.ceil(documentsData.length / documentsPerPage);
   const resolveReport = async (reportId: number, index: number) => {
     console.log(index);
@@ -46,7 +47,6 @@ const ReportListTable = ({
         }
       );
       if (res.status === 200) {
-        // Update the document's resolved property in the documentsData array
         const updatedDocuments = [...documentsData];
         updatedDocuments[index].resolved = true;
         setIsResolved((prev) => {
@@ -75,10 +75,6 @@ const ReportListTable = ({
   const nextPage = () => {
     setCurrentPage((prev) => (prev === totalPageCount ? prev : prev + 1));
   };
-
-  function showDocument(documentId: number) {
-    router.push(`/documents/${documentId}`);
-  }
 
   return (
     <div className="flex flex-col justify-between overflow-x-scroll lg:overflow-x-hidden rounded-3xl bg-white py-1 m-10 mb-4">
@@ -132,6 +128,7 @@ const ReportListTable = ({
                         tabIndex={0}
                         role="button"
                         className="btn btn-ghost btn-circle mr-8"
+                        onClick={() => setDropdownOpen(!dropdownOpen)} // Close dropdown on blur
                       >
                         <img
                           alt="Tailwind CSS Navbar component"
@@ -140,70 +137,29 @@ const ReportListTable = ({
                         />
                       </div>
 
-
-                      <ul
-                        tabIndex={0}
-                        className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-                      >
-                        <li
-
-                          onClick={(e) => {
+                      {dropdownOpen && (
+                        <ul
+                          tabIndex={0}
+                          className="absolute mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+                        >
+                          <li  onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
                             router.push(`/full_report?reportid=${document.reportid}`);
 
-                          }}
-                        >
-                          Full Report
-                          {/* <span className="badge">New</span> */}
-                          {/* </link> */}
-                        </li>
-                        <li>
-                          <button id="logoutButton">Resolved</button>
-                        </li>
-                      </ul>
+                          }}>Full Report</li>
+                          <li>
+                            <button id="logoutButton">Resolved</button>
+                          </li>
+                        </ul>
+                      )}
                     </div>
                   </div>
                 </td>
-
               </tr>
             ))}
           </tbody>
         </table>
-
-      </div>
-      <div className="font-poppins mt-4 mb-6 flex flex-col justify-between text-[#8D8D8D] md:flex-row">
-        <tr>
-          <td>
-            <div className="mb-4 ml-6 flex items-center space-x-2 text-[14px] font-medium ">
-              <span>table.show</span>
-              <div className="flex items-center">
-                <select
-                  className="appearance-non rounded-lg border border-gray-400 bg-white py-0.5 px-2"
-                  onChange={(e) => setDocumentsPerPage(parseInt(e.target.value))}>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={50}>50</option>
-                </select>
-                <ul
-                  tabIndex={0}
-                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-                >
-                  <li>
-                    {/* <link href="../my_profile" className="justify-between"> */}
-                    Full Report
-                    {/* <span className="badge">New</span> */}
-                    {/* </link> */}
-                  </li>
-                  <li>
-                    <button id="logoutButton">Resolved</button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </td>
-        </tr>
       </div>
       <div className="font-poppins mt-4 mb-6 flex flex-col justify-between text-[#8D8D8D] md:flex-row">
         <div className="mb-4 ml-6 flex items-center space-x-2 text-[14px] font-medium ">
@@ -224,8 +180,9 @@ const ReportListTable = ({
 
         <div className="ml-6 flex items-center space-x-1 text-[12px] font-normal md:ml-0 md:mr-6 ">
           <button
-            className={` rounded-lg border py-1 px-2 ${currentPage === 1 ? "border-[#0A43F0] text-[#0A43F0]" : ""
-              }`}
+            className={` rounded-lg border py-1 px-2 ${
+              currentPage === 1 ? "border-[#0A43F0] text-[#0A43F0]" : ""
+            }`}
             onClick={firstPage}
           >
             First Page
@@ -249,21 +206,22 @@ const ReportListTable = ({
             &gt;
           </button>
           <button
-            className={`rounded-xl border py-1 px-2 ${currentPage === totalPageCount
-              ? "border-[#0A43F0] text-[#0A43F0]"
-              : ""
-              }`}
+            className={`rounded-xl border py-1 px-2 ${
+              currentPage === totalPageCount
+                ? "border-[#0A43F0] text-[#0A43F0]"
+                : ""
+            }`}
             onClick={lastPage}
           >
             Last Page
           </button>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
-function formatDocumentStatus(status: DocumentStatus): string | undefined {
+function formatDocumentStatus(status: ReportStatus): string | undefined {
   switch (status) {
     case "Live":
       return "Live";
@@ -272,11 +230,33 @@ function formatDocumentStatus(status: DocumentStatus): string | undefined {
   }
 }
 
-function getDocumentStatusColor(status: DocumentStatus): string {
+function getDocumentStatusColor(status: ReportStatus): string {
   switch (status) {
     case "Live":
       return "bg-[#E5F7ED]";
     case "NotLive":
+      return "bg-[#FEEFEE]";
+    default:
+      return "";
+  }
+}
+
+function formatDocumentResolution(
+  resolution: ReportResolution
+): string | undefined {
+  switch (resolution) {
+    case "Resolved":
+      return "Resolved";
+    case "Unresolved":
+      return "Unresolved";
+  }
+}
+
+function getDocumentResolutionColor(resolution: ReportResolution): string {
+  switch (resolution) {
+    case "Resolved":
+      return "bg-[#E5F7ED]";
+    case "Unresolved":
       return "bg-[#FEEFEE]";
     default:
       return "";

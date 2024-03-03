@@ -17,7 +17,7 @@ export async function GET(req, res) {
     let crimesAround = await volunteerLiveData.activeCrimes;
     // Return only those crimesAround which has type of incident as not Harassment
     crimesAround = crimesAround.filter(
-      (crime) => (crime.typeOfIncident !== "Harassment" && crime.status === "Live")
+      (crime) => (crime.typeOfIncident !== "Harassment" && crime.status === "Live" && crime.userName !== userName)
     );
     // Return the active crimes array
     return Response.json({ activeCrimes: crimesAround});
