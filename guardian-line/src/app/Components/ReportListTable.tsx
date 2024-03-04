@@ -6,6 +6,7 @@ type ReportStatus = "Live" | "NotLive";
 type ReportResolution = "Resolved" | "Unresolved";
 
 const ReportListTable = ({
+  
   documentsData,
 }: {
   documentsData: any;
@@ -106,8 +107,27 @@ const ReportListTable = ({
     setCurrentPage((prev) => (prev === totalPageCount ? prev : prev + 1));
   };
 
+  // const ModalExample = () => {
+  //   const modalRef = useRef<HTMLDialogElement>(null);
+  
+  //   const openModal = () => {
+  //     if (modalRef.current) {
+  //       modalRef.current.showModal();
+  //     }
+  //   };
+  
+  //   const closeModal = () => {
+  //     if (modalRef.current) {
+  //       modalRef.current.close();
+  //     }
+  //   };
+  
+  
+
   return (
     <div className="flex flex-col justify-between overflow-x-scroll lg:overflow-x-hidden rounded-3xl bg-white py-1 m-10 mb-4">
+ 
+      
       <Toaster />
       <div className="p-4">
         <table className="w-full border-separate border-spacing-x-6 lg:border-spacing-x-14 mb-4">
@@ -252,11 +272,9 @@ const ReportListTable = ({
                                 `/full_report?reportid=${document.reportid}`
                               );
                             }}
+                            className="cursor-pointer hover:bg-primary-100 hover:text-primary-700"
                           >
                             Full Report
-                          </li>
-                          <li>
-                            <button id="logoutButton">Resolved</button>
                           </li>
                         </ul>
                       )}
