@@ -1,9 +1,9 @@
 'use client'
 import React from 'react'
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react';
-import { label } from 'aws-sdk/clients/sns';
+import { useSearchParams } from 'next/navigation';
+
 
 type Report = {
     typeOfIncident: string;
@@ -57,7 +57,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
 
 
 
-    const   handleViewDocument = (docPath: Array<any>) => {
+    const handleViewDocument = (docPath: Array<any>) => {
         docPath.forEach((doc) => {
             if (doc.path) {
                 window.open(doc.path, "_blank");
@@ -84,10 +84,12 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
 
 
     const searchParams = useSearchParams()
-    const reportid = searchParams.get('reportid')
+    const reportid = new URLSearchParams(searchParams).get('reportid')
+
     const [uploadedDocs, setUploadedDocs] = useState<
         { file: File; title: string }[]
     >([]);
+
 
     const [dropdownIndex, setDropdownIndex] = useState<number | null>(null);
     const [currentDoc, setCurrentDoc] = useState<{
@@ -103,6 +105,13 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
         setDropdownIndex(null);
     };
 
+    // const [isExpanded, setIsExpanded] = useState(false);
+
+    // const toggleExpand = () => {
+    //   setIsExpanded(!isExpanded);
+
+    // };
+
     const toggleDropdownMore = (index: number | null) => {
         setDropdownIndex(index === dropdownIndex ? null : index);
     };
@@ -116,9 +125,9 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
     };
     // console.log(reportid);
 
-    const handleExpand = (reportId: string) => {
-        setExpandedReport(expandedReport === reportIde);
-      };
+    // const handleExpand = (reportId: string) => {
+    //     setExpandedReport(expandedReport === reportIde);
+    //   };
 
 
 
@@ -126,14 +135,15 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
 
 
     return (
-        <div className='h-screen bg-slate-100'>
-            <div className='flex flex-col justify-center items-center p-8 mt-20'>
+        <div className='h-full bg-slate-100 p-10'>
+            <div className='flex flex-col justify-center items-center'>
 
-                <h1 className='text-3xl p-4 text-red-600'>Full Report</h1>
+                <h1 className='text-3xl text-red-600 font-semibold'>Full Report</h1>
 
 
-                <div className="relative overflow-x-auto">
-                    <table className="w-full md:flex text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border border-black-900 rounded-xl p-4">
+                <div className="">
+                    <table className="flex flex-col justify-center items-center w-[30rem] md:flex text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-xl p-4">
+
                         <tbody>
                             <tr className="bg-white dark:bg-gray-800 ">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -143,45 +153,93 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     {reportid}
                                 </td>
                             </tr>
-                            <tr className="bg-white dark:bg-gray-800">
+                            <tr className='bg-white dark:bg-gray-800'>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Report Type:
                                 </th>
                                 <td className="px-6 py-4">
-                                    {input.typeOfIncident}
-                                </td>
-                            </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Report Description:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.descriptionOfIncident}
+                                    {input.typeOfIncident ? input.typeOfIncident : "N.A"}
                                 </td>
                             </tr>
 
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Report Description:
+                                </th>
+                                <td className="px-6 py-4">
+                                {input.descriptionOfIncident ? input.descriptionOfIncident : "N.A"}
+                                </td>
+                            </tr>
+
+                            <tr className="bg-white dark:bg-gray-800">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                Report address:
+                                </th>
+                                <td className="px-6 py-4">
+                                {input.incidentLocation.address ? input.incidentLocation.address : "N.A"}
+                                </td>
+                            </tr>
+
+                            
+
+                            {/* <tr className="bg-white dark:bg-gray-800">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    Report Description:
+                                </th>
+                                {/* <div className='w-full'> */}
+                                {/* <td className="px-6 py-4 whitespace-normal max-w-md">
+                                    {input.descriptionOfIncident}
+                                    <div className="max-h-32 overflow-y-auto">
+                                        <p>
+                                            {input.descriptionOfIncident}
+                                        </p>
+                                    </div>
+                                </td>
+                                {/* </div> */}
+                                {/* <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Report address:
                                 </th>
                                 <td className="px-6 py-4">
                                     {input.incidentLocation.address}
                                 </td>
-                            </tr>
+
+                            </tr>   */}
+
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     latitude:
                                 </th>
                                 <td className="px-6 py-4">
-                                    {input.incidentLocation.latitude}
+                                    {input.incidentLocation.latitude ? input.incidentLocation.latitude : "N.A"}
                                 </td>
                             </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <tr className='bg-white dark:bg-gray-800'>    
+                                <th scope="row" className="bg-white px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     longitude:
                                 </th>
                                 <td className="px-6 py-4">
-                                    {input.incidentLocation.longitude}
+                                    {input.incidentLocation.longitude ? input.incidentLocation.longitude : "N.A"}
+                                </td>
+                            </tr>
+
+
+
+
+
+                            <tr className="bg-white dark:bg-gray-800">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    state:
+                                </th>
+                                <td className="px-6 py-4">
+                                    {input.State ? input.State : "N.A"}
+                                </td>
+                            </tr>
+                            <tr className='bg-white dark:bg-gray-800'>    
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    pincode:
+                                </th>
+                                <td className="px-6 py-4">
+                                    {input.Pincode ? input.Pincode : "N.A"}
                                 </td>
                             </tr>
 
@@ -190,54 +248,79 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     city:
                                 </th>
                                 <td className="px-6 py-4">
-                                    {input.city}
-                                </td>
-                            </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    state:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.State}
+                                    {input.city ? input.city : "N.A"}
                                 </td>
                             </tr>
 
+                            <tr className="bg-white dark:bg-gray-800">
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    Report Date:
+                                </th>
+                                <td className="px-6 py-4">
+                                    {input.dateOfIncident ? input.dateOfIncident : "N.A"}
+                                </td>
+                            </tr>
+                            <tr className='bg-white dark:bg-gray-800'>    
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    Report Time:
+                                </th>
+                                <td className="px-6 py-4">
+                                    {input.timeOfIncident   ? input.timeOfIncident : "N.A"}
+                                </td>
+                            </tr>
 
-                        </tbody>
+                            <tr className='bg-white dark:bg-gray-800'>    
 
-                        <tbody>
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    Report Validity:
+                                </th>
+                                <td className="px-6 py-4">
+                                    {input.isSame ? "Fraud" : "Not Fraud"}
+                                </td>
+                            </tr>
+
+
+
 
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    pincode:
+                                    Resolved status:
                                 </th>
                                 <td className="px-6 py-4">
-                                    {input.Pincode}
+                                    {input.resolved ? "Resolved" : "Not Resolved"}
+                                </td>
+                            </tr>
+                            <tr className='bg-white dark:bg-gray-800'>    
+                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    report status:
+                                </th>
+                                <td className="px-6 py-4">
+                                    {input.status ? input.status : "N.A"}
                                 </td>
                             </tr>
 
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Personal Information:
-                                </th>
-                                <td className="px-6 py-4">
-                                <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 ml-4"
-                                onClick={() => handleExpand({reportid})}
-                                >
-                                View Full Report
-                                </button>
-                                    csdfdlkfkjweoifjweifjiweoufweifjwekfjwekfwejfqwkfqijriewojnsadcnasjfkqwhifjqwojpfqwofjwnffsadcqwi   wopjfweifjweifjmsdcsdknwf
-                                    dnqwjkdfqwfjqwijfqwojfqwofkqwmfewkfqwijfqowfjqpwfmsdndfkdfjasfkqwk;fkpqwfkqwfmfqwmkfqpwfkewfewkfnwqfqw;fk;
-                                    {/* {input.personalInformation} */}
+                                </th>    
+                                <td className="px-6 py-4 break-all ">
+                                    {input.personalInformation ? input.personalInformation : "N.A"}
+                                    {/* WDUIWQEHDQWUIERQWIIIIIIIIUEWQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ */}
                                 </td>
                             </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    UploadedDoc:
-                                </th>
-                                <td className="px-6 py-4">
-                                {/* {input.uploadedDocPath.length > 0 && input.uploadedDocPath.map((docPath, index) => (
+
+                        </tbody>
+
+                    </table>
+                    <div className='flex-cols justify-center items-center'>
+                        <table className="w-full md:flex text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 p-4">
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    {/* {input.uploadedDocPath.length > 0 && input.uploadedDocPath.map((docPath, index) => (
                                         <button
                                             key={index}
                                             className="bg-slate-300 hover:bg-slate-400 text-green-900 font-bold py-2 px-4 rounded transition-colors duration-300"
@@ -249,74 +332,26 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                 )
                                  
                                 )} */}
+                    <div className='flex justify-center items-center'>
+                        {input.uploadedDocPath && input.uploadedDocPath.length > 0 && (
 
-                                    {input.uploadedDocPath && input.uploadedDocPath.length > 0 && (
-                                                        
-                                                        <button
-                                                        className="bg-slate-300 hover:bg-slate-400 text-green-900 font-bold py-2 px-4 rounded transition-colors duration-300"
-                                                        onClick={() => handleViewDocument(input.uploadedDocPath)}
-                                                        >
-                                                            Download Uploaded Document
-                                                        </button>
-                                                       
-                                    )}
-                                </td>
-                            </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Report Date:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.dateOfIncident}
-                                </td>
-                            </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Report Time:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.timeOfIncident}
-                                </td>
-                            </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Resolved status:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.resolved ? "Resolved" : "Not Resolved"}
-                                </td>
-                            </tr>
+                            <button
+                                className=" bg-slate-300 hover:bg-slate-400 flex justify-center items-center text-green-900 font-bold py-2 px-4 rounded transition-colors duration-300"
+                                onClick={() => handleViewDocument(input.uploadedDocPath)}
+                            >
+                                Download Uploaded Document
+                            </button>
+
+                        )}
+                    </div>
 
 
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    report status:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.status}
-                                </td>
-                            </tr>
-                            <tr className="bg-white dark:bg-gray-800">
-                                <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    Report Validity:
-                                </th>
-                                <td className="px-6 py-4">
-                                    {input.isSame ? "Fraud" : "Not Fraud"}
-                                </td>
 
-                            </tr>
-                        </tbody>
 
-                    </table>
+
+
 
                 </div>
-
-
-
-
-
-
-
 
             </div>
         </div>
