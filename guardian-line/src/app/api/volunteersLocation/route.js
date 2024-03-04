@@ -36,6 +36,8 @@ export async function POST(req) {
     } = await req.json();
     // Connect to MongoDB
     const db = await client.db("GuardianLine");
+    const authSession = await getServerAuthSession();
+    const name = authSession?.user?.name;
     const collection = db.collection("ActiveVolunteers");
     const volunteersAroundCollection = db.collection("VolunteersAround");
     if (addVolunteer === false) {
@@ -50,8 +52,6 @@ export async function POST(req) {
       return new Response("User deleted successfully", { status: 200 });
     } else if (removeReport === true && vote === 0) {
       // Remove the report from the active crimes array that has the reportid
-      const authSession = await getServerAuthSession();
-      const name = authSession?.user?.name;
       // Find the index of the report in the active crimes array where reportid matches
       const document = await collection.findOne({ userName: name });
 
@@ -75,15 +75,35 @@ export async function POST(req) {
       const reportsCollection = db.collection("ReportsData");
       const document2 = await reportsCollection.findOne({ reportid: reportid });
       if (document2) {
-        await reportsCollection.updateOne(
-          { reportid: reportid },
-          { $set: { vote: (document2.vote || 0) + vote } }
-        );
+        if (vote === 1) {
+          await reportsCollection.updateOne(
+            { reportid: reportid },
+            {
+              $set: { vote: (document2.vote || 0) + vote },
+              $addToSet: {
+                votedTrue: name,
+              },
+            },
+            { upsert: true }
+          );
+        } else if (vote === -1) {
+          await reportsCollection.updateOne(
+            { reportid: reportid },
+            {
+              $set: { vote: (document2.vote || 0) + vote },
+              $addToSet: {
+                votedFalse: name,
+              },
+            },
+            { upsert: true }
+          );
+        }
       } else {
-        console.log("Report validation didn't summed up for reportid:", reportid);
+        console.log(
+          "Report validation didn't summed up for reportid:",
+          reportid
+        );
       }
-      const authSession = await getServerAuthSession();
-      const name = authSession?.user?.name;
       const document = await collection.findOne({ userName: name });
       if (document) {
         // Give an array which contains objects and the one of the object has reportid as value find the index of the object
@@ -100,7 +120,7 @@ export async function POST(req) {
       } else {
         console.log("Document not found for userName:", name);
       }
-      
+
       return new Response("Report validated successfully", { status: 200 });
     } else {
       // Check if user already exists

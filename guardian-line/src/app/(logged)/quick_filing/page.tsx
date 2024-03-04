@@ -237,6 +237,7 @@ const Page = () => {
           userName: userName,
           reportid,
           status: "Live",
+          // victimStatus,
         }),
       }),
       {

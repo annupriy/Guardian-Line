@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import  { useRef } from 'react';
+
 type ReportStatus = "Live" | "NotLive";
 type ReportResolution = "Resolved" | "Unresolved";
 
@@ -12,6 +12,7 @@ const ReportListTable = ({
   documentsData: any;
 }): JSX.Element => {
   const router = useRouter();
+  const dialogModalRef = React.useRef<HTMLDialogElement>(null);
   const [documentsPerPage, setDocumentsPerPage] = useState<number>(5);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isResolved, setIsResolved] = useState<boolean[]>([]);
@@ -37,10 +38,11 @@ const ReportListTable = ({
 
   const [dropdownVisible, setDropdownVisible] = useState<string>();
 
-  const toggle = (reportId: string) => {
-    setDropdownVisible((prev: string | undefined) =>
-      prev === reportId ? undefined : reportId
-    );
+  const toggle = (reportId: string): void => {
+    const modal = document.getElementById(
+      `my_modal_${reportId}`
+    ) as HTMLDialogElement | null;
+    modal?.showModal();
   };
 
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // State to track dropdown open/close
@@ -164,9 +166,11 @@ const ReportListTable = ({
                       className="rounded-xl border border-gray-400 py-1 px-2 text-white"
                       style={{
                         backgroundColor:
-                          resolvedtrueReport[index] === true || document.adminStatement === true
+                          resolvedtrueReport[index] === true ||
+                          document.adminStatement === true
                             ? "green"
-                            : resolvedtrueReport[index] === false || document.adminStatement === false
+                            : resolvedtrueReport[index] === false ||
+                              document.adminStatement === false
                             ? "red"
                             : "green",
                       }}
@@ -181,42 +185,61 @@ const ReportListTable = ({
                       >
                         Resolve
                       </button>
-
-                      {dropdownVisible === document.reportid && (
-                        <div
-                          id="dropdownHover"
-                          className="z-10 bg-white divide-y divide-gray-100 rounded-lg shadow w-44"
-                        >
-                          <ul className="py-2 text-sm text-gray-700">
-                            <li>
+                      <dialog
+                        id={`my_modal_${document.reportid}`} // Unique id for each modal
+                        ref={dialogModalRef}
+                        className="modal modal-bottom sm:modal-middle"
+                      >
+                        <div className="modal-box">
+                          <div className="flex justify-center">
+                            <p className="p-1 font-bold text-lg text-black ">
+                              Validate the report as true or false!
+                            </p>
+                          </div>
+                          <form method="dialog">
+                            {/* if there is a button in form, it will close the modal */}
+                            <button
+                              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                              onClick={() => {
+                                dialogModalRef.current?.close();
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </form>
+                          <div className="modal-action justify-between">
+                            <form
+                              method="dialog"
+                              className="flex justify-evenly w-full"
+                            >
                               <button
-                                className="block px-4 py-2 hover:bg-gray-100"
+                                className="btn btn-success"
                                 onClick={() => {
                                   resolveReport(document.reportid, index, true),
-                                    setResolved(1);
+                                    setResolved(1),
+                                    dialogModalRef.current?.close();
                                 }}
                               >
                                 True Report
                               </button>
-                            </li>
-                            <li>
                               <button
-                                className="block px-4 py-2 hover:bg-gray-100"
+                                className="btn btn-error"
                                 onClick={() => {
                                   resolveReport(
                                     document.reportid,
                                     index,
                                     false
                                   ),
-                                    setResolved(-1);
+                                    setResolved(-1),
+                                    dialogModalRef.current?.close();
                                 }}
                               >
                                 False Report
                               </button>
-                            </li>
-                          </ul>
+                            </form>
+                          </div>
                         </div>
-                      )}
+                      </dialog>
                     </div>
                   )}
                 </td>

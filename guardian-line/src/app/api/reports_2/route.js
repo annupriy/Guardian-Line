@@ -67,28 +67,31 @@ export async function POST(req) {
     // Update ActiveVolunteers collection with activeCrimes
     const collection3 = await db.collection("ActiveVolunteers");
     volunteerNearby.forEach(async (volunteer) => {
+      const vol = await collection3.findOne({ userName: volunteer.userName });
+      const newReport = {
+        userName: userName,
+        incidentLocation,
+        distance: volunteer.distance,
+        typeOfIncident,
+        descriptionOfIncident,
+        timeOfIncident,
+        filingtime,
+        personalInformation,
+        status,
+        reportid,
+      };
+      vol.activeCrimes.push(newReport);
       await collection3.updateOne(
         { userName: volunteer.userName },
         {
-          $push: {
-            activeCrimes: {
-              userName,
-              incidentLocation,
-              distance: volunteer.distance,
-              typeOfIncident,
-              descriptionOfIncident,
-              timeOfIncident,
-              filingtime,
-              personalInformation,
-              status,
-              reportid,
-            },
+          $set: {
+            activeCrimes: vol.activeCrimes,
           },
         }
       );
-    })
+    });
     console.log("Crime registered successfully");
-    initiateVideoUrlExtract(reportid,uploadedDocPath);
+    initiateVideoUrlExtract(reportid, uploadedDocPath);
     return new Response("Volunteer registered successfully", { status: 200 });
   } catch (error) {
     console.error("Error:", error);
