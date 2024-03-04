@@ -29,24 +29,29 @@ export async function POST(req) {
       );
 
       // Volunteers point distribution
+
       const votedTrue = report.votedTrue;
       const votedFalse = report.votedFalse;
       console.log("Voted True", votedTrue);
       console.log("Voted False", votedFalse);
       // Update the reputation of the volunteers who voted True by incrememnting 1 if the statement is true
       ct = statement ? 1 : -1;
-      await userCollection.updateMany(
-        { userName: { $in: votedTrue } },
-        {
-          $inc: { reputation: ct },
-        }
-      );
-      await userCollection.updateMany(
-        { userName: { $in: votedFalse } },
-        {
-          $inc: { reputation: -ct },
-        }
-      );
+      if (votedTrue && votedTrue.length > 0) {
+        await userCollection.updateMany(
+          { userName: { $in: votedTrue } },
+          {
+            $inc: { reputation: ct },
+          }
+        );
+      }
+      if (votedFalse && votedFalse.length > 0) {
+        await userCollection.updateMany(
+          { userName: { $in: votedFalse } },
+          {
+            $inc: { reputation: -ct },
+          }
+        );
+      }
     }
     return new Response("Report Resolved", { status: 200 });
   } catch (e) {
