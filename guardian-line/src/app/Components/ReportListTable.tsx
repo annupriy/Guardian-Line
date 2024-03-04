@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import { int } from "aws-sdk/clients/datapipeline";
 
 type ReportStatus = "Live" | "NotLive";
 type ReportResolution = "Resolved" | "Unresolved";
@@ -15,6 +14,7 @@ const ReportListTable = ({
   const [documentsPerPage, setDocumentsPerPage] = useState<number>(5);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isResolved, setIsResolved] = useState<boolean[]>([]);
+  const [resolvedtrueReport, setResolvedTrueReport] = useState<boolean[]>([]);
 
   const indexOfLastDocument = currentPage * documentsPerPage;
   const indexOfFirstDocument = indexOfLastDocument - documentsPerPage;
@@ -28,24 +28,19 @@ const ReportListTable = ({
     value: string;
   };
   const statusFilters: StatusFilterType[] = [
-    { label: "True Report", value:"True Report" },
+    { label: "True Report", value: "True Report" },
     { label: "False Report", value: "False Report" },
   ];
-
- 
 
   const [resolved, setResolved] = useState<number>(0);
 
   const [dropdownVisible, setDropdownVisible] = useState<string>();
 
   const toggle = (reportId: string) => {
-    setDropdownVisible((prev: string | undefined) => prev === reportId ? undefined : reportId);
+    setDropdownVisible((prev: string | undefined) =>
+      prev === reportId ? undefined : reportId
+    );
   };
-  
-  
-
- 
-
 
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // State to track dropdown open/close
 
@@ -54,7 +49,11 @@ const ReportListTable = ({
   };
 
   const totalPageCount = Math.ceil(documentsData.length / documentsPerPage);
-  const resolveReport = async (reportId: number, index: number, statement: boolean) => {
+  const resolveReport = async (
+    reportId: number,
+    index: number,
+    statement: boolean
+  ) => {
     console.log(index);
     try {
       const res = await toast.promise(
@@ -63,7 +62,7 @@ const ReportListTable = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ reportId, index, statement }),
+          body: JSON.stringify({ reportId, statement }),
         }),
         {
           loading: "Resolving report...",
@@ -76,6 +75,10 @@ const ReportListTable = ({
         updatedDocuments[index].resolved = true;
         setIsResolved((prev) => {
           prev[index] = true;
+          return [...prev];
+        });
+        setResolvedTrueReport((prev) => {
+          prev[index] = statement;
           return [...prev];
         });
       } else {
@@ -127,13 +130,27 @@ const ReportListTable = ({
                 <td className="whitespace-nowrap ">{document.reportid}</td>
                 <td className="whitespace-nowrap">{document.typeOfIncident}</td>
                 <td className="whitespace-nowrap">
-                  {document.isSame ? "Fraud" : document.vote < 0 ? "Fraud" : "Not Fraud"}
+                  {document.isSame
+                    ? "Fraud"
+                    : document.vote < 0
+                    ? "Fraud"
+                    : "Not Fraud"}
                 </td>
                 <td className="whitespace-nowrap">{document.status}</td>
                 <td className="whitespace-nowrap">
-
                   {document.resolved ? (
-                    <button className="rounded-xl border border-green-400 py-1 px-2 bg-green-600 text-white">
+                    // If isResolvedTrue is true then bg should be green else red
+                    <button
+                      className="rounded-xl border border-gray-400 py-1 px-2 text-white"
+                      style={{
+                        backgroundColor:
+                          resolvedtrueReport[index] === true || document.adminStatement === true
+                            ? "green"
+                            : resolvedtrueReport[index] === false || document.adminStatement === false
+                            ? "red"
+                            : "green",
+                      }}
+                    >
                       Resolved
                     </button>
                   ) : (
@@ -141,9 +158,8 @@ const ReportListTable = ({
                       <button
                         className="rounded-xl border border-gray-400 py-1 px-2 hover:bg-[#0A43F0] hover:text-white"
                         onClick={() => toggle(document.reportid)}
-                        style={{ backgroundColor: resolved === 1 ? 'green' : (resolved === -1 ? 'red' : '') }}
                       >
-                        {resolved==1 ? 'Resolved' : 'Resolve'}
+                        Resolve
                       </button>
 
                       {dropdownVisible === document.reportid && (
@@ -155,7 +171,10 @@ const ReportListTable = ({
                             <li>
                               <button
                                 className="block px-4 py-2 hover:bg-gray-100"
-                                onClick={() => {resolveReport(document.reportid, index, true), setResolved(1);}}
+                                onClick={() => {
+                                  resolveReport(document.reportid, index, true),
+                                    setResolved(1);
+                                }}
                               >
                                 True Report
                               </button>
@@ -163,7 +182,14 @@ const ReportListTable = ({
                             <li>
                               <button
                                 className="block px-4 py-2 hover:bg-gray-100"
-                                onClick={() => {resolveReport(document.reportid, index, false), setResolved(-1);}}
+                                onClick={() => {
+                                  resolveReport(
+                                    document.reportid,
+                                    index,
+                                    false
+                                  ),
+                                    setResolved(-1);
+                                }}
                               >
                                 False Report
                               </button>
@@ -172,8 +198,7 @@ const ReportListTable = ({
                         </div>
                       )}
                     </div>
-                        )}
-
+                  )}
                 </td>
                 <td>
                   <div className="flex-none gap-2">
@@ -196,12 +221,17 @@ const ReportListTable = ({
                           tabIndex={0}
                           className="absolute mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
                         >
-                          <li  onClick={(e) => {
-                            e.stopPropagation();
-                            e.preventDefault();
-                            router.push(`/full_report?reportid=${document.reportid}`);
-
-                          }}>Full Report</li>
+                          <li
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              router.push(
+                                `/full_report?reportid=${document.reportid}`
+                              );
+                            }}
+                          >
+                            Full Report
+                          </li>
                           <li>
                             <button id="logoutButton">Resolved</button>
                           </li>

@@ -19,11 +19,7 @@ async function authenticate(userName, password) {
   if (!user) {
     throw new Error("invalid-username");
   }
-  // Check if user is present in banned users list
-  const bannedCollection = db.collection("BannedUsers");
-  const bannedUser = await bannedCollection.findOne({ userName: userName });
-  if (bannedUser) {
-    console.log("User is banned");
+  if (user.reputation < -2) {
     throw new Error("user-banned");
   }
   // Compare the hashed password with the provided password

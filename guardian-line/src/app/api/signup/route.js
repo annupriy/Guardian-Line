@@ -10,7 +10,7 @@ export async function POST(req) {
         const db = await client.db("GuardianLine");
         const collection = db.collection("Users");  
         console.log("username", userName);
-        await collection.insertOne({ userName: userName, password: hashedPassword});
+        await collection.insertOne({ userName: userName, password: hashedPassword, reputation: 0});
          
         console.log("User registered successfully");
         return new Response("Registered successfully" ,{ status: 200 }); 

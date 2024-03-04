@@ -121,7 +121,6 @@ const Page = () => {
         toast.dismiss();
         console.log("b");
         router.push(`/login?username=${username}`);
-        state: { username: username }
         // reload the page
       } else {
         if (res.status === 401) {
