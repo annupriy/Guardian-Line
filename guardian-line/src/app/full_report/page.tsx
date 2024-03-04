@@ -30,14 +30,20 @@ type User = {
     id: string | null;
 };
 
-type UserInfo = {
-    user: User;
+
+type PageProps = {
+    searchParams: { error?: string };
 };
 
-const FullReportPage: React.FC<UserInfo> = ({ user }) => {
-    const router = useRouter();
-    const [expandedReport, setExpandedReport] = useState<string | null>(null);
+const Page = ({ searchParams }: PageProps) => {
 
+    const [reportid, setReportid] = useState<string>("");
+    useEffect(() => {
+        const rid = new URLSearchParams(searchParams).get("reportid");
+        if (rid) {
+            setReportid(rid);
+        }
+    }, []);
     useEffect(() => {
         const response = async () => {
             try {
@@ -53,7 +59,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                 console.log(error.message);
             };
         }; response();
-    }, []);
+    }, [reportid]);
 
 
 
@@ -83,8 +89,6 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
     });
 
 
-    const searchParams = useSearchParams()
-    const reportid = new URLSearchParams(searchParams).get('reportid')
 
     const [uploadedDocs, setUploadedDocs] = useState<
         { file: File; title: string }[]
@@ -164,30 +168,30 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
 
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Report Description:
+                                    Report Description:
                                 </th>
                                 <td className="px-6 py-4">
-                                {input.descriptionOfIncident ? input.descriptionOfIncident : "N.A"}
+                                    {input.descriptionOfIncident ? input.descriptionOfIncident : "N.A"}
                                 </td>
                             </tr>
 
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Report address:
+                                    Report address:
                                 </th>
                                 <td className="px-6 py-4">
-                                {input.incidentLocation.address ? input.incidentLocation.address : "N.A"}
+                                    {input.incidentLocation.address ? input.incidentLocation.address : "N.A"}
                                 </td>
                             </tr>
 
-                            
+
 
                             {/* <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Report Description:
                                 </th>
                                 {/* <div className='w-full'> */}
-                                {/* <td className="px-6 py-4 whitespace-normal max-w-md">
+                            {/* <td className="px-6 py-4 whitespace-normal max-w-md">
                                     {input.descriptionOfIncident}
                                     <div className="max-h-32 overflow-y-auto">
                                         <p>
@@ -196,7 +200,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     </div>
                                 </td>
                                 {/* </div> */}
-                                {/* <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {/* <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Report address:
                                 </th>
                                 <td className="px-6 py-4">
@@ -213,7 +217,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     {input.incidentLocation.latitude ? input.incidentLocation.latitude : "N.A"}
                                 </td>
                             </tr>
-                            <tr className='bg-white dark:bg-gray-800'>    
+                            <tr className='bg-white dark:bg-gray-800'>
                                 <th scope="row" className="bg-white px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     longitude:
                                 </th>
@@ -234,7 +238,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     {input.State ? input.State : "N.A"}
                                 </td>
                             </tr>
-                            <tr className='bg-white dark:bg-gray-800'>    
+                            <tr className='bg-white dark:bg-gray-800'>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     pincode:
                                 </th>
@@ -260,16 +264,16 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     {input.dateOfIncident ? input.dateOfIncident : "N.A"}
                                 </td>
                             </tr>
-                            <tr className='bg-white dark:bg-gray-800'>    
+                            <tr className='bg-white dark:bg-gray-800'>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Report Time:
                                 </th>
                                 <td className="px-6 py-4">
-                                    {input.timeOfIncident   ? input.timeOfIncident : "N.A"}
+                                    {input.timeOfIncident ? input.timeOfIncident : "N.A"}
                                 </td>
                             </tr>
 
-                            <tr className='bg-white dark:bg-gray-800'>    
+                            <tr className='bg-white dark:bg-gray-800'>
 
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Report Validity:
@@ -290,7 +294,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                                     {input.resolved ? "Resolved" : "Not Resolved"}
                                 </td>
                             </tr>
-                            <tr className='bg-white dark:bg-gray-800'>    
+                            <tr className='bg-white dark:bg-gray-800'>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     report status:
                                 </th>
@@ -302,7 +306,7 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
                             <tr className="bg-white dark:bg-gray-800">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     Personal Information:
-                                </th>    
+                                </th>
                                 <td className="px-6 py-4 break-all ">
                                     {input.personalInformation ? input.personalInformation : "N.A"}
                                     {/* WDUIWQEHDQWUIERQWIIIIIIIIUEWQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ */}
@@ -358,4 +362,4 @@ const FullReportPage: React.FC<UserInfo> = ({ user }) => {
     )
 }
 
-export default FullReportPage;
+export default Page;

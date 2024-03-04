@@ -272,11 +272,9 @@ const ReportListTable = ({
                                 `/full_report?reportid=${document.reportid}`
                               );
                             }}
+                            className="cursor-pointer hover:bg-primary-100 hover:text-primary-700"
                           >
                             Full Report
-                          </li>
-                          <li>
-                            <button id="logoutButton">Resolved</button>
                           </li>
                         </ul>
                       )}
