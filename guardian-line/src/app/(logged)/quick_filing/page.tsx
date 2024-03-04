@@ -6,6 +6,7 @@ import { uploadFile } from "@/server/db/aws";
 import toast, { Toaster } from "react-hot-toast";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { userService } from "@/server/services/userService";
 
 const Page = () => {
   const router = useRouter();
@@ -164,6 +165,7 @@ const Page = () => {
   const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTypeOfIncident(event.target.value);
   };
+  const[userStatus, setUserStatus] = useState<string>();
 
   // const handleCancel = () => {
   //   router.push('/dashboard');
@@ -236,6 +238,7 @@ const Page = () => {
           filingtime: new Date().getTime(),
           userName: userName,
           reportid,
+          userStatus,
           status: "Live",
           // victimStatus,
         }),
@@ -337,7 +340,12 @@ const Page = () => {
                 role="tab"
                 className="tab"
                 aria-label="Victim"
-                onClick={() => toggleTab(1)}
+                onClick={() => {
+                  toggleTab(1);
+                  if (toggleState === 1) {
+                    setUserStatus("victim");
+                  }
+                }}
                 checked={toggleState === 1}
                 style={{ fontWeight: toggleState === 1 ? "medium" : "normal" }}
               />
@@ -545,7 +553,12 @@ const Page = () => {
                 role="tab"
                 className="tab"
                 aria-label="Not-Victim"
-                onClick={() => toggleTab(2)}
+                onClick={() => {
+                  toggleTab(2);
+                  if (toggleState === 2) {
+                    setUserStatus("not-victim");
+                  }
+                }}
                 checked={toggleState === 2}
                 style={{ fontWeight: toggleState === 2 ? "medium" : "normal" }}
               />
@@ -613,7 +626,7 @@ const Page = () => {
                 <div>
                   <div>
                     <div className=" flex">
-                      <p className=" font-light font-mono text-sm text-sm  mt-6 ml-1">
+                      <p className=" font-light font-mono text-sm  mt-6 ml-1">
                         {"Additional Documents"}
                       </p>
                     </div>

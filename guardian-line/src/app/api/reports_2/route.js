@@ -14,6 +14,7 @@ export async function POST(req) {
     state,
     pincode,
     uploadedDocPath,
+    userStatus,
     userName,
     reportid,
     status,
@@ -38,6 +39,7 @@ export async function POST(req) {
       uploadedDocPath: uploadedDocPath,
       userName: userName,
       reportid: reportid,
+      userStatus: userStatus,
       status: status,
       vote: 0,
     });
