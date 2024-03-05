@@ -248,15 +248,15 @@ const Page = () => {
               In a Hurry?
             </h1>
             <h1
-              className="text-3xl font-semibold -translate-y-12 text-red-500"
-              style={{ marginBottom: "20px" }}
+              className="text-3xl font-semibold -translate-y-12"
+              style={{ marginBottom: "20px", color:"darkgoldenrod" }}
             >
               Choose Quick filing!
             </h1>
             <h1 className="text-xl font-semibold -translate-y-12 text-slate-600">
               Got ample time or need to file a crime that happened earlier?
             </h1>
-            <h1 className="text-3xl font-semibold -translate-y-12 text-red-500">
+            <h1 className="text-3xl font-semibold -translate-y-12" style={{color:"darkgoldenrod" }}>
               Choose Standard filing!
             </h1>
 
