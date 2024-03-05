@@ -165,7 +165,7 @@ const Page = () => {
   const handleTypeChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setTypeOfIncident(event.target.value);
   };
-  const[userStatus, setUserStatus] = useState<string>();
+  const[userStatus, setUserStatus] = useState<string>("victim");
 
   // const handleCancel = () => {
   //   router.push('/dashboard');
@@ -187,14 +187,12 @@ const Page = () => {
 
     // const reportid = userName + timestamp.toString();
     const reportid = `${userName}_${timestamp}`;
-
-    console.log("Username:", userName);
-    console.log("Personal Information:", personalInformation);
+    toast.loading("Submitting...");
     let uploadedDocPath: Array<any> = [];
     if (uploadedDocs.length > 0) {
       // Use Promise.all to wait for all asynchronous operations
       await Promise.all(
-        uploadedDocs.map(async (doc, index) => {
+        uploadedDocs.map(async (doc) => {
           const path = await uploadFile(doc.file);
           uploadedDocPath.push({ path: path, title: doc.title });
 
@@ -221,6 +219,7 @@ const Page = () => {
     } else {
       Loc = incidentLocation;
     }
+    toast.dismiss();
     const res = await toast.promise(
       fetch("api/reports_2", {
         method: "POST",
@@ -240,7 +239,6 @@ const Page = () => {
           reportid,
           userStatus,
           status: "Live",
-          // victimStatus,
         }),
       }),
       {

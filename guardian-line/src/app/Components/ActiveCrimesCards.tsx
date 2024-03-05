@@ -16,6 +16,7 @@ type ActiveCrimesCardsProps = {
   reportid: string;
   typeOfIncident: string;
   distance: string;
+  reputationPoints: number;
 };
 
 const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
@@ -27,6 +28,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
   timeOfIncident,
   userName,
   reportid,
+  reputationPoints
 }) => {
   const [showButtons1, setShowButtons1] = useState(true);
   const [showButtons2, setShowButtons2] = useState(false);
@@ -93,7 +95,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        vote: 1,
+        vote: 1 + (0.2 * reputationPoints),
         removeReport: true,
         reportid: reportid,
       }),
@@ -122,7 +124,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        vote: -1,
+        vote: -1 - (0.2 * reputationPoints),
         removeReport: true,
         reportid: reportid,
       }),

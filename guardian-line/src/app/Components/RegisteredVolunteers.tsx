@@ -1,9 +1,9 @@
 "use client";
-import React, { use } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ActiveCrimesCards from "./ActiveCrimesCards";
-import { Award } from 'lucide-react';
+import { Award } from "lucide-react";
 
 type User = {
   id?: string | null;
@@ -20,6 +20,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // Set an array of objects to store the active crimes
   const [activeCrimes, setactiveCrimes] = useState<any[]>([]);
+  const [resputationPoints, setReputationPoints] = useState<number>(0);
 
   const handleNoClick = () => {
     console.log("No clicked");
@@ -87,8 +88,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         // filter out those activeCrimes where current time minus timeOfIncident is less than 2 hour
         const currentTime = new Date().getTime();
         const filteredCrimes = data.activeCrimes.filter(
-          (crime: any) =>
-            currentTime - crime.filingtime < 7200000
+          (crime: any) => currentTime - crime.filingtime < 7200000
         );
         setactiveCrimes(filteredCrimes);
       } catch (error: any) {
@@ -100,6 +100,30 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
       fetchActiveCrimes();
     }
   }, [isReadyToVolunteer, user]);
+
+  useEffect(() => {
+    const getUserReputation = async () => {
+      const res = await fetch("/api/volunteersLocation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          getUserReputation: true,
+        }),
+      });
+      if (!res) {
+        return null;
+      } else if (res.status === 200) {
+        const data = await res.json();
+        setReputationPoints(data);
+        return data;
+      } else {
+        return null;
+      }
+    };
+    getUserReputation();
+  }, []);
 
   const handleGetLocation = () => {
     try {
@@ -157,22 +181,41 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
   };
   if (isLoading) {
     return (
-      <div className="flex justify-center h-full align-middle" style={{marginTop:'120px'}}>
+      <div
+        className="flex justify-center h-full align-middle"
+        style={{ marginTop: "120px" }}
+      >
         <span className="loading loading-spinner loading-lg"></span>
       </div>
     );
   }
   return (
-
     <div className="text-center bg-[#f0f0f0]">
-      <div className="" style={{ position: 'absolute', top: '8.75rem', right: '0', marginRight: '1.875rem', display: 'flex', alignItems: 'center' }}>
-    <p style={{ marginRight: '1rem' , color:"#ff9900"}}>Reputation Points:</p>
-    <p><Award color="#f5c132"/></p>
-</div>
+      <div
+        className=""
+        style={{
+          position: "absolute",
+          top: "8.75rem",
+          right: "0",
+          marginRight: "1.875rem",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <p style={{ marginRight: "1rem", color: "#ff9900" }}>
+          Reputation Points: {resputationPoints}
+        </p>
+        <p>
+          <Award color="#f5c132" />
+        </p>
+      </div>
 
       {isReadyToVolunteer ? (
         <div>
-          <div className="text-green-900 text-4xl m-8 font-semibold" style={{marginTop:'120px'}}>
+          <div
+            className="text-green-900 text-4xl m-8 font-semibold"
+            style={{ marginTop: "120px" }}
+          >
             Live Reports Near you
           </div>
           <div className="grid grid-cols-1 gap-4 p-8 relative lg:grid-cols-2 ml-24">
@@ -188,9 +231,10 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
                   timeOfIncident={crime.timeOfIncident}
                   userName={crime.userName}
                   reportid={crime.reportid}
+                  reputationPoints={resputationPoints}
                 />
               ))
-            ) : ( 
+            ) : (
               <div className="text-2xl font-semibold text-red-600 -mr-96 style={{marginTop:'120px'}}">
                 No active crimes
               </div>

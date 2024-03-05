@@ -12,6 +12,7 @@ export async function GET(req, res) {
       userName: userName,
     });
     const reports = await reportsData.toArray();
+    reports.reverse();
     // console.log("reports", reports);
     return Response.json({ reports });
   } catch (error) {

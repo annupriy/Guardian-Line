@@ -33,6 +33,7 @@ export async function POST(req) {
       removeReport,
       reportid,
       vote,
+      getUserReputation,
     } = await req.json();
     // Connect to MongoDB
     const db = await client.db("GuardianLine");
@@ -122,6 +123,17 @@ export async function POST(req) {
       }
 
       return new Response("Report validated successfully", { status: 200 });
+    } else if (getUserReputation === true) {
+      const userCollection = db.collection("Users");
+
+      const user = await userCollection.findOne({ userName: name });
+      if (user) {
+        console.log("User found",user.reputation);
+        return new Response(user.reputation, { status: 200 });
+      } else {
+        console.log("User not found");
+        return new Response("User not found", { status: 200 });
+      }
     } else {
       // Check if user already exists
       const userExists = await collection.findOne({ userName: userName });

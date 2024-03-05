@@ -33,15 +33,17 @@ const Page = () => {
   // const [incidentLocation, setIncidentLocation] = useState("");
   const [personalInformation, setPersonalInformation] = useState("");
   const currentDate = new Date();
-  const formattedDate = `${currentDate.getDate()}/${
+  const formattedDate = `${currentDate.getFullYear()}-${(
     currentDate.getMonth() + 1
-  }/${currentDate.getFullYear()}`;
+  )
+    .toString()
+    .padStart(2, "0")}-${currentDate.getDate().toString().padStart(2, "0")}`;
+
   const formattedTime = currentDate.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
     hour12: false,
   });
-
   const [dateOfIncident, setDateOfIncident] = useState(formattedDate);
   const [timeOfIncident, setTimeOfIncident] = useState(formattedTime);
   // const [elaborateLocation, setElaborateLocation] = useState('')
@@ -53,7 +55,6 @@ const Page = () => {
   const [address, setAddress] = useState("");
   // const uploadedUrls: {title: string, url: string }[] = [];
   const formatInput = (date: string) => {
-    // Format date from YYYY-MM-DD to DD/MM/YYYY
     date = date.split("-").reverse().join("/");
     return date;
   };
@@ -62,7 +63,7 @@ const Page = () => {
     longitude: number;
     address: string;
   }>({} as any);
-  const [userStatus, setUserStatus] = useState<string>();
+  const [userStatus, setUserStatus] = useState<string>("victim");
 
   const handleGetAddress = async (latitude: number, longitude: number) => {
     try {
@@ -191,7 +192,7 @@ const Page = () => {
 
     // const reportid = userName + timestamp.toString();
     const reportid = `${userName}_${timestamp}`;
-
+    toast.loading("Submitting...");
     let uploadedDocPath: Array<any> = [];
 
     // let mp4Urls: Array<string> = [];
@@ -208,7 +209,16 @@ const Page = () => {
 
     let Loc = {};
     if (address !== "") {
-      const obj = await handleGetCoordinates(address);
+      let obj;
+      if (status === "Live") {
+        obj = await handleGetCoordinates(address);
+      } else {
+        console.log("city: ", city);
+        console.log("state: ", state);
+        console.log("pincode: ", pincode);
+        const refinedaddress = city + ", " + state + ", " + pincode;
+        obj = await handleGetCoordinates(refinedaddress);
+      }
       console.log("obj: ", obj);
       if (!obj) {
         return;
@@ -221,7 +231,8 @@ const Page = () => {
     } else {
       Loc = incidentLocation;
     }
-
+    const formatDate = formatInput(dateOfIncident);
+    toast.dismiss();
     const res = await toast.promise(
       fetch("api/reports_2", {
         method: "POST",
@@ -233,7 +244,7 @@ const Page = () => {
           descriptionOfIncident,
           incidentLocation: Loc,
           personalInformation,
-          dateOfIncident,
+          dateOfIncident: formatDate,
           timeOfIncident,
           reportid,
           city,
@@ -305,7 +316,7 @@ const Page = () => {
               role="tab"
               className="tab"
               aria-label="Victim"
-              onClick={() => {
+              onChange={() => {
                 toggleTab(1);
                 if (toggleState === 1) {
                   setUserStatus("victim");
@@ -360,6 +371,7 @@ const Page = () => {
                   value={descriptionOfIncident}
                   type="text"
                   id="description"
+                  name="description"
                   required
                 />
 
@@ -376,7 +388,7 @@ const Page = () => {
                     role="tab"
                     className="tab font-light  text-sm"
                     aria-label="LIVE"
-                    onClick={() => {
+                    onChange={() => {
                       toggle2(3);
                       setStatus("Live");
                     }}
@@ -407,7 +419,8 @@ const Page = () => {
                             type="text"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setAddress(e.target.value)}
-                            required={status === "Not Live"}
+                            name="address"
+                            required={status === "Live" && toggleState === 1}
                           />
                         </div>
                         // </div>
@@ -438,7 +451,7 @@ const Page = () => {
                     role="tab"
                     className="tab text-sm  font-light"
                     aria-label="NOT LIVE"
-                    onClick={() => {
+                    onChange={() => {
                       toggle2(4);
                       setStatus("Not Live");
                     }}
@@ -461,12 +474,10 @@ const Page = () => {
                           <input
                             type="date"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                            onChange={(e) =>
-                              setDateOfIncident(formatInput(e.target.value))
-                            }
+                            onChange={(e) => setDateOfIncident(e.target.value)}
                             value={dateOfIncident}
                             placeholder="dd/mm/yyyy"
-                            style={{ fontFamily: "" }}
+                            name="dateOfIncident"
                             required={status === "Not Live"}
                           />
                           {dateOfIncident}
@@ -516,7 +527,10 @@ const Page = () => {
                             type="text"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setAddress(e.target.value)}
-                            required={status === "Not Live"}
+                            name="address"
+                            required={
+                              status === "Not Live" && toggleState === 1
+                            }
                           />
                         </div>
                         // </div>
@@ -553,7 +567,7 @@ const Page = () => {
                           value={city}
                           className="w-full rounded-full border border-neutral-900  px-4 py-2 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                           placeholder="City"
-                          style={{ fontFamily: "" }}
+                          name="city"
                           required={status === "Not Live"}
                         />
                       </div>
@@ -572,6 +586,7 @@ const Page = () => {
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
                           onChange={handleTypeChangeForState}
                           value={state}
+                          name="state"
                           required={status === "Not Live"}
                         >
                           <option value="">Select State</option>
@@ -776,7 +791,7 @@ const Page = () => {
               role="tab"
               className="tab"
               aria-label="Not-Victim"
-              onClick={() => {
+              onChange={() => {
                 toggleTab(2);
                 if (toggleState === 2) {
                   setUserStatus("not victim");
@@ -802,7 +817,7 @@ const Page = () => {
                   onChange={handleTypeChange}
                   value={typeOfIncident}
                 >
-                  <option selected>Accidents</option>
+                  <option>Accidents</option>
                   <option>Harassment</option>
                   <option>Mob Lynching & Crowd Fights</option>
                   <option>Others</option>
@@ -827,6 +842,7 @@ const Page = () => {
                   value={descriptionOfIncident}
                   type="text"
                   id="description"
+                  name="description"
                   required
                 />
 
@@ -843,7 +859,7 @@ const Page = () => {
                     role="tab"
                     className="tab font-light  text-sm"
                     aria-label="LIVE"
-                    onClick={() => {
+                    onChange={() => {
                       toggle2(3);
                       setStatus("Live");
                     }}
@@ -874,7 +890,8 @@ const Page = () => {
                             type="text"
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setAddress(e.target.value)}
-                            required={status === "Not Live"}
+                            name="address"
+                            required={status === "Live" && toggleState === 2}
                           />
                         </div>
                         // </div>
@@ -905,7 +922,7 @@ const Page = () => {
                     role="tab"
                     className="tab text-sm  font-light"
                     aria-label="NOT LIVE"
-                    onClick={() => {
+                    onChange={() => {
                       toggle2(4);
                       setStatus("Not Live");
                     }}
@@ -932,6 +949,7 @@ const Page = () => {
                             value={dateOfIncident}
                             placeholder="dd/mm/yyyy"
                             style={{ fontFamily: "" }}
+                            name="dateOfIncident"
                             required={status === "Not Live"}
                           />
                         </div>
@@ -980,7 +998,10 @@ const Page = () => {
                             type="text "
                             className="w-full rounded-full border border-neutral-900  py-2 px-4 text-gray-600 focus:border-gray-900 focus:outline-none focus:ring-gray-500 sm:text-sm"
                             onChange={(e) => setAddress(e.target.value)}
-                            required={status === "Not Live"}
+                            name="address"
+                            required={
+                              status === "Not Live" && toggleState === 2
+                            }
                           />
                         </div>
                         // </div>
@@ -1019,6 +1040,7 @@ const Page = () => {
                           value={city}
                           placeholder="City"
                           style={{ fontFamily: "" }}
+                          name="city"
                           required={status === "Not Live"}
                         />
                       </div>
@@ -1037,6 +1059,7 @@ const Page = () => {
                           className="w-full rounded-full border border-neutral-900  text-gray-600 px-4 py-2 bg-white focus:outline-none  sm:text-sm"
                           onChange={handleTypeChangeForState}
                           value={state}
+                          name="state"
                           required={status === "Not Live"}
                         >
                           <option value="">Select State</option>
@@ -1119,7 +1142,7 @@ const Page = () => {
                 </div>
                 <div>
                   <div className=" flex">
-                    <p className="text-sm  mt-6 ml-1 font-normal text-sm font-mono">
+                    <p className="text-sm  mt-6 ml-1 font-normal font-mono">
                       {"Additional Documents"}
                     </p>
                   </div>

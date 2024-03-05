@@ -55,9 +55,10 @@ const ReportListTable = ({
   const resolveReport = async (
     reportId: number,
     index: number,
-    statement: boolean
+    statement: boolean,
+    incidentType: string,
+    userStatus: string
   ) => {
-    console.log(index);
     try {
       const res = await toast.promise(
         fetch(`/api/resolveReport`, {
@@ -65,7 +66,7 @@ const ReportListTable = ({
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ reportId, statement }),
+          body: JSON.stringify({ reportId, statement,incidentType,userStatus }),
         }),
         {
           loading: "Resolving report...",
@@ -215,7 +216,7 @@ const ReportListTable = ({
                               <button
                                 className="btn btn-success"
                                 onClick={() => {
-                                  resolveReport(document.reportid, index, true),
+                                  resolveReport(document.reportid, index, true, document.typeOfIncident,document.userStatus),
                                     setResolved(1),
                                     dialogModalRef.current?.close();
                                 }}
@@ -228,7 +229,9 @@ const ReportListTable = ({
                                   resolveReport(
                                     document.reportid,
                                     index,
-                                    false
+                                    false,
+                                    document.typeOfIncident,
+                                    document.userStatus
                                   ),
                                     setResolved(-1),
                                     dialogModalRef.current?.close();

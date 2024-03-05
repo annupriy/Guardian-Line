@@ -1,7 +1,7 @@
 import clientPromise from "@/app/lib/mongodb";
 
 export async function POST(req) {
-  const { reportId, statement } = await req.json();
+  const { reportId, statement,incidentType,userStatus } = await req.json();
   console.log("Report Data is being resolved");
   const client = await clientPromise;
   try {
@@ -19,8 +19,26 @@ export async function POST(req) {
       }
     );
     if (report) {
+      console.log(incidentType, userStatus, statement);
       const username = report.userName;
-      let ct = statement ? 1 : -1;
+      let ct = 0;
+      if(userStatus === "victim"){
+        if(incidentType === "Harassment"){
+          ct = statement ? 1 : -0.5;
+        }
+        else{
+          ct = statement ? 1 : -1.5;
+        }
+      }
+      else{
+        if(incidentType === "Harassment"){
+          ct = statement ? 1 : -0.5;
+        }
+        else{
+          ct = statement ? 1 : -1;
+        }
+      }
+      console.log("CT", ct);
       await userCollection.updateOne(
         { userName: username },
         {
