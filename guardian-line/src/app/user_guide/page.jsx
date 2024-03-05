@@ -285,7 +285,7 @@ const Page = () => {
             </div>
             <div style={{ marginTop: "-1rem" }}>
               <img
-                src="/Blank Diagram (1).png"
+                src="/blankImage.png"
                 style={{ width: "10rem", height: "auto" }}
               ></img>
             </div>
