@@ -215,12 +215,12 @@ const Page = () => {
   //   }
   // }, []);
 
-  const formatNumber = (number: string) => {
-    return number.split("").reduce((formattedNumber, digit, index) => {
-      if (index !== 0 && !(index % 4)) formattedNumber += " ";
-      return formattedNumber + digit;
-    }, "");
-  };
+  // const formatNumber = (number: string) => {
+  //   return number.split("").reduce((formattedNumber, digit, index) => {
+  //     if (index !== 0 && !(index % 4)) formattedNumber += " ";
+  //     return formattedNumber + digit;
+  //   }, "");
+  // };
 
 
   return (
@@ -261,7 +261,8 @@ const Page = () => {
                           className="w-5 absolute right-2 bottom-2 bg-white"
                         />
                       ) : (
-                        playerStarted && (
+                          (
+                           
                           // <Player
                           //   autoplay
                           //   keepLastFrame
@@ -269,7 +270,8 @@ const Page = () => {
                           //   className="h-10 w-10 absolute right-2"
                           //   style={{ marginLeft: "4px", marginTop: "-2.3rem" }}
                           // />
-                          <div></div>
+                           <img src="/check.png" alt=""   className= "absolute right-2 bottom" 
+                          style={{ marginLeft: "4px", marginTop: "-1.9rem",  height: "1.5rem", width:"1.5rem"}}/>
                         )
                       )}
                     </div>
