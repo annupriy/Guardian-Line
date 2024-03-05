@@ -62,6 +62,7 @@ const Page = () => {
     longitude: number;
     address: string;
   }>({} as any);
+  const [userStatus, setUserStatus] = useState<string>();
 
   const handleGetAddress = async (latitude: number, longitude: number) => {
     try {
@@ -240,6 +241,7 @@ const Page = () => {
           pincode,
           uploadedDocPath,
           userName: userName,
+          userStatus,
           status,
           filingtime: new Date().getTime(),
         }),
@@ -303,7 +305,12 @@ const Page = () => {
               role="tab"
               className="tab"
               aria-label="Victim"
-              onClick={() => toggleTab(1)}
+              onClick={() => {
+                toggleTab(1);
+                if (toggleState === 1) {
+                  setUserStatus("victim");
+                }
+              }}
               checked={toggleState === 1}
               style={{ fontWeight: toggleState === 1 ? "medium" : "normal" }}
             />
@@ -769,7 +776,12 @@ const Page = () => {
               role="tab"
               className="tab"
               aria-label="Not-Victim"
-              onClick={() => toggleTab(2)}
+              onClick={() => {
+                toggleTab(2);
+                if (toggleState === 2) {
+                  setUserStatus("not victim");
+                }
+              }}
               checked={toggleState === 2}
               style={{ fontWeight: toggleState === 2 ? "medium" : "normal" }}
             />
