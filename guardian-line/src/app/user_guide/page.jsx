@@ -289,30 +289,44 @@ const Page = () => {
         </div>
 
         <div className="content-section">
-          <div>
-            <h1 className="dudeHeader text-slate-600 text-lg">
+          <div className="rounded lg shadow-lg p-10 pl-12">
+            <div className="dudeHeader text-slate-600 text-lg font-semibold">
+              {" "}
               Volunteers are individuals who take the initiative to assist users
-              in need based on reported incidents. If you choose to be a
-              volunteer,you can help whenever you`&apos;`re available,by
-              enabling GPS. This allows you to locate nearby reports on
-              volunteer`&apos;`s page.
-              <br />
-              As a volunteer, you have the authority to validate reports if you
-              have knowledge about the incident. Your validation helps in
-              assessing the validity of the report accurately. Your performance
-              as a volunteer is tracked through reputation points. <br /> Every
-              true validation adds to your reputation points, while false
-              validations may deduct from them. Volunteers must validate reports
-              accurately to uphold Guardian-line`&apos;`s credibility. Exercise
-              caution to avoid false validations, which can result in reputation
-              point deductions. Accumulating false validations may lead to a
-              ban, but volunteers can justify themselves if necessary.
-            </h1>
+              in need based on reported incidents.{" "}
+            </div>
+
+            <div className=" dudeHeader text-slate-600 text-md ">
+              <ul className="list-disc mb-4">
+                <li>
+                  If you choose to be a volunteer, you can help whenever
+                  you&apos;re available by pressing "Ready to help" button. This
+                  allows you to locate nearby reports on volunteer&apos;s page.
+                </li>
+              </ul>
+              <ul className="list-disc mb-4">
+                <li>
+                  As a volunteer, you have the authority to validate reports.
+                  Your validation helps in assessing the validity of the report
+                  accurately.
+                </li>
+              </ul>
+
+              <ul className="list-disc mb-4">
+                <li>
+                  Your performance as a volunteer is tracked through reputation
+                  points. Every true validation adds to your reputation points,
+                  while false validations may deduct from them.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div className="content-section bg-gray-100 p-6 rounded-lg shadow-lg justify-center align-middle">
           <div className="rounded-lg shadow-lg flex justify-center align-middle p-8 mb-16">
-            <h1 className="text-3xl font-bold text-gray-800 p-4">BANNING CRITERIA</h1>
+            <h1 className="text-3xl font-bold text-gray-800 p-4">
+              BANNING CRITERIA
+            </h1>
             <h3 className="text-xl font-semibold text-gray-800">
               Guardian Line has a strict policy against fraud
             </h3>
