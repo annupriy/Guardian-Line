@@ -241,13 +241,16 @@ const Page = () => {
           </div>
         </div>
 
-        <div className="content-section" >
+        <div className="content-section">
           <div>
-          {/* <img src="/filingImage.png" alt="" className="image-class mb-[5rem]" style={{width: '20rem',  height: 'auto', marginTop: '1rem'}}/> */}
-          <h1 className="text-xl font-semibold -translate-y-12 text-slate-600">
+            {/* <img src="/filingImage.png" alt="" className="image-class mb-[5rem]" style={{width: '20rem',  height: 'auto', marginTop: '1rem'}}/> */}
+            <h1 className="text-xl font-semibold -translate-y-12 text-slate-600">
               In a Hurry?
             </h1>
-            <h1 className="text-3xl font-semibold -translate-y-12 text-red-500" style={{marginBottom: '20px'}}>
+            <h1
+              className="text-3xl font-semibold -translate-y-12 text-red-500"
+              style={{ marginBottom: "20px" }}
+            >
               Choose Quick filing!
             </h1>
             <h1 className="text-xl font-semibold -translate-y-12 text-slate-600">
@@ -255,45 +258,80 @@ const Page = () => {
             </h1>
             <h1 className="text-3xl font-semibold -translate-y-12 text-red-500">
               Choose Standard filing!
-              
             </h1>
-            
-            <h1 className="dudeHeader text-slate-600 text-lg" style={{marginTop:'-1rem'}}>
-Whether you&apos;re a victim or just someone who has witnessed a crime, we&apos;ve got you covered with our two reporting options.</h1>
 
-            
+            <h1
+              className="dudeHeader text-slate-600 text-lg"
+              style={{ marginTop: "-1rem" }}
+            >
+              Whether you&apos;re a victim or just someone who has witnessed a
+              crime, we&apos;ve got you covered with our two reporting options.
+            </h1>
           </div>
         </div>
 
         <div className="content-section">
           <div>
-          <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
+            <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
               VOLUNTEER APPROVAL AND POLICE ENFORCEMENT
             </h1>
-            <h1 className="dudeHeader text-slate-600 text-lg">Guardian Line outlines the validation process for user reports involving Volunteers and Admins. Depending on your report type and status,
-             it may be sent directly to Admin or undergo preliminary checks.
-             Your report will be validated by our volunteers,for which they`&apos;`ll earn reputation points. 
-            <br/> Admin utilizes Volunteer feedback and AI predictions to determine if a report is fraudulent. Subsequently, takes appropriate actions, ensuring society`&pos;` safeguarding.
-
-</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">
+              Guardian Line outlines the validation process for user reports
+              involving Volunteers and Admins. Depending on your report type and
+              status, it may be sent directly to Admin or undergo preliminary
+              checks. Your report will be validated by our volunteers,for which
+              they`&apos;`ll earn reputation points.
+              <br /> Admin utilizes Volunteer feedback and AI predictions to
+              determine if a report is fraudulent. Subsequently, takes
+              appropriate actions, ensuring society`&pos;` safeguarding.
+            </h1>
           </div>
         </div>
 
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader text-slate-600 text-lg">Volunteers are individuals who take the initiative to assist users in need based on reported incidents. 
-If you choose to be a volunteer,you can help whenever you`&apos;`re available,by enabling GPS. This allows you to locate nearby reports on volunteer`&apos;`s page.
-<br/>As a volunteer, you have the authority to validate reports if you have knowledge about the incident. Your validation helps in assessing the validity of the report accurately.
-Your performance as a volunteer is tracked through reputation points. <br/> Every true validation adds to your reputation points, while false validations may deduct from them.
-Volunteers must validate reports accurately to uphold Guardian-line`&apos;`s credibility. Exercise caution to avoid false validations, which can result in reputation point deductions. Accumulating false validations may lead to a ban, but volunteers can justify themselves if necessary.
-</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">
+              Volunteers are individuals who take the initiative to assist users
+              in need based on reported incidents. If you choose to be a
+              volunteer,you can help whenever you`&apos;`re available,by
+              enabling GPS. This allows you to locate nearby reports on
+              volunteer`&apos;`s page.
+              <br />
+              As a volunteer, you have the authority to validate reports if you
+              have knowledge about the incident. Your validation helps in
+              assessing the validity of the report accurately. Your performance
+              as a volunteer is tracked through reputation points. <br /> Every
+              true validation adds to your reputation points, while false
+              validations may deduct from them. Volunteers must validate reports
+              accurately to uphold Guardian-line`&apos;`s credibility. Exercise
+              caution to avoid false validations, which can result in reputation
+              point deductions. Accumulating false validations may lead to a
+              ban, but volunteers can justify themselves if necessary.
+            </h1>
           </div>
         </div>
-        <div className="content-section">
-          <div>
-            <h1 className="dudeHeader text-slate-600 text-lg">Banning</h1>
+        <div className="content-section bg-gray-100 p-6 rounded-lg shadow-lg justify-center align-middle">
+          <div className="rounded-lg shadow-lg flex justify-center align-middle p-8 mb-16">
+            <h1 className="text-3xl font-bold text-gray-800 p-4">BANNING CRITERIA</h1>
+            <h3 className="text-xl font-semibold text-gray-800">
+              Guardian Line has a strict policy against fraud
+            </h3>
+            <ul className="mt-4 list-disc">
+              <li className="text-gray-700 mb-1">
+                If a user repeatedly files false reports
+              </li>
+              or
+              <li className="text-gray-700 mb-1">
+                a volunteer accumulates a certain number of false validations
+              </li>
+            </ul>
+            <div className="p-4">
+              they may be banned from the platform. However, users can justify
+              themselves if necessary through the "Contact Us" feature provided.
+            </div>
           </div>
         </div>
+
         <div className="content-section">
           <div>
             {/* <h1 className="dudeHeader text-slate-600 text-lg">Contact Us</h1> */}
@@ -305,17 +343,11 @@ Volunteers must validate reports accurately to uphold Guardian-line`&apos;`s cre
               {/* <img src="/contactUsImage.png" alt="" className="image-class" style={{width: '10rem',  height: 'auto', marginTop: '1rem'}}/> */}
             </h1>
             <h1 className="dudeHeader text-slate-700 text-lg">
-              Click on the Contact Us button and write down all your doubts. We&apos;ll answer all your questions.
+              Click on the Contact Us button and write down all your doubts.
+              We&apos;ll answer all your questions.
             </h1>
-          
           </div>
         </div>
-        <div className="content-section">
-          <div>
-            <h1 className="dudeHeader text-slate-600 text-lg">What&apos;s this?</h1>
-          </div>
-        </div>
-        <div className="content-section"></div>
         <div className="content-section"></div>
         <div className="content-section"></div>
         <div className="content-section"></div>
