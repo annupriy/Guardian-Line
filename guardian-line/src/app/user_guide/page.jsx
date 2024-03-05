@@ -314,7 +314,7 @@ const Page = () => {
               <ul className="list-disc mb-4">
                 <li>
                   If you choose to be a volunteer, you can help whenever
-                  you&apos;re available by pressing "&ldquo;Ready to help&ldquo;" button. This
+                  you&apos;re available by pressing &ldquo;Ready to help&rdquo; button. This
                   allows you to locate nearby reports on volunteer&apos;s page.
                 </li>
               </ul>
