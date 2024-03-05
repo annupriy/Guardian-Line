@@ -300,7 +300,7 @@ const Page = () => {
               <ul className="list-disc mb-4">
                 <li>
                   If you choose to be a volunteer, you can help whenever
-                  you&apos;re available by pressing "Ready to help" button. This
+                  you&apos;re available by pressing "&ldquo;Ready to help&ldquo;" button. This
                   allows you to locate nearby reports on volunteer&apos;s page.
                 </li>
               </ul>
@@ -322,6 +322,7 @@ const Page = () => {
             </div>
           </div>
         </div>
+        
         <div className="content-section bg-gray-100 p-6 rounded-lg shadow-lg justify-center align-middle">
           <div className="rounded-lg shadow-lg flex justify-center align-middle p-8 mb-16">
             <h1 className="text-3xl font-bold text-gray-800 p-4">
@@ -352,7 +353,7 @@ const Page = () => {
             <h1 className="text-xl font-semibold -translate-y-12 text-slate-600">
               Want to know more about us or facing any issue?
             </h1>
-            <h1 className="text-3xl font-semibold -translate-y-12 text-red-500">
+            <h1 className="text-3xl font-semibold -translate-y-5 text-red-500">
               Contact Us!
               {/* <img src="/contactUsImage.png" alt="" className="image-class" style={{width: '10rem',  height: 'auto', marginTop: '1rem'}}/> */}
             </h1>
