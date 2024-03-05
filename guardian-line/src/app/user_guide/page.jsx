@@ -271,20 +271,34 @@ const Page = () => {
         </div>
 
         <div className="content-section">
-          <div>
-            <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
+          <div className="">
+            <h1
+              className="text-3xl font-semibold -translate-y-12 text-slate-600"
+              style={{ width: "50rem" }}
+            >
               VOLUNTEER APPROVAL AND POLICE ENFORCEMENT
             </h1>
-            <h1 className="dudeHeader text-slate-600 text-lg">
-              Guardian Line outlines the validation process for user reports
-              involving Volunteers and Admins. Depending on your report type and
-              status, it may be sent directly to Admin or undergo preliminary
-              checks. Your report will be validated by our volunteers,for which
-              they`&apos;`ll earn reputation points.
-              <br /> Admin utilizes Volunteer feedback and AI predictions to
-              determine if a report is fraudulent. Subsequently, takes
-              appropriate actions, ensuring society`&pos;` safeguarding.
-            </h1>
+            <div style={{ marginTop: "-2rem" }}>
+              <h1 className="dudeHeader text-slate-600 text-xl">
+                We involve volunteers only in case of non-harassment live crimes
+              </h1>
+            </div>
+            <div style={{ marginTop: "-1rem" }}>
+              <img
+                src="/Blank Diagram (1).png"
+                style={{ width: "10rem", height: "auto" }}
+              ></img>
+            </div>
+
+            <div className="w-60">
+              <hr className="border border-rose-300" />
+            </div>
+
+            <div style={{ marginTop: "rem" }}>
+              <h1 className="dudeHeader text-slate-600 text-xl">
+                In other live cases, we directly involve police.
+              </h1>
+            </div>
           </div>
         </div>
 
@@ -312,11 +326,13 @@ const Page = () => {
         </div>
         <div className="content-section bg-gray-100 p-6 rounded-lg shadow-lg justify-center align-middle">
           <div className="rounded-lg shadow-lg flex justify-center align-middle p-8 mb-16">
-            <h1 className="text-3xl font-bold text-gray-800 p-4">BANNING CRITERIA</h1>
+            <h1 className="text-3xl font-bold text-gray-800 p-4">
+              BANNING CRITERIA
+            </h1>
             <h3 className="text-xl font-semibold text-gray-800">
               Guardian Line has a strict policy against fraud
             </h3>
-            <ul className="mt-4 list-disc">
+            <ul className="mt-4 list-disc text-gray-600">
               <li className="text-gray-700 mb-1">
                 If a user repeatedly files false reports
               </li>
@@ -325,9 +341,9 @@ const Page = () => {
                 a volunteer accumulates a certain number of false validations
               </li>
             </ul>
-            <div className="p-4">
+            <div className="p-4 text-gray-600">
               they may be banned from the platform. However, users can justify
-              themselves if necessary through the "Contact Us" feature provided.
+              themselves if necessary through the &ldquo;Contact Us&rdquo; feature provided.
             </div>
           </div>
         </div>
