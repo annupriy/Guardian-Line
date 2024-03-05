@@ -243,11 +243,24 @@ const Page = () => {
 
         <div className="content-section">
           <div>
-          <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
-              STANDARD AND QUICK FILING
+          <h1 className="text-2xl font-semibold -translate-y-12 text-slate-600">
+              In a Hurry?
             </h1>
-            <h1 className="dudeHeader text-slate-600 text-lg">
+            <h1 className="text-3xl font-semibold -translate-y-12 text-red-500" style={{marginBottom: '20px'}}>
+              Choose Quick filing!
+            </h1>
+            <h1 className="text-2xl font-semibold -translate-y-12 text-slate-600">
+              Got ample time or need to file a crime that happened earlier?
+            </h1>
+            <h1 className="text-3xl font-semibold -translate-y-12 text-red-500">
+              Choose Standard filing!
+              <img src="/filingImage.png" alt="" className="image-class" style={{width: '20rem',  height: 'auto', marginTop: '1rem'}}/>
+            </h1>
+            
+            <h1 className="dudeHeader text-slate-600 text-lg" style={{marginTop:'-1rem'}}>
 Whether you&apos;ve got time to spare or need to act fast, we&apos;ve got you covered with our two reporting options: Standard for when you&apos;ve got the time, and Quick for when every second counts.</h1>
+
+            
           </div>
         </div>
 
@@ -272,7 +285,18 @@ Whether you&apos;ve got time to spare or need to act fast, we&apos;ve got you co
         </div>
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader text-slate-600 text-lg">Contact Us</h1>
+            {/* <h1 className="dudeHeader text-slate-600 text-lg">Contact Us</h1> */}
+            <h1 className="text-2xl font-semibold -translate-y-12 text-slate-600">
+              Want to know more about us or facing any issue?
+            </h1>
+            <h1 className="text-3xl font-semibold -translate-y-12 text-red-500">
+              Contact Us!
+              <img src="/contactUsImage.png" alt="" className="image-class" style={{width: '10rem',  height: 'auto', marginTop: '1rem'}}/>
+            </h1>
+            <h1 className="dudeHeader text-slate-700 text-lg">
+              Click on the Contact Us button and write down all your doubts. We&apos;ll answer all your questions.
+            </h1>
+          
           </div>
         </div>
         <div className="content-section">

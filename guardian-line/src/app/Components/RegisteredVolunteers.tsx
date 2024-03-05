@@ -3,7 +3,7 @@ import React, { use } from "react";
 import { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import ActiveCrimesCards from "./ActiveCrimesCards";
-import { Trophy } from 'lucide-react';
+import { Award } from 'lucide-react';
 
 type User = {
   id?: string | null;
@@ -167,7 +167,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
     <div className="text-center bg-[#f0f0f0]">
       <div className="" style={{ position: 'absolute', top: '8.75rem', right: '0', marginRight: '1.875rem', display: 'flex', alignItems: 'center' }}>
     <p style={{ marginRight: '1rem' , color:"#ff9900"}}>Reputation Points:</p>
-    <p><Trophy color="#dab42b" size="2.5rem" /></p>
+    <p><Award color="#f5c132"/></p>
 </div>
 
       {isReadyToVolunteer ? (
