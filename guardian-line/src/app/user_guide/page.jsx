@@ -256,13 +256,23 @@ Whether you&apos;ve got time to spare or need to act fast, we&apos;ve got you co
           <h1 className="text-3xl font-semibold -translate-y-12 text-slate-600">
               VOLUNTEER APPROVAL AND POLICE ENFORCEMENT
             </h1>
-            <h1 className="dudeHeader text-slate-600 text-lg">Volunteers validate reports, Admins enforce — safeguarding neighborhoods, hand in hand!</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">Guardian Line outlines the validation process for user reports involving Volunteers and Admins. Depending on your report type and status,
+             it may be sent directly to Admin or undergo preliminary checks.
+             Your report will be validated by our volunteers,for which they`&apos;`ll earn reputation points. 
+            <br/> Admin utilizes Volunteer feedback and AI predictions to determine if a report is fraudulent. Subsequently, takes appropriate actions, ensuring society`&pos;` safeguarding.
+
+</h1>
           </div>
         </div>
 
         <div className="content-section">
           <div>
-            <h1 className="dudeHeader text-slate-600 text-lg">Being a Volunteer - how will it work</h1>
+            <h1 className="dudeHeader text-slate-600 text-lg">Volunteers are individuals who take the initiative to assist users in need based on reported incidents. 
+If you choose to be a volunteer,you can help whenever you`&apos;`re available,by enabling GPS. This allows you to locate nearby reports on volunteer`&apos;`s page.
+<br/>As a volunteer, you have the authority to validate reports if you have knowledge about the incident. Your validation helps in assessing the validity of the report accurately.
+Your performance as a volunteer is tracked through reputation points. <br/> Every true validation adds to your reputation points, while false validations may deduct from them.
+Volunteers must validate reports accurately to uphold Guardian-line`&apos;`s credibility. Exercise caution to avoid false validations, which can result in reputation point deductions. Accumulating false validations may lead to a ban, but volunteers can justify themselves if necessary.
+</h1>
           </div>
         </div>
         <div className="content-section">
