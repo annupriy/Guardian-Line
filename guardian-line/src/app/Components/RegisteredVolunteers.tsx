@@ -88,7 +88,7 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         // filter out those activeCrimes where current time minus timeOfIncident is less than 2 hour
         const currentTime = new Date().getTime();
         const filteredCrimes = data.activeCrimes.filter(
-          (crime: any) => currentTime - crime.filingtime < 7200000
+          (crime: any) => currentTime - crime.filingtime < 72000000
         );
         // Reverse the array so that the latest crime comes first
         filteredCrimes.reverse();

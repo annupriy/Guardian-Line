@@ -25,11 +25,6 @@ type Report = {
     resolved: boolean;
 
 };
-type User = {
-    name: string | null;
-    id: string | null;
-};
-
 
 type PageProps = {
     searchParams: { error?: string };
@@ -45,6 +40,7 @@ const Page = ({ searchParams }: PageProps) => {
         }
     }, []);
     useEffect(() => {
+        if(reportid === "") return;
         const response = async () => {
             try {
                 const response = await fetch(`/api/detailed_report?reportid=${reportid}`);

@@ -1,4 +1,3 @@
-'use client';
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -36,8 +35,6 @@ const ReportListTable = ({
   ];
 
   const [resolved, setResolved] = useState<number>(0);
-
-  const [dropdownVisible, setDropdownVisible] = useState<string>();
 
   const toggle = (reportId: string): void => {
     const modal = document.getElementById(
