@@ -184,17 +184,18 @@ const Page = () => {
   }
   return (
     <>
-      <div className="flex h-full flex-col justify-between space-y-6 px-4 lg:pt-[30px] lg:px-0 pb-24 md:pb-0 bg-[#f3f3f3]">
-        <div className="flex justify-center flex-row">
+    <div className="min-h-screen bg-[#f3f3f3]">
+      <div className="flex h-full flex-col justify-between space-y-6 px-4 lg:pt-[30px] lg:px-0 pb-24 md:pb-0 bg-[#f3f3f3]" >
+        <div className="flex justify-center flex-row bg-[#f3f3f3]" >
           <div
-            className="text-4xl text-red-600 mb-6 "
+            className="text-4xl text-red-600 mb-6 bg-[#f3f3f3]"
             style={{ textShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}
           >
             Guardian Line Crime Reports
           </div>
         </div>
-        <div className="flex justify-center">
-          <div className="form-control">
+        <div className="flex justify-center bg-[#f3f3f3]">
+          <div className="form-control bg-[#f3f3f3]">
             <input
               type="text"
               placeholder="Search"
@@ -204,22 +205,22 @@ const Page = () => {
             />
           </div>
           <div
-            className="flex justify-end flex-row w-[70vw]"
+            className="flex justify-end flex-row w-[70vw] bg-[#f3f3f3]"
             style={{ marginTop: 0 }}
           >
-            <div className="relative mr-2">
+            <div className="relative mr-2 bg-[#f3f3f3]">
               <button
                 className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4 `}
                 onClick={() =>
                   setShowResolutionFilterOptions(!showResolutionFilterOptions)
                 }
               >
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2 bg-[#f3f3f3]">
                   Resolution <img src="/ControlDownIcon.svg" alt="" />
                 </div>
               </button>
               {showResolutionFilterOptions && (
-                <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51]">
+                <ul className="font-poppins absolute my-2 w-max rounded-2xl border bg-gray-50 p-2 text-[16px] font-medium z-[51] bg-[#f3f3f3]">
                   {resolutionFilters.map((status, index) => (
                     <li
                       key={index}
@@ -239,14 +240,14 @@ const Page = () => {
                 </ul>
               )}
             </div>
-            <div className="relative mr-2">
+            <div className="relative mr-2 bg-[#f3f3f3]">
               <button
                 className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4 `}
                 onClick={() =>
                   setShowStatusFilterOptions(!showStatusFilterOptions)
                 }
               >
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2 bg-[#f3f3f3]">
                   Status <img src="/ControlDownIcon.svg" alt="" />
                 </div>
               </button>
@@ -272,7 +273,7 @@ const Page = () => {
               )}
             </div>
 
-            <div className="relative">
+            <div className="relative bg-[#f3f3f3]">
               <button
                 className={`font-poppins h-10 w-max rounded-full bg-white p-2 text-[16px] font-medium text-[#0943F1] md:h-[55px] md:p-4`}
                 onClick={() =>
@@ -308,16 +309,17 @@ const Page = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center h-[72.4vh] w-full items-center">
+          <div className="flex justify-center h-[72.4vh] w-full items-center bg-[#f3f3f3]">
             <p>Loading...</p>
           </div>
         ) : documents.length === 0 ? (
-          <div className="flex justify-center h-[72.4vh] w-full items-center">
+          <div className="flex justify-center h-[72.4vh] w-full items-center bg-[#f3f3f3]">
             <div>Welcome to the Crime list</div>
           </div>
         ) : (
           <ReportListTable documentsData={filteredDocuments} />
         )}
+      </div>
       </div>
     </>
   );
