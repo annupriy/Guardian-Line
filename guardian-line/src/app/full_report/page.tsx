@@ -22,15 +22,11 @@ type Report = {
   resolved: boolean;
 };
 
-type PageProps = {
-  searchParams: { error?: string };
-};
-
-const Page = ({ searchParams }: PageProps) => {
+const Page = () => {
   const [reportid, setReportid] = useState<string>("");
   useEffect(() => {
-    const rid = new URLSearchParams(searchParams).get("reportid");
-    console.log(searchParams, rid);
+    const searchParams = new URLSearchParams(window.location.search);
+    const rid = searchParams.get("reportid");
     if (rid) {
       setReportid(rid);
     }
