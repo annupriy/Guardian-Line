@@ -1,11 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import ReportListTable from "@/app/Components/ReportListTable";
 type ReportStatus = "Live" | "NotLive";
 type ReportResolution = "Resolved" | "Unresolved";
 
-const Page = (props: any) => {
+const Page = () => {
   const [documents, setDocuments] = useState<any[]>([]);
   const [filteredDocuments, setFilteredDocuments] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
