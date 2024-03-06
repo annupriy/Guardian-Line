@@ -28,7 +28,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
   timeOfIncident,
   userName,
   reportid,
-  reputationPoints
+  reputationPoints,
 }) => {
   const [showButtons1, setShowButtons1] = useState(true);
   const [showButtons2, setShowButtons2] = useState(false);
@@ -95,7 +95,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        vote: 1 + (0.2 * reputationPoints),
+        vote: 1 + (0.2 * reputationPoints > 0 ? reputationPoints : 0),
         removeReport: true,
         reportid: reportid,
       }),
@@ -124,7 +124,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        vote: -1 - (0.2 * reputationPoints),
+        vote: -1 - (0.2 * reputationPoints > 0 ? reputationPoints : 0),
         removeReport: true,
         reportid: reportid,
       }),
@@ -178,7 +178,7 @@ const ActiveCrimesCards: React.FC<ActiveCrimesCardsProps> = ({
                 <h5 className="">Longitude: {longitude}</h5>
               </div>
             </div>
-            {personalInformation && personalInformation!=="" && (
+            {personalInformation && personalInformation !== "" && (
               <div className="mb-3">
                 <p>Personal Information: {personalInformation}</p>
               </div>

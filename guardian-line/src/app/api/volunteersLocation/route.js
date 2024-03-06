@@ -96,7 +96,7 @@ export async function POST(req) {
       const reportsCollection = db.collection("ReportsData");
       const document2 = await reportsCollection.findOne({ reportid: reportid });
       if (document2) {
-        if (vote === 1) {
+        if (vote >= 1) {
           await reportsCollection.updateOne(
             { reportid: reportid },
             {
@@ -107,7 +107,7 @@ export async function POST(req) {
             },
             { upsert: true }
           );
-        } else if (vote === -1) {
+        } else if (vote <= -1) {
           await reportsCollection.updateOne(
             { reportid: reportid },
             {
