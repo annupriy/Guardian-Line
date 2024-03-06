@@ -1,5 +1,5 @@
 import { SendSupportMail } from "@/app/lib/sendSupportMail";
-
+export const dynamic = 'force-dynamic'
 export async function POST(req) {
   try {
     const data = await req.json();

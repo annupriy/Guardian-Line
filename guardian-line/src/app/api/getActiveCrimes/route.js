@@ -1,4 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
+export const dynamic = 'force-dynamic'
 export async function GET(req, res) {
   const { searchParams } = new URL(req.url);
   const userName = searchParams.get("userName");

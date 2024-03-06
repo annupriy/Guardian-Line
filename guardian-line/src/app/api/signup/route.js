@@ -1,6 +1,6 @@
 import clientPromise from "@/app/lib/mongodb";
 import bcrypt from 'bcrypt';
-
+export const dynamic = 'force-dynamic'
 export async function POST(req) {
     const client = await clientPromise;
     try{

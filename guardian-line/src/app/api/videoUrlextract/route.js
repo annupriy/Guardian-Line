@@ -1,5 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
-
+export const dynamic = 'force-dynamic'
 import axios from "axios";
 import crypto from "crypto";
 

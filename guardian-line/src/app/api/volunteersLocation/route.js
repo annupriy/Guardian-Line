@@ -1,6 +1,6 @@
 import clientPromise from "@/app/lib/mongodb";
 import { getServerAuthSession } from "@/server/auth";
-
+export const dynamic = 'force-dynamic'
 // Define getDistance function
 function getDistance(lat1, lon1, lat2, lon2) {
   const deg2rad = (deg) => {

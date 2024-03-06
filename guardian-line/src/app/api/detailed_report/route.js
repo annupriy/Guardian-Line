@@ -1,6 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
-import { stat } from "fs";
-
+export const dynamic = 'force-dynamic'
 export async function GET(req) {
     const client = await clientPromise;
     const { searchParams } = new URL(req.url);

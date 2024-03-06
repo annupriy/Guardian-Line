@@ -1,8 +1,6 @@
 const JWT = process.env.JWT;
-import axios from "axios";
-import fs from 'fs';
-import path from 'path';
-import FormData from 'form-data';
+
+export const dynamic = 'force-dynamic'
 
 
 const generateString = async () => {

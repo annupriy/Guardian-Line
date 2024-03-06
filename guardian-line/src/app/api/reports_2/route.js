@@ -1,6 +1,6 @@
 import clientPromise from "@/app/lib/mongodb";
 import initiateVideoUrlExtract from "@/app/api/videoUrlextract/route";
-
+export const dynamic = 'force-dynamic'
 export async function POST(req) {
   const {
     typeOfIncident,

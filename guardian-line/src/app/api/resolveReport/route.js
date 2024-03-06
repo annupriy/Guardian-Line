@@ -1,5 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
-
+export const dynamic = 'force-dynamic'
 export async function POST(req) {
   const { reportId, statement,incidentType,userStatus } = await req.json();
   console.log("Report Data is being resolved");

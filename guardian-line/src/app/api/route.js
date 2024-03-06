@@ -5,7 +5,7 @@ const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
+export const dynamic = 'force-dynamic'
 // Connect to the MongoDB Atlas cluster
 async function connectToDatabase() {
   try {

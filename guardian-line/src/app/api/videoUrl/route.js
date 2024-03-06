@@ -1,5 +1,5 @@
 import clientPromise from "@/app/lib/mongodb";
-
+export const dynamic = 'force-dynamic'
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const reportid = searchParams.get("reportid");
