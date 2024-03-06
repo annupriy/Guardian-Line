@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -47,10 +47,6 @@ const ReportListTable = ({
   };
 
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false); // State to track dropdown open/close
-
-  const toggleDropdown = () => {
-    setDropdownOpen((prev) => !prev); // Toggle dropdown state
-  };
 
   const totalPageCount = Math.ceil(documentsData.length / documentsPerPage);
   const resolveReport = async (
@@ -108,21 +104,6 @@ const ReportListTable = ({
   const nextPage = () => {
     setCurrentPage((prev) => (prev === totalPageCount ? prev : prev + 1));
   };
-
-  // const ModalExample = () => {
-  //   const modalRef = useRef<HTMLDialogElement>(null);
-  
-  //   const openModal = () => {
-  //     if (modalRef.current) {
-  //       modalRef.current.showModal();
-  //     }
-  //   };
-  
-  //   const closeModal = () => {
-  //     if (modalRef.current) {
-  //       modalRef.current.close();
-  //     }
-  //   };
   
   
 

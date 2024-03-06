@@ -20,6 +20,7 @@ const Page = () => {
   const getDocuments = async () => {
     try {
       const response = await fetch(`/api/report_admin`);
+      console.log(response);
       return response;
     } catch (error) {
       console.error("Error fetching documents", error);
@@ -259,7 +260,7 @@ const Page = () => {
                       onClick={() => {
                         handleStatusFilterChange(status);
                         setShowStatusFilterOptions(false);
-                      }} 
+                      }}
                     >
                       {status.label}
                     </li>
@@ -304,9 +305,13 @@ const Page = () => {
         </div>
 
         {loading ? (
-          <p>Loading...</p>
+          <div className="flex justify-center h-[72.4vh] w-full items-center">
+            <p>Loading...</p>
+          </div>
         ) : documents.length === 0 ? (
-          <div>Welcome to the document list</div>
+          <div className="flex justify-center h-[72.4vh] w-full items-center">
+            <div>Welcome to the Crime list</div>
+          </div>
         ) : (
           <ReportListTable documentsData={filteredDocuments} />
         )}
