@@ -94,13 +94,16 @@ const Page = () => {
   const loadDocuments = async () => {
     setLoading(true);
     if (!documents.length) setLoading(true);
-    getDocuments().then((res: any) => {
-      res.json().then((j: any) => {
-        setDocuments(j);
-        setOriginalDocuments(j);
-        setLoading(false);
-      });
-    });
+    const res = await getDocuments();
+    if (!res){
+      console.log("No response from server");
+      return;
+    };
+    const j = await res.json();
+    console.log(j);
+    setDocuments(j);
+    setOriginalDocuments(j);
+    setLoading(false);
   };
 
   useEffect(() => {
