@@ -45,10 +45,30 @@ export async function POST(req) {
       // Delete the user from the active volunteers
       await collection.findOneAndDelete({ userName: userName });
       // Remove the user from VolunteersAround collection as well
-      await volunteersAroundCollection.updateMany(
-        { "volunteers.userName": userName },
-        { $pull: { volunteers: { userName } } }
-      );
+      const allVolunteersAround = await volunteersAroundCollection
+        .find()
+        .toArray();
+      for (const volunteer of allVolunteersAround) {
+        if (volunteer.volunteers.length > 0) {
+          let indx = [];
+          volunteer.volunteers.map((vol, idx) => {
+            if (vol.userName === userName) {
+              indx.push(idx);
+            }
+          });
+          if (indx.length > 0) {
+            for (const i of indx) {
+              volunteer.volunteers.splice(i, 1);
+              await volunteersAroundCollection.updateOne(
+                { userName: volunteer.userName },
+                { $set: { volunteers: volunteer.volunteers } },
+                { upsert: true }
+              );
+            }
+          }
+        }
+      }
+
       console.log("User deleted successfully");
       return new Response("User deleted successfully", { status: 200 });
     } else if (removeReport === true && vote === 0) {
@@ -116,7 +136,8 @@ export async function POST(req) {
         });
         await collection.updateOne(
           { userName: name },
-          { $set: { activeCrimes: document.activeCrimes } }
+          { $set: { activeCrimes: document.activeCrimes } },
+          { upsert: true }
         );
       } else {
         console.log("Document not found for userName:", name);
@@ -128,7 +149,7 @@ export async function POST(req) {
 
       const user = await userCollection.findOne({ userName: name });
       if (user) {
-        console.log("User found",user.reputation);
+        console.log("User found", user.reputation);
         return new Response(user.reputation, { status: 200 });
       } else {
         console.log("User not found");
@@ -160,16 +181,23 @@ export async function POST(req) {
           return { ...report, distance: distance };
         })
         .filter((report) => report.distance <= 2);
-
+      // remove those reports which have same username as report.username
+      // create an empty set
+      let s = new Set();
+      for (let i = reportsNearby.length - 1; i >= 0; i--) {
+        if (s.has(reportsNearby[i].userName)) {
+          reportsNearby.splice(i, 1);
+        } else {
+          s.add(reportsNearby[i].userName);
+        }
+      }
+      console.log("Reports Nearby", reportsNearby);
       for (const report of reportsNearby) {
         await volunteersAroundCollection.updateOne(
           { userName: report.userName },
           {
             $addToSet: {
-              volunteers: {
-                userName: userName,
-                distance: report.distance,
-              },
+              volunteers: { userName: userName, distance: report.distance },
             },
           },
           { upsert: true }
@@ -191,16 +219,31 @@ export async function POST(req) {
         };
       });
 
-      await collection.insertOne({
-        userName: userName,
-        latitude: latitude,
-        longitude: longitude,
-        accuracy: accuracy,
-        dateTime: new Date().toLocaleString("en-US", {
-          timeZone: "Asia/Kolkata",
-        }),
-        activeCrimes: activeCrimesNear,
-      });
+      await collection.updateOne(
+        {
+          userName: userName,
+          latitude: latitude,
+          longitude: longitude,
+          accuracy: accuracy,
+          dateTime: new Date().toLocaleString("en-US", {
+            timeZone: "Asia/Kolkata",
+          }),
+          activeCrimes: activeCrimesNear,
+        },
+        {
+          $set: {
+            userName: userName,
+            latitude: latitude,
+            longitude: longitude,
+            accuracy: accuracy,
+            dateTime: new Date().toLocaleString("en-US", {
+              timeZone: "Asia/Kolkata",
+            }),
+            activeCrimes: activeCrimesNear,
+          },
+        },
+        { upsert: true }
+      );
 
       // Respond with success message
       console.log("Location added successfully");

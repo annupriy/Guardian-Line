@@ -90,6 +90,8 @@ const RegisteredVolunteers: React.FC<UserInfo> = ({ user }) => {
         const filteredCrimes = data.activeCrimes.filter(
           (crime: any) => currentTime - crime.filingtime < 7200000
         );
+        // Reverse the array so that the latest crime comes first
+        filteredCrimes.reverse();
         setactiveCrimes(filteredCrimes);
       } catch (error: any) {
         setError(error.message);

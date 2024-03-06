@@ -60,11 +60,12 @@ export async function POST(req) {
 
     // Store VolunteersNearby in VolunteersAround collection
     const collection2 = await db.collection("VolunteersAround");
-    await collection2.insertOne({
-      userName: userName,
-      incidentLocation,
-      volunteers: volunteerNearby,
-    });
+    console.log(volunteerNearby, "Volunteer Nearby")
+    await collection2.updateOne(
+      { userName: userName }, // Search for existing userName
+      { $set: { incidentLocation, volunteers: volunteerNearby } }, // Update with new data
+      { upsert: true } // Create a new document if userName doesn't exist
+    );
 
     // Update ActiveVolunteers collection with activeCrimes
     const collection3 = await db.collection("ActiveVolunteers");

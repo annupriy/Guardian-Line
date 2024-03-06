@@ -1121,7 +1121,7 @@ const Page = () => {
                           />
                         </div>
                       </div>
-                      <div>
+                      {/* <div>
                         <label
                           className="text-sm  font-light text-gray-400"
                           style={{ fontFamily: "" }}
@@ -1136,7 +1136,7 @@ const Page = () => {
                           placeholder={"PIN Code"}
                           style={{ fontFamily: "" }}
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
