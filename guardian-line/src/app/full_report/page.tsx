@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -28,18 +27,20 @@ type PageProps = {
   searchParams: { error?: string };
 };
 
-const Page = ({ searchParams }: PageProps) => {
-  const [reportid, setReportid] = useState<string>("");
+const Page = () => {
+  const searchParams = useSearchParams();
+
+  const [reportid, setReportid] = useState<string>(
+    String(searchParams.get("reportid"))
+  );
   useEffect(() => {
-    const rid = new URLSearchParams(searchParams).get("reportid");
+    const rid = String(searchParams.get("reportid"));
     if (rid) {
       setReportid(rid);
     }
     const response = async () => {
       try {
-        const response = await fetch(
-          `/api/detailed_report?reportid=${rid}`
-        );
+        const response = await fetch(`/api/detailed_report?reportid=${rid}`);
         if (response.status === 200) {
           const data = await response.json();
           console.log(data);
